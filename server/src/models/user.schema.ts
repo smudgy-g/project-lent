@@ -5,26 +5,42 @@ export interface IUser extends Document {
   email: string;
   password: string; // hashed
   address: IAddress;
-  geoLocation: string; // or stored geo-location
+  geoLocation: IGeoLocation; // or stored geo-location
   credits: number;
   reputation: number;
   collections: string[]; // collection._id
   inbox: string[]; // chat._id
 }
 
-export interface IAddress extends Document {
+export interface IGeoLocation {
+  lat: number;
+  lng: number;
+}
+
+export interface IAddress {
   streetName: string;
   streetNumber: string;
   postalCode: string;
   city: string;
 }
 
-const addressSchema = new Schema<IAddress>({
-  streetName: { type: String, required: true },
-  streetNumber: { type: String, required: true },
-  postalCode: { type: String, required: true },
-  city: { type: String, required: true },
-});
+const addressSchema = new Schema<IAddress>(
+  {
+    streetName: { type: String, required: true },
+    streetNumber: { type: String, required: true },
+    postalCode: { type: String, required: true },
+    city: { type: String, required: true },
+  },
+  { _id: false }
+);
+
+const geoLocationSchema = new Schema<IGeoLocation>(
+  {
+    lat: { type: Number, required: true },
+    lng: { type: Number, required: true },
+  },
+  { _id: false }
+);
 
 // Schema for the user
 const userSchema = new Schema<IUser>({
@@ -32,7 +48,7 @@ const userSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }, // hashed
   address: { type: addressSchema, required: true },
-  geoLocation: { type: String, required: true }, // or stored geo-location
+  geoLocation: { type: geoLocationSchema, required: true },
   credits: { type: Number },
   reputation: { type: Number },
   collections: [String],
@@ -41,4 +57,3 @@ const userSchema = new Schema<IUser>({
 
 // Create model from schema
 export const User = model<IUser>('User', userSchema);
-

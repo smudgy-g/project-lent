@@ -1,28 +1,49 @@
-import { convertAddressToGeoCode } from "../middleware/geocoding";
-import { IUser, IAddress, User } from "./user.schema";
+import convertAddressToGeoCode from '../helpers/geocoding';
+import { IUser, IAddress, User } from './user.schema';
+import bcrypt from 'bcrypt';
 
 export async function createUser(
   username: string,
   email: string,
   password: string,
-  address: IAddress,
+  address: IAddress
 ): Promise<IUser> {
   try {
-    const geoLocation = convertAddressToGeoCode(address);
+    const geoLocation = await convertAddressToGeoCode(address);
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = new User({
       username,
       email,
-      password,
+      password: hashedPassword,
       address,
       geoLocation,
       credits: 0,
       reputation: 0,
-      collections: ['all', 'borrowed', 'lent out'],
-      inbox: ['']
+      collections: ['borrowed', 'lent out'],
+      inbox: [''],
     });
-    console.log(user);
     return await user.save();
   } catch (err) {
     throw err;
   }
-};
+}
+
+export async function findUserByEmail(email: string): Promise<IUser | null> {
+  try {
+    return await User.findOne({email})
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function findUserByUsername(username: string): Promise<IUser | null> {
+  try {
+    return await User.findOne({username})
+  } catch (err) {
+    throw err;
+  }
+}
+
+
+

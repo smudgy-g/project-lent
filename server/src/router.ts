@@ -1,5 +1,6 @@
 import Router from 'koa-router';
 // import controllers
+import * as user from './controllers/user.controller';
 
 const router = new Router();
 
@@ -8,6 +9,8 @@ router.get('/', async (ctx, next) => {
   await next();
 });
 
-router.post('/register', )
+router.post('/register', user.createOne);
+
 // Add routes for app here
-export default router;
+export default router
+

@@ -26,7 +26,7 @@ const run = async () => {
   app.listen(PORT, async () => {
     console.log(`🚀 Live from Berlin at port ${PORT}, its Project Lent. 🚀`);
   });
-}
+};
 
 run();
 
