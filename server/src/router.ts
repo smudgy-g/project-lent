@@ -1,11 +1,13 @@
 import Router from 'koa-router';
 // import controllers
 
-export const router = new Router();
+const router = new Router();
 
 router.get('/', async (ctx, next) => {
-  ctx.body = {msg: "Moin moin."};
+  ctx.body = { msg: 'Moin moin.' };
   await next();
-})
+});
 
+router.post('/register', )
 // Add routes for app here
+export default router;
