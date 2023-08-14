@@ -1,6 +1,6 @@
 import { ICollection, Collection } from './collection.schema';
 import { IUser } from './user.schema';
-import { findUserById, addToUserCollection } from './user.model';
+import * as user from './user.model';
 
 export async function createOne (name: string, userId: string): Promise<ICollection | null> {
   try {
@@ -9,14 +9,14 @@ export async function createOne (name: string, userId: string): Promise<ICollect
       name: name.toLowerCase(),
       items: [],
     });
-    newCollection.save().then((savedCollection) => {
+    return newCollection.save().then((savedCollection) => {
       const collectionId = savedCollection._id;
       // update user ccollections arrray
-      addToUserCollection(userId, collectionId);
+      user.addToUserCollection(userId, collectionId);
 
       // Return the newly created collection
-    }).then(() => newCollection)
-    return newCollection;
+    })
+    .then(() => newCollection);
   } catch (error) {
     throw error;
   }
@@ -33,7 +33,7 @@ export async function findCollectionById (id:string) {
 
 export async function getAllCollections (id: string): Promise<any | null> {
   try {
-    const { collections } = (await findUserById(id)) as IUser;
+    const { collections } = (await user.findUserById(id)) as IUser;
     return collections;
   } catch (error) {
     throw error;

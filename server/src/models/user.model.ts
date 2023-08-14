@@ -1,4 +1,5 @@
 import convertAddressToGeoCode from '../helpers/geocoding';
+import * as collection from './collection.model';
 import { IUser, IAddress, User } from './user.schema';
 import bcrypt from 'bcrypt';
 
@@ -12,7 +13,7 @@ export async function createUser (
     const geoLocation = await convertAddressToGeoCode(address);
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = new User({
+    const newUser = new User({
       username,
       email,
       password: hashedPassword,
@@ -20,10 +21,15 @@ export async function createUser (
       geoLocation,  
       credits: 0,
       reputation: 0,
-      collections: ['borrowed', 'lent out'],
-      inbox: [''],
+      collections: [],
+      inbox: [],
     });
-    return await user.save();
+    return newUser.save().then(async (user) => {
+      const id = user._id;
+      await collection.createOne('borrowed', id);
+      await collection.createOne('lent out', id);
+    })
+    .then(() => newUser);
   } catch (err) {
     throw err;
   }
