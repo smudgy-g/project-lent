@@ -6,7 +6,7 @@ export async function createOne (name: string, userId: string): Promise<ICollect
   try {
     const newCollection = new Collection({
     // const newCollection = await Collection.create({
-      name: name.toLowerCase(),
+      name: name,
       items: [],
     });
     return newCollection.save().then((savedCollection) => {

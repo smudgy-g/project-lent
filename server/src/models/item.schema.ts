@@ -1,15 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
+import { IItem } from '../_types';
 
-export interface IItem extends Document {
-  user: string; // user._id
-  name: string;
-  photo?: string; // URL to cloudinary link
-  value: number;
-  description: string;
-  lendable: boolean;
-  available: boolean;
-  collections: string[];
-}
 
 // Schema for the user
 const itemSchema = new Schema<IItem>({
@@ -21,7 +12,7 @@ const itemSchema = new Schema<IItem>({
   lendable: { type: Boolean },
   available: { type: Boolean },
   collections: { type: [String] },
-});
+}, { timestamps: true });
 
 // Create model from schema
 export const Item = model<IItem>('Item', itemSchema);

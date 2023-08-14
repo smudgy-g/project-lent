@@ -2,11 +2,8 @@ import { Context } from 'koa';
 import { findUserByUsername } from '../models/user.model';
 import bcrypt from 'bcrypt';
 import { generateJWT } from '../helpers/webToken';
+import { ILogin } from '../_types'
 
-interface ILogin {
-  username: string;
-  password: string;
-}
 
 export async function login (ctx: Context): Promise<any | null> {
   try {

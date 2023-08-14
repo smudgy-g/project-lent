@@ -1,6 +1,7 @@
+import { IAddress, IUser } from '../_types';
 import convertAddressToGeoCode from '../helpers/geocoding';
 import * as collection from './collection.model';
-import { IUser, IAddress, User } from './user.schema';
+import { User } from './user.schema';
 import bcrypt from 'bcrypt';
 
 export async function createUser (

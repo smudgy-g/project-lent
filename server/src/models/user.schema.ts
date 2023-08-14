@@ -1,28 +1,5 @@
-import { Schema, model, Document } from 'mongoose';
-
-export interface IUser extends Document {
-  username: string;
-  email: string;
-  password: string; // hashed
-  address: IAddress;
-  geoLocation: IGeoLocation; // or stored geo-location
-  credits: number;
-  reputation: number;
-  collections: string[]; // collection._id
-  inbox: string[]; // chat._id
-}
-
-export interface IGeoLocation {
-  lat: number;
-  lng: number;
-}
-
-export interface IAddress {
-  streetName: string;
-  streetNumber: string;
-  postalCode: string;
-  city: string;
-}
+import { Schema, model } from 'mongoose';
+import { IAddress, IGeoLocation, IUser } from '../_types';
 
 const addressSchema = new Schema<IAddress>(
   {
@@ -42,7 +19,6 @@ const geoLocationSchema = new Schema<IGeoLocation>(
   { _id: false }
 );
 
-// Schema for the user
 const userSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
@@ -53,7 +29,6 @@ const userSchema = new Schema<IUser>({
   reputation: { type: Number },
   collections: [String],
   inbox: [String],
-});
+}, { timestamps: true });
 
-// Create model from schema
 export const User = model<IUser>('User', userSchema);

@@ -1,11 +1,5 @@
-import { Schema, model, Document } from 'mongoose';
-
-export interface IMessage extends Document {
-  body: string;
-  from: string; // A user._id
-  to: string; // B user._id
-  seen: boolean;
-}
+import { Schema, model } from 'mongoose';
+import { IMessage } from '../_types';
 
 // Schema for the user
 const messageSchema = new Schema<IMessage>(

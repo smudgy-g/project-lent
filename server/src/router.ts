@@ -30,5 +30,14 @@ router.put('/collection', authMiddleware, collection.updateCollectionName);
 router.post('/register', user.createOne);
 router.post('/login', auth.login)
 
+// item routes
+router.get('/item/all', )
+router.get('/item/all/:collectionid', )
+router.get('/item/all/discover', )
+router.get('/item/:id', )
+router.post('/item', )
+router.put('/item/:id', )
+router.delete('/item/:id', )
+
 // Add routes for app here
 export default router;

@@ -1,9 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
-
-export interface IChat extends Document {
-  item: string; // item._id
-  messages: string[];
-}
+import { IChat } from '../_types';
 
 // Schema for the collection
 const chatSchema = new Schema<IChat>(

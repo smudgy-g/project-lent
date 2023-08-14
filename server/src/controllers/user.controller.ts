@@ -1,13 +1,8 @@
 import { Context } from 'koa';
 import { IAddress, IUser, User } from '../models/user.schema';
 import * as userModel from '../models/user.model';
+import { INewUser } from '../_types';
 
-interface INewUser {
-  username: string;
-  password: string;
-  email: string;
-  address: IAddress;
-}
 
 export async function createOne (ctx: Context, next: () => Promise<any>) {
   const user = ctx.request.body as INewUser;
