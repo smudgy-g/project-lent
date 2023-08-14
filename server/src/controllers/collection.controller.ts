@@ -28,10 +28,7 @@ export async function createCollection (ctx:Context) {
     ctx.body = { messsage: 'No name was supplied.' };
     return;
   }
-  /* error handle for collection already existing based on user._id !!! */
-  // need the client._id from the JWT object
-  // const user = await findUserById(id) as IUser;
-
+  
   try {
     const newCollection = await createOne(name, userId);
     ctx.status = 201;

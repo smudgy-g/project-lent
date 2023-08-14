@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { getAll, createOne } from '../models/item.model';
+import { getAll, createOne, findItemById } from '../models/item.model';
 
 export async function getAllItems (ctx: Context) {
   const id = ctx.userId;
@@ -30,6 +30,40 @@ export async function createItem (ctx:Context) {
     const newItem = await createOne(name, userId);
     ctx.status = 201;
     ctx.body = newItem;
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = { message: error };
+  }
+}
+
+export async function findItem (ctx:Context) {
+  const id = ctx.params.id;
+  if (!id) {
+    ctx.status = 400;
+    ctx.body = { messsage: 'No item ID supplied.' };
+    return;
+  }
+  try {
+    const item = await findItemById(id);
+    ctx.status = 201;
+    ctx.body = item;
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = { message: error };
+  }
+}
+
+export async function findItemsByCollection (ctx:Context) {
+  const id = ctx.params.id;
+  if (!id) {
+    ctx.status = 400;
+    ctx.body = { messsage: 'No collection ID supplied.' };
+    return;
+  }
+  try {
+    const items = await findItemsByCollection(id);
+    ctx.status = 201;
+    ctx.body = items;
   } catch (error) {
     ctx.status = 500;
     ctx.body = { message: error };

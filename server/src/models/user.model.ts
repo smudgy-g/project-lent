@@ -38,14 +38,14 @@ export async function createUser (
 
 export async function findUserById (id: string): Promise<IUser | null> {
   try {
-    return await User.findById(id);
+    return await User.findById(id).lean();
   } catch (err) {
     throw err;
   }
 }
 export async function findUserByEmail (email: string): Promise<IUser | null> {
   try {
-    return await User.findOne({ email });
+    return await User.findOne({ email }).lean();
   } catch (err) {
     throw err;
   }
@@ -55,7 +55,7 @@ export async function findUserByUsername (
   username: string
 ): Promise<IUser | null> {
   try {
-    return await User.findOne({ username });
+    return await User.findOne({ username }).lean();
   } catch (err) {
     throw err;
   }

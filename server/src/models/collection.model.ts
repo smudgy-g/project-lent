@@ -1,5 +1,5 @@
-import { ICollection, Collection } from './collection.schema';
-import { IUser } from './user.schema';
+import { ICollection, IUser } from '../_types';
+import { Collection } from './collection.schema';
 import * as user from './user.model';
 
 export async function createOne (name: string, userId: string): Promise<ICollection | null> {
@@ -22,7 +22,7 @@ export async function createOne (name: string, userId: string): Promise<ICollect
   }
 }
 
-export async function findCollectionById (id:string) {
+export async function findCollectionById (id:string): Promise<ICollection | null> {
   try {
     return await Collection.findById(id);
   } catch (error) {
@@ -43,7 +43,7 @@ export async function getAllCollections (id: string): Promise<any | null> {
 export async function updateName (id: string, newName: string) {
   try {
     return await Collection.findByIdAndUpdate(id, 
-      {name: newName});
+      {name: newName}, { new: true });
   } catch (error) {
     throw error;
   }

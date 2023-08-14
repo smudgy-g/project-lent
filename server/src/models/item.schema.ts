@@ -1,8 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 import { IItem } from '../_types';
 
-
-// Schema for the user
 const itemSchema = new Schema<IItem>({
   user: { type: String, required: true, unique: true }, // user._id
   name: { type: String, required: true },
