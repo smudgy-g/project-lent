@@ -1,6 +1,6 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
-import { IAddress } from '../models/user.schema';
+import { IAddress } from '../_types';
 
 dotenv.config();
 const apiKey = process.env.GEO_API_KEY as string;

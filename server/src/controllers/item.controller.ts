@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { getAll, createOne, findItemById } from '../models/item.model';
+import { getAll, createOne, findItemById, deleteOne } from '../models/item.model';
 
 export async function getAllItems (ctx: Context) {
   const id = ctx.userId;
@@ -70,39 +70,22 @@ export async function findItemsByCollection (ctx:Context) {
   }
 }
 
-// export async function deleteCollection (ctx:Context) {
-//   const id = ctx.params.id;
-//   if (!id) {
-//     ctx.status = 400;
-//     ctx.body = { message: 'No collection ID was supplied.' };
-//     return;
-//   }
+export async function deleteItem (ctx:Context) {
+  const id = ctx.params.id;
+  if (!id) {
+    ctx.status = 400;
+    ctx.body = { message: 'No item ID was supplied.' };
+    return;
+  }
 
-//   try {
-//     const result = await deleteOne(id);
-//     ctx.status = 200;
-//     ctx.body = result;
-//   } catch (error) {
-//     ctx.status = 500;
-//     ctx.body = { message: error };
-//   }
-// }
+  try {
+    const result = await deleteOne(id);
+    ctx.status = 200;
+    ctx.body = { message: 'success', result };
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = { message: error };
+  }
+}
 
-// export async function updateCollectionName (ctx:Context) {
-//   const { id, newName } = ctx.request.body as any;
-//   if (!id) {
-//     ctx.status = 400;
-//     ctx.body = { message: 'No collection ID was supplied.' };
-//     return;
-//   }
-
-//   try {
-//     const result = await updateName(id, newName);
-//     ctx.status = 200;
-//     ctx.body = result;
-//   } catch (error) {
-//     ctx.status = 500;
-//     ctx.body = { message: error };
-//   }
-// }
 

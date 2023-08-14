@@ -1,6 +1,6 @@
 import { IItem, INewItem } from "../_types";
 import { Item } from "./item.schema";
-import { findCollectionById } from "./collection.model";
+import { findCollectionById, findCollectionByName } from "./collection.model";
 
 export async function getAll (id: string): Promise<IItem[] | null> {
   try {
@@ -22,9 +22,10 @@ export async function createOne (
   userId: string, itemData: INewItem
   ): Promise<IItem | null> {
   try {
+    const allCollectionId = await findCollectionByName('All')
     const newItem = await Item.create({
       user: userId,
-      collections: [],
+      collections: [allCollectionId],
       ...itemData
     });
     return newItem.save();
@@ -63,10 +64,10 @@ export async function updateOne (id: string, itemData: Partial<IItem>) {
   }
 }
 
-// export async function deleteOne (id:string): Promise<ICollection | null> {
-//   try {
-//     return Collection.findByIdAndDelete(id);
-//   } catch (error) {
-//     throw error
-//   }
-// }
+export async function deleteOne (id:string): Promise<IItem | null> {
+  try {
+    return Item.findByIdAndDelete(id);
+  } catch (error) {
+    throw error
+  }
+}

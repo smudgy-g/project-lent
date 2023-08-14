@@ -27,6 +27,7 @@ export async function createUser (
     });
     return newUser.save().then(async (user) => {
       const id = user._id;
+      await collection.createOne('All', id);
       await collection.createOne('Borrowed', id);
       await collection.createOne('Lent Out', id);
     })
