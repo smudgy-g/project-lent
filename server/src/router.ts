@@ -9,6 +9,11 @@ router.get('/', async (ctx, next) => {
   await next();
 });
 
+// user routes
+router.get('/user/:id', user.getUserById);
+
+
+// register routes
 router.post('/register', user.createOne);
 
 // Add routes for app here

@@ -1,9 +1,10 @@
 import { Context } from 'koa';
-import { IAddress } from '../models/user.schema';
+import { IAddress, IUser } from '../models/user.schema';
 import {
   createUser,
   findUserByEmail,
   findUserByUsername,
+  findUserById,
 } from '../models/user.model';
 
 interface INewUser {
@@ -47,7 +48,32 @@ export async function createOne(ctx: Context, next: () => Promise<any>) {
     ctx.status = 201;
     ctx.body = result;
   } catch (error) {
+    ctx.status = 500;
+    ctx.body = error;
+  }
+}
+
+export async function getUserById(ctx: Context) {
+  const id = ctx.params.id;
+  if (!id) {
     ctx.status = 400;
+    ctx.body = 'User ID was not supplied.';
+    return;
+  }
+  try {
+    /*
+    const { username, email, address, credits } = (await findUserById(
+      id
+    )) as IUser;
+    const result = { username, email, address, credits };
+    */
+
+    const result = await findUserById(id);
+
+    ctx.status = 200;
+    ctx.body = result;
+  } catch (error) {
+    ctx.status = 500;
     ctx.body = error;
   }
 }
