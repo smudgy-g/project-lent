@@ -1,7 +1,24 @@
 import { LoginFormData } from "../components/auth/Login";
 import { RegisterFormData } from "../components/auth/Register"
+import { User } from "../components/profile/Profile";
 
-const baseUrl = "http://localhost:3001"
+const baseUrl = "http://localhost:5001"
+
+/* Profile */
+
+export async function getUser(userId : User['id']): Promise<User | undefined> {
+  try{
+    const response = await fetch(`${baseUrl}/user/:id`)
+    return await response.json()
+  } catch (error){
+    console.log(error)
+  } 
+}
+
+
+
+
+/* Authentication */
 
 export async function registerUser(registerFormData: RegisterFormData) {
   try{

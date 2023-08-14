@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { loginUser, registerUser } from "../../service/apiService";
-import { log } from "console";
+import { loginUser } from "../../service/apiService";
 
 /* Type Definitions */
 
