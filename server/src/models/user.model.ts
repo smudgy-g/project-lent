@@ -26,8 +26,8 @@ export async function createUser (
     });
     return newUser.save().then(async (user) => {
       const id = user._id;
-      await collection.createOne('borrowed', id);
-      await collection.createOne('lent out', id);
+      await collection.createOne('Borrowed', id);
+      await collection.createOne('Lent Out', id);
     })
     .then(() => newUser);
   } catch (err) {
@@ -67,6 +67,14 @@ export async function addToUserCollection (userId: string, collectionId: string)
       { $push: { collections: collectionId } }
     );
     return updatedUser;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function deleteUserById (userId: string): Promise<IUser | null> {
+  try {
+    return await User.findByIdAndDelete({ userId });
   } catch (err) {
     throw err;
   }

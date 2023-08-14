@@ -40,6 +40,15 @@ export async function getAllCollections (id: string): Promise<any | null> {
   }
 }
 
+export async function updateName (id: string, newName: string) {
+  try {
+    return await Collection.findByIdAndUpdate(id, 
+      {name: newName});
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function deleteOne (id:string): Promise<ICollection | null> {
   try {
     return Collection.findByIdAndDelete(id);

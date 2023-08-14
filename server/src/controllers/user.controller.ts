@@ -1,11 +1,6 @@
 import { Context } from 'koa';
 import { IAddress, IUser, User } from '../models/user.schema';
-import {
-  createUser,
-  findUserByEmail,
-  findUserByUsername,
-  findUserById,
-} from '../models/user.model';
+import * as userModel from '../models/user.model';
 
 interface INewUser {
   username: string;
@@ -23,15 +18,14 @@ export async function createOne (ctx: Context, next: () => Promise<any>) {
     return;
   }
   try {
-    // check if email exists
-    const emailExists = await findUserByEmail(user.email);
+    const emailExists = await userModel.findUserByEmail(user.email);
     if (emailExists) {
       ctx.status = 400;
       ctx.body = { message: 'Email already exists.' };
       return;
     }
-    // if not check if username is taken
-    const usernameExists = await findUserByUsername(user.username);
+
+    const usernameExists = await userModel.findUserByUsername(user.username);
     if (usernameExists) {
       ctx.status = 400;
       ctx.body = { message: 'Username already exists.' };
@@ -39,7 +33,7 @@ export async function createOne (ctx: Context, next: () => Promise<any>) {
     }
     // create welcome chat!
     // then add that to the user inbox 🙃
-    const newUser = await createUser(
+    const newUser = await userModel.createUser(
       user.username,
       user.email,
       user.password,
@@ -62,19 +56,35 @@ export async function getUserById (ctx: Context) {
     return;
   }
   try {
-    /*
-    const { username, email, address, credits } = (await findUserById(
-      id
-    )) as IUser;
-    const result = { username, email, address, credits };
-    */  
-
-    const result = await findUserById(id);
+    const result = await userModel.findUserById(id);
 
     ctx.status = 200;
     ctx.body = result;
   } catch (error) {
     ctx.status = 500;
     ctx.body = { message: error };
+  }
+}
+
+export async function deleteUser (ctx:Context) {
+  const userId = ctx.userId;
+  if (!userId) {
+    ctx.status = 400;
+    ctx.body = { message: 'User ID was not supplied.' };
+    return;
+  }
+  try {
+    const result = await userModel.deleteUserById(userId)
+    ctx.status = 200;
+    ctx.body = { 
+      succcess: true,
+      message: 'User deleted.', 
+      result,
+    };
+    return;
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = { message: error };
+    return;
   }
 }

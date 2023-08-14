@@ -11,7 +11,9 @@ export function generateJWT (userId: string, geoLocation: IGeoLocation) {
     userId: userId,
     geoLocation: geoLocation
   };
-  const token = jwt.sign(payload, secretKey!);
+  const token = jwt.sign(payload, secretKey!, {
+    expiresIn: '1d'
+  });
   console.log(token)
   return token
 }

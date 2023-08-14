@@ -7,19 +7,12 @@ import { Context } from 'koa';
 
 const router = new Router();
 
-router.get('/', async (ctx, next) => {
-  ctx.body = { msg: 'Moin moin.' };
-  await next();
-});
-
 // user routes
 router.get('/user/:id', user.getUserById);
 router.put('/user/:id', (ctx: Context) => {
   ctx.body ='Update User'
 });
-router.delete('/user/:id', (ctx: Context) => {
-  ctx.body ='Delete user'
-});
+router.delete('/user/:id', authMiddleware, );
 
 /* Not sure if needed */
 // router.post('/user/', (ctx: Context) => {
@@ -28,14 +21,10 @@ router.delete('/user/:id', (ctx: Context) => {
 
 // collection routes
 
-/* This will be the user id from the JWT & not the params */
 router.get('/collection/all/:id', authMiddleware, collection.getAllCollecttions);
-
 router.post('/collection', authMiddleware, collection.createCollection);
-router.delete('/collection/:id', collection.deleteCollection);
-router.put('/collection/:id', (ctx: Context) => {
-  ctx.body ='Update Collection'
-});
+router.delete('/collection/:id', authMiddleware, collection.deleteCollection);
+router.put('/collection', authMiddleware, collection.updateCollectionName);
 
 // auth routes
 router.post('/register', user.createOne);

@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { getAllCollections, createOne, deleteOne } from '../models/collection.model';
+import { getAllCollections, createOne, deleteOne, updateName } from '../models/collection.model';
 import { Collection } from '../models/collection.schema';
 
 export async function getAllCollecttions (ctx: Context) {
@@ -59,3 +59,22 @@ export async function deleteCollection (ctx:Context) {
     ctx.body = { message: error };
   }
 }
+
+export async function updateCollectionName (ctx:Context) {
+  const { id, newName } = ctx.request.body as any;
+  if (!id) {
+    ctx.status = 400;
+    ctx.body = { message: 'No collection ID was supplied.' };
+    return;
+  }
+
+  try {
+    const result = await updateName(id, newName);
+    ctx.status = 200;
+    ctx.body = result;
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = { message: error };
+  }
+}
+

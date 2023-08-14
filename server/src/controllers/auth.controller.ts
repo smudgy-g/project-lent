@@ -35,7 +35,7 @@ export async function login (ctx: Context): Promise<any | null> {
     const token = generateJWT(user._id, user.geoLocation);
 
     ctx.status = 200;
-    ctx.body = { message: 'Username already exists.', token };
+    ctx.body = token;
     
   } catch (error) {
     ctx.status = 500;
