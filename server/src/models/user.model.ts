@@ -17,7 +17,7 @@ export async function createUser(
       email,
       password: hashedPassword,
       address,
-      geoLocation,
+      geoLocation,  
       credits: 0,
       reputation: 0,
       collections: ['borrowed', 'lent out'],

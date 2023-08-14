@@ -14,7 +14,7 @@ interface INewUser {
   address: IAddress;
 }
 
-export async function createOne(ctx: Context, next: () => Promise<any>) {
+export async function createOne (ctx: Context, next: () => Promise<any>) {
   const user = ctx.request.body as INewUser;
   // check all details are there
   if (!user.username || !user.email || !user.password || !user.address) {
@@ -53,7 +53,7 @@ export async function createOne(ctx: Context, next: () => Promise<any>) {
   }
 }
 
-export async function getUserById(ctx: Context) {
+export async function getUserById (ctx: Context) {
   const id = ctx.params.id;
   if (!id) {
     ctx.status = 400;
