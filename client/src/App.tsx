@@ -9,11 +9,13 @@ import HeaderProvider from "./contexts/HeaderContext";
 // import TabNavigation from "./components/TabNavigation";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import Profile from "./components/profile/Profile";
+import CollectionOverview from "./components/collections/CollectionOverview";
 
 const router = createBrowserRouter([
   {
-    path: '/test',
-    element: undefined
+    path: '/',
+    element: <CollectionOverview />
   },
   {
     path: '/register',
@@ -22,6 +24,13 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login/>
+  },
+  {
+    path: '/profile',
+    // element: (<RequireAuth loginPath='/login'>
+    //             <Profile/>
+    //           </RequireAuth>)
+    element: <Profile></Profile>
   }
 ])
 
