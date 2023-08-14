@@ -1,7 +1,7 @@
-import { Document } from 'mongoose';
+import { Document, Schema } from 'mongoose';
 
 export interface IItem extends Document {
-  user: string; // user._id
+  user: Schema.Types.ObjectId; // user._id
   name: string;
   photo?: string; // URL to cloudinary link
   value?: number;
@@ -9,16 +9,8 @@ export interface IItem extends Document {
   lendable: boolean;
   available: boolean;
   collections: string[];
+  borrowed: boolean;
 }
-
-// export interface INewItem {
-//   name: string;
-//   photo?: string; // URL to cloudinary link
-//   value?: number;
-//   description: string;
-//   lendable: boolean;
-//   available: boolean;
-// }
 
 export interface ILogin {
   username: string;
@@ -26,20 +18,20 @@ export interface ILogin {
 }
 
 export interface IChat extends Document {
-  item: string; // item._id
+  item: Schema.Types.ObjectId; // item._id
   messages: string[];
 }
 
 export interface IMessage extends Document {
   body: string;
-  from: string; // A user._id
-  to: string; // B user._id
+  from: Schema.Types.ObjectId; // A user._id
+  to: Schema.Types.ObjectId; // B user._id
   seen: boolean;
 }
 
 export interface ICollection extends Document {
   name: string;
-  items: string[]; // item._id
+  items: Schema.Types.ObjectId[]; // item._id
 }
 
 export interface IUser extends Document {
@@ -50,8 +42,8 @@ export interface IUser extends Document {
   geoLocation: IGeoLocation; // or stored geo-location
   credits: number;
   reputation: number;
-  collections: string[]; // collection._id
-  inbox: string[]; // chat._id
+  collections: Schema.Types.ObjectId[]; // collection._id
+  inbox: Schema.Types.ObjectId[]; // chat._id
 }
 
 export interface IGeoLocation {

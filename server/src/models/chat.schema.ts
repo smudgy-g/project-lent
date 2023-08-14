@@ -4,7 +4,7 @@ import { IChat } from '../_types';
 // Schema for the collection
 const chatSchema = new Schema<IChat>(
   {
-    item: { type: String, required: true }, // item._id
+    item: { type: Schema.Types.ObjectId, ref: 'Item', required: true }, // item._id
     messages: { type: [String] },
   },
   { timestamps: true }

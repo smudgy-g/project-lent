@@ -1,6 +1,7 @@
 import { IItem } from "../_types";
 import { Item } from "./item.schema";
 import { addItemToCollection, findCollectionById, findCollectionByName } from "./collection.model";
+import { User } from "./user.schema";
 
 export async function getAll (id: string): Promise<IItem[] | null> {
   try {
@@ -18,8 +19,13 @@ export async function findItemById (id: string): Promise<IItem | null> {
   }
 }
 
-export async function createOne(userId: string, itemData: Partial<IItem>): Promise<IItem | null> {
+export async function createOne (userId: string, itemData: Partial<IItem>): Promise<IItem | null> {
   try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error('User not found.');
+    }
+
     const allCollection = await findCollectionByName('All');
     const allCollectionId = allCollection?._id.toString();
 
@@ -39,6 +45,7 @@ export async function createOne(userId: string, itemData: Partial<IItem>): Promi
     })
     .then(() => newItem);
   } catch (error) {
+    console.log('model error', error)
     throw error;
   }
 }
@@ -65,7 +72,7 @@ export async function findItemsByCollection (collectionId: string): Promise<IIte
 
 export async function updateOne (id: string, itemData: Partial<IItem>) {
   try {
-    const { collections, user, ...updatedData } = itemData;
+    const { user, ...updatedData } = itemData;
     const updatedItem = await Item.findByIdAndUpdate(id, updatedData, { new: true });
     return updatedItem;
   } catch (error) {

@@ -3,8 +3,8 @@ import { ICollection } from '../_types';
 
 // Schema for the collection
 const collectionSchema = new Schema<ICollection>({
-  name: String,
-  items: [String], // item._id
+  name: { type: String, required: true },
+  items: [{ type: Schema.Types.ObjectId, ref: 'Item', required: true }], // item._id
 }, { timestamps: true });
 
 // Create model from schema

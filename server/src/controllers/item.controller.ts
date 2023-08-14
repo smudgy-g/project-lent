@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { getAll, createOne, findItemById, deleteOne, findItemsByCollection } from '../models/item.model';
+import { getAll, createOne, findItemById, deleteOne, findItemsByCollection, updateOne } from '../models/item.model';
 import { IItem } from '../_types';
 
 export async function getAllItems (ctx: Context) {
@@ -31,6 +31,7 @@ export async function createItem (ctx:Context) {
     const newItem = await createOne(userId, itemData);
     ctx.status = 201;
     ctx.body = newItem;
+    console.log('success')
   } catch (error) {
     ctx.status = 500;
     ctx.body = { message: error };
@@ -63,6 +64,27 @@ export async function findItemsByCollectionId (ctx:Context) {
   }
   try {
     const items = await findItemsByCollection(collectionId);
+    ctx.status = 201;
+    ctx.body = items;
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = { message: error };
+  }
+}
+
+export async function updateItemById (ctx: Context) {
+  const id = ctx.params.id;
+  const { name, photo, value, description, lendable, collections } = ctx.request.body as Partial<IItem>;
+  const itemData = { name, photo, value, description, lendable, collections };
+
+  if (!id) {
+    ctx.status = 400;
+    ctx.body = { messsage: 'No item ID supplied.' };
+    return;
+  }
+
+  try {
+    const items = await updateOne(id, itemData);
     ctx.status = 201;
     ctx.body = items;
   } catch (error) {
