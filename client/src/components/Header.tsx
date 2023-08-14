@@ -1,4 +1,4 @@
-/* Type Definitions */
+/* Imports */
 
 import { useContext, useEffect, useState } from "react";
 import { ActionButtonData, HeaderContext, HeaderContextProps } from "../contexts/HeaderContext";
@@ -7,10 +7,13 @@ import { ActionButtonData, HeaderContext, HeaderContextProps } from "../contexts
 
 export default function Header () {
 
-  const [previousPageName, setPreviousPageName] = useState<string>('');
+  const [previousPageName, setPreviousPageName] = useState<string | undefined>(undefined);
   const { actionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
 
-  // Update the previousPagePath whenever the location changes
+  /* Use Effect */
+
+  // When the location changes, transform the path name to the page name,
+  // and update the previousPagePath
   useEffect(() => {
     const previousPageName = lookUpPageNameFromPathName(window.location.pathname);
     setPreviousPageName(previousPageName);
@@ -20,7 +23,9 @@ export default function Header () {
 
   return (<>
     <div className="header">
-      <button className="button plain back">{previousPageName}</button>
+      {previousPageName &&
+        <button className="button plain back">{previousPageName}</button>
+      }
       <div className="action-button-group">
         {actionButtonGroupData.map((item: (ActionButtonData | ActionButtonData[]), index: number) => {
           // If the item is an array of action button objects
@@ -40,15 +45,11 @@ export default function Header () {
   </>);
 }
 
+/* Helper Function */
+
 function lookUpPageNameFromPathName (pathname: string) {
-  if (pathname === 'profile' || pathname === 'collections' || pathname === 'discover' || pathname === 'inbox') {
-    return pathname.slice(0, 1).toUpperCase() + pathname.slice(1);
-  }
   const pathArray = pathname.split('/');
-  if (pathArray.length === 2) {
-    if (pathArray[0] === 'collection' || pathArray[0] === 'item') {
-      return pathArray[1];
-    }
-  }
-  return '';
+  if (pathArray.length < 1) return undefined;
+  if (pathArray.length === 1) return pathname.slice(0, 1).toUpperCase() + pathname.slice(1);
+  else return pathArray[1];
 }
