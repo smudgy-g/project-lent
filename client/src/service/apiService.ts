@@ -1,12 +1,12 @@
 import { LoginFormData } from "../components/auth/Login";
 import { RegisterFormData } from "../components/auth/Register"
-import { User } from "../types/types";
+import { Collection, User } from "../types/types";
 
 const baseUrl = "http://localhost:5001"
 
 /* Profile */
 
-export async function getUser(userId : User['id']): Promise<User | undefined> {
+export async function getUser (userId : User['id']): Promise<User | undefined> {
   try{
     const response = await fetch(`${baseUrl}/user/${userId}`);
     return await response.json();
@@ -17,7 +17,7 @@ export async function getUser(userId : User['id']): Promise<User | undefined> {
 
 /* Authentication */
 
-export async function registerUser(registerFormData: RegisterFormData) {
+export async function registerUser (registerFormData: RegisterFormData) {
   try{
     const response = await fetch(`${baseUrl}/register`, {
       method: 'POST',
@@ -33,7 +33,7 @@ export async function registerUser(registerFormData: RegisterFormData) {
   };
 };
 
-export async function loginUser(loginFormData: LoginFormData) {
+export async function loginUser (loginFormData: LoginFormData) {
   try{
     const response = await fetch(`${baseUrl}/login`, {
       method: 'POST',
@@ -47,3 +47,10 @@ export async function loginUser(loginFormData: LoginFormData) {
     console.log(err);
   };
 };
+
+/* Collection */
+
+export async function getAllCollections (): Promise<Collection[]> {
+  const response = await fetch(`${baseUrl}/collection/all`);
+  return await response.json();
+}
