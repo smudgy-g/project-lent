@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { IAddress, IUser } from '../models/user.schema';
+import { IAddress, IUser, User } from '../models/user.schema';
 import {
   createUser,
   findUserByEmail,
@@ -19,7 +19,7 @@ export async function createOne (ctx: Context, next: () => Promise<any>) {
   // check all details are there
   if (!user.username || !user.email || !user.password || !user.address) {
     ctx.status = 400;
-    ctx.body = {message: 'One or more fields are incomplete.'};
+    ctx.body = {message: 'One or more fields are empty.'};
     return;
   }
   try {
@@ -39,14 +39,15 @@ export async function createOne (ctx: Context, next: () => Promise<any>) {
     }
     // create welcome chat!
     // then add that to the user inbox 🙃
-    const result = await createUser(
+    const newUser = await createUser(
       user.username,
       user.email,
       user.password,
       user.address
     );
+    
     ctx.status = 201;
-    ctx.body = result;
+    ctx.body = newUser;
   } catch (error) {
     ctx.status = 500;
     ctx.body = { message: error };
