@@ -21,4 +21,12 @@ body,
 
 /* COMPONENTS */
 
+/* REGISTER */
+
+.form{
+  display: flex;
+  flex-direction: column;
+}
+
+
 /* BASIC CLASSES */
