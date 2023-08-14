@@ -26,7 +26,6 @@ function Login() {
       ...prevLoginFormData,
       [name]: value,
     }));
-    console.log(loginFormData)
   };
 
   function handleSubmit(event: React.FormEvent) {
