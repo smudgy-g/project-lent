@@ -6,6 +6,7 @@ import {AuthProvider, RequireAuth} from 'react-auth-kit'
 
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import Profile from "./components/profile/Profile";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,14 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login/>
+  },
+  {
+    path: '/profile',
+    // element: (<RequireAuth loginPath='/login'>
+    //             <Profile/>
+    //           </RequireAuth>)
+    element: <Profile></Profile>
+          
   }
 ])
 
