@@ -1,6 +1,6 @@
-import { IItem, INewItem } from "../_types";
+import { IItem } from "../_types";
 import { Item } from "./item.schema";
-import { findCollectionById, findCollectionByName } from "./collection.model";
+import { addItemToCollection, findCollectionById, findCollectionByName } from "./collection.model";
 
 export async function getAll (id: string): Promise<IItem[] | null> {
   try {
@@ -18,17 +18,26 @@ export async function findItemById (id: string): Promise<IItem | null> {
   }
 }
 
-export async function createOne (
-  userId: string, itemData: INewItem
-  ): Promise<IItem | null> {
+export async function createOne(userId: string, itemData: Partial<IItem>): Promise<IItem | null> {
   try {
-    const allCollectionId = await findCollectionByName('All')
-    const newItem = await Item.create({
+    const allCollection = await findCollectionByName('All');
+    const allCollectionId = allCollection?._id.toString();
+
+    if (!allCollection) {
+      throw new Error('Could not find the "All" collection.');
+    }
+
+    const newItem = new Item({
       user: userId,
-      collections: [allCollectionId],
-      ...itemData
+      collections: [...(itemData.collections || []), allCollectionId],
+      ...itemData,
     });
-    return newItem.save();
+
+    return newItem.save().then(savedItem => {
+      const itemId = savedItem._id;
+      addItemToCollection(allCollectionId, itemId)
+    })
+    .then(() => newItem);
   } catch (error) {
     throw error;
   }

@@ -11,14 +11,14 @@ export interface IItem extends Document {
   collections: string[];
 }
 
-export interface INewItem {
-  name: string;
-  photo?: string; // URL to cloudinary link
-  value?: number;
-  description: string;
-  lendable: boolean;
-  available: boolean;
-}
+// export interface INewItem {
+//   name: string;
+//   photo?: string; // URL to cloudinary link
+//   value?: number;
+//   description: string;
+//   lendable: boolean;
+//   available: boolean;
+// }
 
 export interface ILogin {
   username: string;

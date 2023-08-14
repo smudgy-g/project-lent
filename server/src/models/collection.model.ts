@@ -48,6 +48,16 @@ export async function getAllCollections (id: string): Promise<any | null> {
   }
 }
 
+export async function addItemToCollection (collectionId: string, itemId: string) {
+  try {
+    return await Collection.findByIdAndUpdate(collectionId, 
+      { $push: { items: itemId }},
+      { new: true } )
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function updateName (id: string, newName: string) {
   try {
     return await Collection.findByIdAndUpdate(id, 
