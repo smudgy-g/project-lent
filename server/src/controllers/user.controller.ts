@@ -1,11 +1,10 @@
 import { Context } from 'koa';
-import { IAddress, IUser, User } from '../models/user.schema';
+import { IAddress, IUser } from '../_types';
 import * as userModel from '../models/user.model';
-import { INewUser } from '../_types';
 
 
 export async function createOne (ctx: Context, next: () => Promise<any>) {
-  const user = ctx.request.body as INewUser;
+  const user = ctx.request.body as Partial<IUser>;
   // check all details are there
   if (!user.username || !user.email || !user.password || !user.address) {
     ctx.status = 400;

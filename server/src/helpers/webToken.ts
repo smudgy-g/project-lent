@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
-import { IGeoLocation } from "../models/user.schema";
 import dotenv from 'dotenv';
+import { IGeoLocation } from '../_types';
+
 
 dotenv.config();
 

@@ -22,9 +22,17 @@ export async function createOne (name: string, userId: string): Promise<ICollect
   }
 }
 
-export async function findCollectionById (id:string): Promise<ICollection | null> {
+export async function findCollectionById (id: string): Promise<ICollection | null> {
   try {
     return await Collection.findById(id);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function findCollectionByName (name: string): Promise<ICollection | null> {
+  try {
+    return await Collection.findOne({ name }).lean();
   } catch (error) {
     throw error;
   }

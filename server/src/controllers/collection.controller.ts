@@ -57,7 +57,7 @@ export async function deleteCollection (ctx:Context) {
   }
 }
 
-export async function updateCollectionName (ctx:Context) {
+export async function updateCollectionName (ctx: Context) {
   const { id, newName } = ctx.request.body as any;
   if (!id) {
     ctx.status = 400;
