@@ -2,7 +2,7 @@ import convertAddressToGeoCode from '../helpers/geocoding';
 import { IUser, IAddress, User } from './user.schema';
 import bcrypt from 'bcrypt';
 
-export async function createUser(
+export async function createUser (
   username: string,
   email: string,
   password: string,
@@ -29,14 +29,14 @@ export async function createUser(
   }
 }
 
-export async function findUserById(id: string): Promise<IUser | null> {
+export async function findUserById (id: string): Promise<IUser | null> {
   try {
     return await User.findById(id);
   } catch (err) {
     throw err;
   }
 }
-export async function findUserByEmail(email: string): Promise<IUser | null> {
+export async function findUserByEmail (email: string): Promise<IUser | null> {
   try {
     return await User.findOne({ email });
   } catch (err) {
@@ -44,11 +44,23 @@ export async function findUserByEmail(email: string): Promise<IUser | null> {
   }
 }
 
-export async function findUserByUsername(
+export async function findUserByUsername (
   username: string
 ): Promise<IUser | null> {
   try {
     return await User.findOne({ username });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function addToUserCollection (userId: string, collectionId: string): Promise<any> {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $push: { collections: collectionId } }
+    );
+    return updatedUser;
   } catch (err) {
     throw err;
   }

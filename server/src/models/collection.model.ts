@@ -1,13 +1,21 @@
 import { ICollection, Collection } from './collection.schema';
 import { IUser } from './user.schema';
-import { findUserById } from './user.model';
+import { findUserById, addToUserCollection } from './user.model';
 
-export async function createOne (name: string): Promise<ICollection | null> {
+export async function createOne (name: string, userId: string): Promise<ICollection | null> {
   try {
-    const newCollection = await Collection.create({
+    const newCollection = new Collection({
+    // const newCollection = await Collection.create({
       name: name.toLowerCase(),
       items: [],
     });
+    newCollection.save().then((savedCollection) => {
+      const collectionId = savedCollection._id;
+      // update user ccollections arrray
+      addToUserCollection(userId, collectionId);
+
+      // Return the newly created collection
+    }).then(() => newCollection)
     return newCollection;
   } catch (error) {
     throw error;

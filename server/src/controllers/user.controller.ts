@@ -19,7 +19,7 @@ export async function createOne (ctx: Context, next: () => Promise<any>) {
   // check all details are there
   if (!user.username || !user.email || !user.password || !user.address) {
     ctx.status = 400;
-    ctx.body = 'One or more fields are incomplete.';
+    ctx.body = {message: 'One or more fields are incomplete.'};
     return;
   }
   try {
@@ -27,14 +27,14 @@ export async function createOne (ctx: Context, next: () => Promise<any>) {
     const emailExists = await findUserByEmail(user.email);
     if (emailExists) {
       ctx.status = 400;
-      ctx.body = 'Email already exists.';
+      ctx.body = { message: 'Email already exists.' };
       return;
     }
     // if not check if username is taken
     const usernameExists = await findUserByUsername(user.username);
     if (usernameExists) {
       ctx.status = 400;
-      ctx.body = 'Username already exists.';
+      ctx.body = { message: 'Username already exists.' };
       return;
     }
     // create welcome chat!
@@ -49,7 +49,7 @@ export async function createOne (ctx: Context, next: () => Promise<any>) {
     ctx.body = result;
   } catch (error) {
     ctx.status = 500;
-    ctx.body = error;
+    ctx.body = { message: error };
   }
 }
 
@@ -57,7 +57,7 @@ export async function getUserById (ctx: Context) {
   const id = ctx.params.id;
   if (!id) {
     ctx.status = 400;
-    ctx.body = 'User ID was not supplied.';
+    ctx.body = { message: 'User ID was not supplied.' };
     return;
   }
   try {
@@ -66,7 +66,7 @@ export async function getUserById (ctx: Context) {
       id
     )) as IUser;
     const result = { username, email, address, credits };
-    */
+    */  
 
     const result = await findUserById(id);
 
@@ -74,6 +74,6 @@ export async function getUserById (ctx: Context) {
     ctx.body = result;
   } catch (error) {
     ctx.status = 500;
-    ctx.body = error;
+    ctx.body = { message: error };
   }
 }

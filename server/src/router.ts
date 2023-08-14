@@ -1,7 +1,8 @@
 import Router from 'koa-router';
-// import controllers
+import { authMiddleware } from './middleware/auth.middleware';
 import * as user from './controllers/user.controller';
 import * as collection from './controllers/collection.controller';
+import { Context } from 'koa';
 
 const router = new Router();
 
@@ -12,18 +13,34 @@ router.get('/', async (ctx, next) => {
 
 // user routes
 router.get('/user/:id', user.getUserById);
+router.put('/user/:id', (ctx: Context) => {
+  ctx.body ='Update User'
+});
+router.delete('/user/:id', (ctx: Context) => {
+  ctx.body ='Delete user'
+});
+
+/* Not sure if needed */
+// router.post('/user/', (ctx: Context) => {
+//   ctx.body ='Login'
+// });
 
 // collection routes
 
 /* This will be the user id from the JWT & not the params */
-router.get('/collection/all/:id', collection.getAllCollecttions);
+router.get('/collection/all/:id', authMiddleware, collection.getAllCollecttions);
 
-router.post('/collection', collection.createCollection);
+router.post('/collection', authMiddleware, collection.createCollection);
 router.delete('/collection/:id', collection.deleteCollection);
-router.put('/collection/:id', );
+router.put('/collection/:id', (ctx: Context) => {
+  ctx.body ='Update Collection'
+});
 
-// register routes
+// auth routes
 router.post('/register', user.createOne);
+router.post('/login', (ctx: Context) => {
+  ctx.body ='Login'
+})
 
 // Add routes for app here
 export default router;

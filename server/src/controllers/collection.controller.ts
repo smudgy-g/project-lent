@@ -1,42 +1,44 @@
 import { Context } from 'koa';
-import { getAllCollections, createOne, deleteOne, findCollectionById } from '../models/collection.model';
+import { getAllCollections, createOne, deleteOne } from '../models/collection.model';
+import { Collection } from '../models/collection.schema';
 
 export async function getAllCollecttions (ctx: Context) {
   /* This will be the user id from the JWT */
-  const id = ctx.params.id;
+  const id = ctx.userId;
   if (!id) {
     ctx.status = 400;
-    ctx.body = 'User ID was not supplied.';
+    ctx.body = { message: 'User ID was not supplied.' };
     return;
   }
   try {
     const result = await getAllCollections(id);
-
     ctx.status = 200;
     ctx.body = result;
   } catch (error) {
     ctx.status = 500;
-    ctx.body = error;
+    ctx.body = { message: error };
   }
 }
 
 export async function createCollection (ctx:Context) {
+  const userId = ctx.userId;
   const { name } = ctx.request.body as any;
   if (!name) {
     ctx.status = 400;
-    ctx.body = 'No name was supplied.';
+    ctx.body = { messsage: 'No name was supplied.' };
     return;
   }
   /* error handle for collection already existing based on user._id !!! */
-  // need the client._id from the JJWT object
+  // need the client._id from the JWT object
+  // const user = await findUserById(id) as IUser;
 
   try {
-    const result = await createOne(name);
+    const newCollection = await createOne(name, userId);
     ctx.status = 201;
-    ctx.body = result;
+    ctx.body = newCollection;
   } catch (error) {
     ctx.status = 500;
-    ctx.body = error;
+    ctx.body = { message: error };
   }
 }
 
@@ -44,7 +46,7 @@ export async function deleteCollection (ctx:Context) {
   const id = ctx.params.id;
   if (!id) {
     ctx.status = 400;
-    ctx.body = 'No collection ID was supplied.';
+    ctx.body = { message: 'No collection ID was supplied.' };
     return;
   }
 
@@ -54,6 +56,6 @@ export async function deleteCollection (ctx:Context) {
     ctx.body = result;
   } catch (error) {
     ctx.status = 500;
-    ctx.body = error;
+    ctx.body = { message: error };
   }
 }
