@@ -12,19 +12,18 @@ export interface LoginFormData {
 
 function Login() {
 
-  const navigate = useNavigate()
-
   /* State Variables */
 
   const [loginFormData, setLoginFormData] = useState<LoginFormData>({
     username: '',
     password: '',
   });
-  const [error, setError] = useState<string>('')
+  const [error, setError] = useState<string>('');
 
-  /* State Variables */
-  const signIn = useSignIn()
-  const navigate = useNavigate()
+  /* Hooks */
+
+  const signIn = useSignIn();
+  const navigate = useNavigate();
 
 
   /* Handler Functions */
@@ -41,7 +40,7 @@ function Login() {
     try {
       event.preventDefault();
       const response = await loginUser(loginFormData);
-  
+
       // If the login attempt was successful,
       // use the token in the server response
       // to sign the user in, and redirect the user to the root,
@@ -97,7 +96,7 @@ function Login() {
               <button type="submit"
               disabled={
                 loginFormData.username === '' ||
-                loginFormData.password === '' 
+                loginFormData.password === ''
               }
               >Log In</button>
             </div>
