@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { loginUser } from "../../service/apiService";
+import { useSignIn } from 'react-auth-kit'
+import { useNavigate } from 'react-router-dom'
 
 /* Type Definitions */
 
@@ -16,6 +18,12 @@ function Login() {
     username: '',
     password: '',
   });
+  const [error, setError] = useState<string>('')
+
+  /* State Variables */
+  const signIn = useSignIn()
+  const navigate = useNavigate()
+
 
   /* Handler Functions */
 
@@ -27,10 +35,30 @@ function Login() {
     }));
   };
 
-  function handleSubmit(event: React.FormEvent) {
-    event.preventDefault();
-    console.log(loginFormData)
-    loginUser(loginFormData)
+  async function handleSubmit(event: React.FormEvent) {
+    try {
+      event.preventDefault();
+      const response = await loginUser(loginFormData);
+  
+      // If the login attempt was successful,
+      // use the token in the server response
+      // to sign the user in, and redirect the user to the root,
+      // otherwise show the error message
+      if (response.token) {
+        signIn({
+          token: response.token,
+          expiresIn: 3600,
+          tokenType: 'Bearer',
+          authState: { loginFormData }
+        });
+        navigate('/')
+      } else {
+        setError(response.message)
+      }
+    } catch (err) {
+      console.log('Error:', err)
+    }
+   
   };
 
   /* Render Component */
