@@ -2,6 +2,7 @@ import Router from 'koa-router';
 import { authMiddleware } from './middleware/auth.middleware';
 import * as user from './controllers/user.controller';
 import * as collection from './controllers/collection.controller';
+import * as auth from './controllers/auth.controller'
 import { Context } from 'koa';
 
 const router = new Router();
@@ -38,9 +39,7 @@ router.put('/collection/:id', (ctx: Context) => {
 
 // auth routes
 router.post('/register', user.createOne);
-router.post('/login', (ctx: Context) => {
-  ctx.body ='Login'
-})
+router.post('/login', auth.login)
 
 // Add routes for app here
 export default router;
