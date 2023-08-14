@@ -5,8 +5,8 @@ import { IMessage } from '../_types';
 const messageSchema = new Schema<IMessage>(
   {
     body: { type: String, required: true }, // user._id
-    from: { type: String, required: true },
-    to: { type: String, required: true }, // URL to cloudinary link
+    from: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    to: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // URL to cloudinary link
     seen: { type: Boolean },
   },
   { timestamps: true }

@@ -5,13 +5,12 @@ import * as user from './user.model';
 export async function createOne (name: string, userId: string): Promise<ICollection | null> {
   try {
     const newCollection = new Collection({
-    // const newCollection = await Collection.create({
       name: name,
       items: [],
     });
     return newCollection.save().then((savedCollection) => {
       const collectionId = savedCollection._id;
-      // update user ccollections arrray
+      // update user collections array
       user.addToUserCollection(userId, collectionId);
 
       // Return the newly created collection
@@ -39,9 +38,9 @@ export async function findCollectionByName (name: string): Promise<ICollection |
 }
 
 
-export async function getAllCollections (id: string): Promise<any | null> {
+export async function getAll (userId: string): Promise<any | null> {
   try {
-    const { collections } = (await user.findUserById(id)) as IUser;
+    const { collections } = (await user.findUserById(userId)) as IUser;
     return collections;
   } catch (error) {
     throw error;
