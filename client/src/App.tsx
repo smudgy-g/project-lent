@@ -2,16 +2,20 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import {AuthProvider, RequireAuth} from 'react-auth-kit'
+import {AuthProvider, RequireAuth} from 'react-auth-kit';
 
+import Header from "./components/Header";
+import HeaderProvider from "./contexts/HeaderContext";
+// import TabNavigation from "./components/TabNavigation";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Profile from "./components/profile/Profile";
+import CollectionOverview from "./components/collections/CollectionOverview";
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: undefined
+    element: <CollectionOverview />
   },
   {
     path: '/register',
@@ -27,20 +31,21 @@ const router = createBrowserRouter([
     //             <Profile/>
     //           </RequireAuth>)
     element: <Profile></Profile>
-          
   }
 ])
 
 function App() {
   return (<>
-    <h1>Header</h1>
     <AuthProvider authType={'cookie'}
                   authName={'_auth'}
                   cookieDomain={window.location.hostname}
                   cookieSecure={window.location.protocol === 'https:'}>
-      <RouterProvider router={router} />
+      <HeaderProvider>
+        <Header />
+        <RouterProvider router={router} />
+      </HeaderProvider>
+      {/* <TabNavigation /> */}
     </AuthProvider>
-    <h1>Navigation</h1>
   </>);
 }
 
