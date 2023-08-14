@@ -31,7 +31,6 @@ const router = createBrowserRouter([
     //             <Profile/>
     //           </RequireAuth>)
     element: <Profile></Profile>
-
   }
 ])
 
