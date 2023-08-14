@@ -12,6 +12,8 @@ export interface LoginFormData {
 
 function Login() {
 
+  const navigate = useNavigate()
+
   /* State Variables */
 
   const [loginFormData, setLoginFormData] = useState<LoginFormData>({
@@ -58,7 +60,6 @@ function Login() {
     } catch (err) {
       console.log('Error:', err)
     }
-   
   };
 
   /* Render Component */

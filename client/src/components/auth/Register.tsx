@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { registerUser } from "../../service/apiService";
-
+import { useNavigate } from 'react-router-dom'
 /* Type Definitions */
 
 export interface RegisterFormData {
@@ -18,6 +18,8 @@ export interface Address {
 };
 
 function Register() {
+
+  const navigate = useNavigate()
 
   /* State Variables */
 
@@ -60,6 +62,7 @@ function Register() {
     event.preventDefault();
     console.log(registerFormData);
     registerUser(registerFormData);
+    navigate('/login')
     setRegisterFormData({
       username: '',
       password: '',
