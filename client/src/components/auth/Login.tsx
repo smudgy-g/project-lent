@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { loginUser } from "../../service/apiService";
+import { useNavigate } from 'react-router-dom'
 
 /* Type Definitions */
 
@@ -9,6 +10,8 @@ export interface LoginFormData {
 };
 
 function Login() {
+
+  const navigate = useNavigate()
 
   /* State Variables */
 
@@ -31,6 +34,7 @@ function Login() {
     event.preventDefault();
     console.log(loginFormData)
     loginUser(loginFormData)
+    navigate('/')
   };
 
   /* Render Component */
