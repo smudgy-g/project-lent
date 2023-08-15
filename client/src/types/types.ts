@@ -17,7 +17,7 @@ export interface Item {
   id: string;
   user: User;
   name: string;
-  imgPath: string;
+  img_url: string;
   value: number;
   description: string;
   collections: Collection[];

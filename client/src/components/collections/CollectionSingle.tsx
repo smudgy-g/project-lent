@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import { Collection, Item } from "../../types/types";
+import { Item } from "../../types/types";
 import { ActionButtonGroupData, HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAllItems, getItemsByCollection } from "../../service/apiService";
+import ItemList from "./ItemList";
 
 export default function CollectionSingle () {
 
@@ -52,7 +53,7 @@ export default function CollectionSingle () {
 
   return (<>
     <div className="collection-single">
-
+      {items && <ItemList items={items} />}
     </div>
   </>)
 }

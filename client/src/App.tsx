@@ -16,7 +16,9 @@ import CollectionSingle from "./components/collections/CollectionSingle";
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <CollectionOverview />
+    element: (<RequireAuth loginPath='/login'>
+                <CollectionOverview />
+              </RequireAuth>)
   },
   {
     path: '/register',
@@ -28,18 +30,21 @@ const router = createBrowserRouter([
   },
   {
     path: '/profile',
-    // element: (<RequireAuth loginPath='/login'>
-    //             <Profile/>
-    //           </RequireAuth>)
-    element: <Profile />
+    element: (<RequireAuth loginPath='/login'>
+                <Profile/>
+              </RequireAuth>)
   },
   {
     path: '/collections',
-    element: <CollectionOverview />
+    element: (<RequireAuth loginPath='/login'>
+                <CollectionOverview />
+              </RequireAuth>)
   },
   {
     path: '/collection/:collectionId',
-    element: <CollectionSingle />
+    element: (<RequireAuth loginPath='/login'>
+                <CollectionSingle />
+              </RequireAuth>)
   }
 ])
 
