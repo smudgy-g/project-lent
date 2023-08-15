@@ -14,11 +14,11 @@ export default function CollectionListItem ({ collection }: CollectionListItemPr
 
   return (<>
     <div className="list-item">
-      <div className="preview-container"></div>
+      <div className="preview-container">
       {collection.items.map((item) => (
-        // <div key={item.id} className="item-preview" style={{backgroundImage: item.img_url}}></div>
-        <img key={item.id} src={item.img_url} alt=""/>
+        <div key={item.id} className="item-preview" style={{backgroundImage: `url(${item.img_url})`}}></div>
       ))}
+      </div>
       <h2>{collection.name}</h2>
     </div>
   </>);
