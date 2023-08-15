@@ -32,11 +32,11 @@ export async function createOne (userId: string, itemData: Partial<IItem>): Prom
     }
 
     const allCollection = await findCollectionByName('All');
-    const allCollectionId = allCollection?._id;
-
+    
     if (!allCollection) {
       throw new Error('Could not find the "All" collection.');
     }
+    const allCollectionId = new mongoose.Types.ObjectId(allCollection._id);
 
     const newItem = new Item({
       user: userIdObject,
@@ -46,7 +46,7 @@ export async function createOne (userId: string, itemData: Partial<IItem>): Prom
 
     return newItem.save().then(savedItem => {
       const itemId = savedItem._id;
-      addItemToCollection(allCollectionId, itemId)
+      addItemToCollection(allCollectionId.toString(), itemId)
     })
     .then(() => newItem);
   } catch (error) {

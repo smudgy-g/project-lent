@@ -98,3 +98,7 @@ export async function checkEmailUsernameExist(email: string, username: string) {
 
   return null;
 }
+
+export async function findUserByUsername(username:string) {
+   return await User.findOne({ username });
+}
