@@ -76,15 +76,17 @@ const router = createBrowserRouter([
 
 function App() {
   return (<>
-    <AuthProvider authType={'cookie'}
-                  authName={'_auth'}
-                  cookieDomain={window.location.hostname}
-                  cookieSecure={window.location.protocol === 'https:'}>
-      <HeaderProvider>
-        <Header />
-        <RouterProvider router={router} />
-      </HeaderProvider>
-    </AuthProvider>
+    <div className="app">
+      <AuthProvider authType={'cookie'}
+                    authName={'_auth'}
+                    cookieDomain={window.location.hostname}
+                    cookieSecure={window.location.protocol === 'https:'}>
+        <HeaderProvider>
+          <Header />
+          <RouterProvider router={router} />
+        </HeaderProvider>
+      </AuthProvider>
+    </div>
   </>);
 }
 
