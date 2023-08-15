@@ -23,7 +23,7 @@ function Inbox() {
     <div className="inbox">
       <div>Chats</div>
       {chats?.map((chat) => (
-        <Link key={chat.id} to="/chat/chatid">
+        <Link key={chat.id} to={`/chat/${chat.id}`}>
           <div className="chat-thumbnail" key={chat.id}>
             <div>{chat.foreignUser}</div>
             <div>{chat.itemName}</div>

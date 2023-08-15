@@ -45,7 +45,8 @@ export interface Message {
   id: string;
   body: string;
   from: User['id'];
+  foreignUsername: string;
   to: User['id'];
-  timestamp: number;
+  createdAt: number;
   seen: boolean;
 }

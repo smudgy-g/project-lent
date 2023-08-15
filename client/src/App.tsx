@@ -81,7 +81,16 @@ const router = createBrowserRouter([
       </RequireAuth>
       <TabNavigation />
     </>)
-  }
+  },
+  {
+    path: '/chat/:chatId',
+    element: (<>
+      <RequireAuth loginPath='/login'>
+        <Inbox />
+      </RequireAuth>
+      <TabNavigation />
+    </>)
+  },
 ])
 
 function App() {

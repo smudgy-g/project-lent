@@ -52,11 +52,11 @@ export async function getUser(): Promise<User> {
 
 export async function putUser(profileEditData : ProfileEditData) {
   try {
-    const userIdObject = getCookieValue('_auth_state');
-    const parsedUserIdObject = JSON.parse(userIdObject);
-    const userId = parsedUserIdObject._id;
+    // const userIdObject = getCookieValue('_auth_state');
+    // const parsedUserIdObject = JSON.parse(userIdObject);
+    // const userId = parsedUserIdObject._id;
 
-    const response = await fetch(`${baseUrl}/user/${userId}`, {
+    const response = await fetch(`${baseUrl}/user`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -200,7 +200,7 @@ export async function getAllChats (): Promise<Chat[]> {
     throw new Error('An error occured');
   }
 }
-export async function getChatbyId (chatId: Chat['id']): Promise<Chat> {
+export async function getChatbyId (chatId: Chat['id'] | undefined): Promise<Chat> {
   try {
     const response = await fetch(`${baseUrl}/inbox/${chatId}`, {
       credentials: 'include'
