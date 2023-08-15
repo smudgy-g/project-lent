@@ -12,6 +12,7 @@ import Login from "./components/auth/Login";
 import Profile from "./components/profile/Profile";
 import CollectionOverview from "./components/collections/CollectionOverview";
 import CollectionSingle from "./components/collections/CollectionSingle";
+import ProfileEdit from "./components/profile/ProfileEdit";
 
 const router = createBrowserRouter([
   {
@@ -29,10 +30,21 @@ const router = createBrowserRouter([
     element: <Login/>
   },
   {
+    path: '/logout',
+    element: <Login/>
+  },
+  {
     path: '/profile',
     element: (<RequireAuth loginPath='/login'>
                 <Profile/>
               </RequireAuth>)
+  },
+  {
+    path: '/profile/edit',
+    // element: (<RequireAuth loginPath='/login'>
+    //             <Profile/>
+    //           </RequireAuth>)
+    element: <ProfileEdit />
   },
   {
     path: '/collections',

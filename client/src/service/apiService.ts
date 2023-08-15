@@ -1,5 +1,6 @@
 import { LoginFormData } from "../components/auth/Login";
 import { RegisterFormData } from "../components/auth/Register"
+import { ProfileEditData } from "../components/profile/ProfileEdit";
 import { Collection, Item, User } from "../types/types";
 
 const baseUrl = "http://localhost:5001"
@@ -49,6 +50,37 @@ export async function getUser(): Promise<User> {
   }
 }
 
+export async function putUser(profileEditData : ProfileEditData) {
+  try {
+    const userIdObject = getCookieValue('_auth_state');
+    const parsedUserIdObject = JSON.parse(userIdObject);
+    const userId = parsedUserIdObject._id;
+
+    const response = await fetch(`${baseUrl}/user/${userId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(profileEditData),
+      credentials: 'include',
+    });
+    return await response.json();
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export async function deleteUser() {
+  try {
+    const response = await fetch(`${baseUrl}/user`, {
+      method: 'DELETE'
+    })
+    return await response.json()
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 /* Authentication */
 
 export async function registerUser (registerFormData: RegisterFormData) {
@@ -62,7 +94,7 @@ export async function registerUser (registerFormData: RegisterFormData) {
       credentials: 'include'
     });
 
-    console.log(await response.json());
+    return await response.json();
   } catch (err) {
     console.log(err);
   };

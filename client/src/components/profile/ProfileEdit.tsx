@@ -1,33 +1,22 @@
-import { useState, useEffect, useContext} from "react";
-import { registerUser } from "../../service/apiService";
-import { useNavigate } from 'react-router-dom'
-import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
+import { useEffect, useState, useContext } from "react";
+import { HeaderContext } from "../../contexts/HeaderContext";
+import { HeaderContextProps } from "../../contexts/HeaderContext";
+import { Address } from "../auth/Register";
+import { putUser } from "../../service/apiService";
+import { useNavigate } from 'react-router-dom';
 
-/* Type Definitions */
-
-export interface RegisterFormData {
+export interface ProfileEditData {
   username: string;
-  password: string;
   email: string;
   address: Address;
 };
 
-export interface Address {
-  streetName: string;
-  streetNumber: string;
-  postalCode: string;
-  city: string;
-};
-
-function Register() {
-
-  const navigate = useNavigate()
+function ProfileEdit() {
 
   /* State Variables */
 
-  const [registerFormData, setRegisterFormData] = useState<RegisterFormData>({
+  const [profileEditData, setProfileEditData] = useState<ProfileEditData>({
     username: '',
-    password: '',
     email: '',
     address: {
       streetName: '',
@@ -40,12 +29,14 @@ function Register() {
   /* Hooks */
 
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
-
+  const navigate = useNavigate();
+      
   /* Use Effects */
 
   useEffect(() => {
     setActionButtonGroupData([]);
   }, []);
+
 
   /* Handler Functions */
 
@@ -53,18 +44,18 @@ function Register() {
     const { name, value } = event.target;
     // Access the properties of the nested address object,
     if (name === 'streetName' || name === 'streetNumber' || name === 'postalCode' || name === 'city') {
-      setRegisterFormData((prevRegisterFormData) => ({
-        ...prevRegisterFormData,
+      setProfileEditData((prevProfileData) => ({
+        ...prevProfileData,
         address: {
-          ...prevRegisterFormData.address,
+          ...prevProfileData.address,
           [name]: value
         }
       }))
     } 
     // Access the non-nested properties of the registerFormData object
     else {
-      setRegisterFormData((prevRegisterFormData) => ({
-        ...prevRegisterFormData,
+      setProfileEditData((prevProfileData) => ({
+        ...prevProfileData,
         [name]: value,
       }));
     };
@@ -72,12 +63,11 @@ function Register() {
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    console.log(registerFormData);
-    registerUser(registerFormData);
-    navigate('/login')
-    setRegisterFormData({
+    console.log(profileEditData)
+    putUser(profileEditData)
+    navigate('/profile')
+    setProfileEditData({
       username: '',
-      password: '',
       email: '',
       address: {
         streetName: '',
@@ -90,30 +80,16 @@ function Register() {
 
   /* Render Component */
 
-  return (
-    <>
-      <div className="register">
-        <div className="form register">
-          <form onSubmit={handleSubmit}>
+  return (<>
+    <div className="profile">
+    <form onSubmit={handleSubmit}>
             <div className="form-element">
               <label>
                 Username:
                 <input
                   type="text"
                   name="username"
-                  value={registerFormData.username}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
-
-            <div className="form-element">
-              <label>
-                Password:
-                <input
-                  type="text"
-                  name="password"
-                  value={registerFormData.password}
+                  value={profileEditData.username}
                   onChange={handleChange}
                 />
               </label>
@@ -125,7 +101,7 @@ function Register() {
                 <input
                   type="text"
                   name="email"
-                  value={registerFormData.email}
+                  value={profileEditData.email}
                   onChange={handleChange}
                 />
               </label>
@@ -137,7 +113,7 @@ function Register() {
                 <input
                   type="text"
                   name="streetName"
-                  value={registerFormData.address.streetName}
+                  value={profileEditData.address.streetName}
                   onChange={handleChange}
                 />
               </label>
@@ -149,7 +125,7 @@ function Register() {
                 <input
                   type="text"
                   name="streetNumber"
-                  value={registerFormData.address.streetNumber}
+                  value={profileEditData.address.streetNumber}
                   onChange={handleChange}
                 />
               </label>
@@ -161,7 +137,7 @@ function Register() {
                 <input
                   type="text"
                   name="postalCode"
-                  value={registerFormData.address.postalCode}
+                  value={profileEditData.address.postalCode}
                   onChange={handleChange}
                 />
               </label>
@@ -173,7 +149,7 @@ function Register() {
                 <input
                   type="text"
                   name="city"
-                  value={registerFormData.address.city}
+                  value={profileEditData.address.city}
                   onChange={handleChange}
                 />
               </label>
@@ -182,21 +158,19 @@ function Register() {
             <div className="form-element">
               <button type="submit"
               disabled={
-                registerFormData.username === '' ||
-                registerFormData.password === '' ||
-                registerFormData.email === '' ||
-                registerFormData.address.streetName === '' ||
-                registerFormData.address.streetNumber === '' ||
-                registerFormData.address.postalCode === '' ||
-                registerFormData.address.city === ''
+                profileEditData.username === '' ||
+                profileEditData.email === '' ||
+                profileEditData.address.streetName === '' ||
+                profileEditData.address.streetNumber === '' ||
+                profileEditData.address.postalCode === '' ||
+                profileEditData.address.city === ''
               }
-              >Register</button>
+              >Save Changes</button>
             </div>
           </form>
-        </div>
-      </div>
-    </>
-  );
+    </div>
+      
+  </>);
 }
 
-export default Register;
+export default ProfileEdit;
