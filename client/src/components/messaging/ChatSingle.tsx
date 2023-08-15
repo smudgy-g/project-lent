@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Chat, User} from "../../types/types";
 import { useParams } from 'react-router-dom'
 import { getChatbyId } from "../../service/apiService";
+import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 
 export default function ChatSingle() {
 
@@ -12,7 +13,8 @@ export default function ChatSingle() {
 
   /* Hooks */
   const {chatId} = useParams()
-  
+  const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
+       
   /* Helper Functions */
 
   // Helper Functions to retrieve the userId by the cookie
@@ -45,8 +47,12 @@ export default function ChatSingle() {
     const userId = parsedUserIdObject._id;
     setUserId(userId);
   }
-  
+
   /* Use Effect */
+
+  useEffect(() => {
+    setActionButtonGroupData([]);
+  }, []);
 
   useEffect(() => {
     getChatbyId(chatId)

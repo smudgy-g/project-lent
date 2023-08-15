@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { getAllChats } from "../../service/apiService";
 import { Chat } from "../../types/types";
 import { Link } from 'react-router-dom'
+import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 
 function Inbox() {
 
@@ -9,7 +10,15 @@ function Inbox() {
 
   const [chats, setChats] = useState<Chat[] | null>(null)
 
+  /* Hooks */
+
+  const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
+
   /* Use Effect */
+
+  useEffect(() => {
+    setActionButtonGroupData([]);
+  }, []);
 
   useEffect(() => {
     getAllChats()
