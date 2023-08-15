@@ -1,11 +1,11 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { IChat } from '../_types';
 
 // Schema for the collection
 const chatSchema = new Schema<IChat>(
   {
     item: { type: Schema.Types.ObjectId, ref: 'Item', required: true }, // item._id
-    messages: { type: [String] },
+    messages: { type: [Schema.Types.ObjectId], ref: 'Chat' },
   },
   { timestamps: true }
 );

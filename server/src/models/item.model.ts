@@ -27,7 +27,7 @@ export async function createOne (userId: string, itemData: Partial<IItem>): Prom
     }
 
     const allCollection = await findCollectionByName('All');
-    const allCollectionId = allCollection?._id.toString();
+    const allCollectionId = allCollection?._id;
 
     if (!allCollection) {
       throw new Error('Could not find the "All" collection.');

@@ -19,7 +19,7 @@ export interface ILogin {
 
 export interface IChat extends Document {
   item: Schema.Types.ObjectId; // item._id
-  messages: string[];
+  messages: Schema.Types.ObjectId[];
 }
 
 export interface IMessage extends Document {

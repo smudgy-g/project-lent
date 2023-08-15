@@ -14,7 +14,10 @@ const itemSchema = new Schema<IItem>({
 }, { timestamps: true });
 
 // remove unique index on the user field
-itemSchema.index({ user: 1 }, { unique: false })
+itemSchema.index({ user: 1 }, { unique: false });
+
+// Create a text index on the name field for searching
+itemSchema.index({name: 'text'});
 
 // Create model from schema
 export const Item = model<IItem>('Item', itemSchema);
