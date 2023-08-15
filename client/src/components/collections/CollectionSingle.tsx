@@ -36,13 +36,13 @@ export default function CollectionSingle () {
       // {
       //   title: 'Edit Collection',
       //   action: () => {
-      //     navigate('/collection/add');
+      //     navigate('/collection/edit');
       //   }
       // },
       {
-        title: 'Add Collection',
+        title: 'Add Item',
         action: () => {
-          navigate('/collection/add');
+          navigate('/item/add');
         }
       }
     ]

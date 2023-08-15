@@ -3,6 +3,7 @@
 import { useContext, useEffect, useState } from "react";
 import { ActionButtonData, HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import DropdownButton from "./DropdownButton";
+// import { useNavigate } from "react-router-dom";
 
 /* Component Definition */
 
@@ -10,6 +11,8 @@ export default function Header () {
 
   const [previousPageName, setPreviousPageName] = useState<string | undefined>(undefined);
   const { actionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
+
+  // const navigate = useNavigate();
 
   /* Use Effect */
 
@@ -20,12 +23,19 @@ export default function Header () {
     setPreviousPageName(previousPageName);
   }, [window.location.pathname]);
 
+  /* Event handler */
+
+  // When the user clicks the "back" button
+  function handleClickBack () {
+    // navigate(-1);
+  }
+
   /* Render Component */
 
   return (<>
     <div className="header">
       {previousPageName &&
-        <button className="button plain back">{previousPageName}</button>
+        <button className="button plain back" onClick={handleClickBack}>{previousPageName}</button>
       }
       {!previousPageName && <div></div>}
       <div className="action-button-group">
