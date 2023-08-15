@@ -28,7 +28,7 @@ export default function CollectionSingle () {
         .then((items) => setItems(items))
         .catch((error) => console.log(error));
     }
-  }, []);
+  }, [collectionId]);
 
   // Populate the Header component’s action button group
   useEffect(() => {

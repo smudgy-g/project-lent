@@ -15,6 +15,7 @@ import CollectionSingle from "./components/collections/CollectionSingle";
 import ProfileEdit from "./components/profile/ProfileEdit";
 import Inbox from "./components/messaging/Inbox";
 import ChatSingle from "./components/messaging/ChatSingle";
+import ItemSingle from "./components/collections/ItemSingle";
 
 const router = createBrowserRouter([
   {
@@ -75,6 +76,16 @@ const router = createBrowserRouter([
       <Header />
       <RequireAuth loginPath='/login'>
         <CollectionSingle />
+      </RequireAuth>
+      <TabNavigation />
+    </>)
+  },
+  {
+    path: '/item/:itemId',
+    element: (<>
+      <Header />
+      <RequireAuth loginPath="/login">
+        <ItemSingle />
       </RequireAuth>
       <TabNavigation />
     </>)

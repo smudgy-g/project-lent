@@ -175,6 +175,45 @@ export async function getItemsByCollection (id: string): Promise<Item[]> {
   }
 }
 
+export async function getItemById (id: string): Promise<Item> {
+  try {
+    const response = await fetch(`${baseUrl}/item/${id}`, {
+      credentials: 'include'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
+export async function deleteItem (id: string): Promise<Item> {
+  try {
+    const response = await fetch(`${baseUrl}/item/${id}`, {
+      method: 'DELETE',
+      credentials: 'include'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
 /* Messaging */
 
 export async function getAllChats (): Promise<Chat[]> {
