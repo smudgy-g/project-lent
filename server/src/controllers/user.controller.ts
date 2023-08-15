@@ -64,12 +64,24 @@ export async function updateUser (ctx: Context) {
     return;
   }
 
-  const detailsExist = await userModel.checkEmailUsernameExist(email, username);
-  if (detailsExist) {
-    ctx.status = 400;
-    ctx.body = { message: detailsExist.message };
-    return;
+  const user = await userModel.findUserById(id);
+
+  if (user?.username !== username) {
+    // const detailsExist = await userModel.checkEmailUsernameExist(email, username);
+    // if (detailsExist) {
+    //   ctx.status = 400;
+    //   ctx.body = { message: detailsExist.message };
+    //   return;
+    // }
+  } else if (user?.email !== email) {
+     const detailsExist = await userModel.checkEmailUsernameExist(email, username);
+    // if (detailsExist) {
+    //   ctx.status = 400;
+    //   ctx.body = { message: detailsExist.message };
+    //   return;
+    // }
   }
+
 
   const userData = { username, email, address }
 
