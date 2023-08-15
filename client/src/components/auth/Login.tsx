@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { loginUser } from "../../service/apiService";
 import { useSignIn } from 'react-auth-kit'
 import { useNavigate } from 'react-router-dom'
-import { log } from "console";
+import { HeaderContext } from "../../contexts/HeaderContext";
+import { HeaderContextProps } from "../../contexts/HeaderContext";
 
 /* Type Definitions */
 
@@ -25,7 +26,13 @@ function Login() {
 
   const signIn = useSignIn();
   const navigate = useNavigate();
+  const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
+        
+  /* Use Effects */
 
+  useEffect(() => {
+    setActionButtonGroupData([]);
+  }, []);
 
   /* Handler Functions */
 
