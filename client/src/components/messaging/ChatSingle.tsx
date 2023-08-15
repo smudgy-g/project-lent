@@ -3,7 +3,7 @@ import { Chat, User} from "../../types/types";
 import { useParams } from 'react-router-dom'
 import { getChatbyId } from "../../service/apiService";
 
-function Chat() {
+export default function ChatSingle() {
 
   /* State Variables */
 
@@ -12,14 +12,6 @@ function Chat() {
 
   /* Hooks */
   const {chatId} = useParams()
-
-  /* Use Effect */
-
-  useEffect(() => {
-    getChatbyId(chatId)
-      .then((chat) => setCurrentChat(chat))
-      .catch((error) => console.log(error));
-  })
   
   /* Helper Functions */
 
@@ -53,8 +45,18 @@ function Chat() {
     const userId = parsedUserIdObject._id;
     setUserId(userId);
   }
+  
+  /* Use Effect */
 
-  getUserId();
+  useEffect(() => {
+    getChatbyId(chatId)
+      .then((result) => setCurrentChat(result))
+      .catch((error) => console.log(error));
+  }, [])
+
+  useEffect(() => (
+    getUserId()
+  ))
 
   /* Render Component */
 
@@ -94,5 +96,3 @@ function Chat() {
     
   </>);
 }
-
-export default Chat;

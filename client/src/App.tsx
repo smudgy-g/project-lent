@@ -14,6 +14,7 @@ import CollectionOverview from "./components/collections/CollectionOverview";
 import CollectionSingle from "./components/collections/CollectionSingle";
 import ProfileEdit from "./components/profile/ProfileEdit";
 import Inbox from "./components/messaging/Inbox";
+import ChatSingle from "./components/messaging/ChatSingle";
 
 const router = createBrowserRouter([
   {
@@ -86,7 +87,7 @@ const router = createBrowserRouter([
     path: '/chat/:chatId',
     element: (<>
       <RequireAuth loginPath='/login'>
-        <Inbox />
+        <ChatSingle />
       </RequireAuth>
       <TabNavigation />
     </>)
