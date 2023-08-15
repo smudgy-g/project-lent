@@ -1,18 +1,20 @@
-/* Imports */
-
 import { useContext, useEffect, useState } from "react";
 import { ActionButtonData, HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import DropdownButton from "./DropdownButton";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 /* Component Definition */
 
 export default function Header () {
 
-  const [previousPageName, setPreviousPageName] = useState<string | undefined>(undefined);
-  const { actionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
+  /* State Variable */
 
-  // const navigate = useNavigate();
+  const [previousPageName, setPreviousPageName] = useState<string | undefined>(undefined);
+
+  /* Hooks */
+
+  const { actionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
+  const navigate = useNavigate();
 
   /* Use Effect */
 
@@ -27,7 +29,7 @@ export default function Header () {
 
   // When the user clicks the "back" button
   function handleClickBack () {
-    // navigate(-1);
+    navigate(-1);
   }
 
   /* Render Component */

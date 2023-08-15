@@ -144,7 +144,6 @@ export async function getAllItems (): Promise<Item[]> {
     });
 
     const data = await response.json();
-    console.log(data);
 
     if (!response.ok) {
       throw new Error(data.message);
