@@ -43,7 +43,7 @@ export async function findCollectionByName (name: string): Promise<ICollection |
 export async function getAll (userId: string): Promise<any | null> {
   try {
     // const { collections } = (await user.findUserById(userId)) as IUser;
-    const collections = await User.aggregate([
+    const data = await User.aggregate([
       {
         $match: {
           _id: new mongoose.Types.ObjectId(userId)
@@ -74,12 +74,14 @@ export async function getAll (userId: string): Promise<any | null> {
           'items.img_url': { $slice: ['$items.img_url', 4] }
         }
       }
-      // {
-      //   $project: {
-      //     'collections.name': 1
-      //   }
-      // }
-    ])
+    ]);
+
+    const collections = data.map(item => ({
+      id: item.collections._id,
+      name: item.collections.name,
+      items: item.items.flatMap((item: { img_url: any; }) => ({img_url: item.img_url[0]}))
+    }));
+
     return collections;
   } catch (error) {
     throw error;
