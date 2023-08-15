@@ -11,6 +11,7 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Profile from "./components/profile/Profile";
 import CollectionOverview from "./components/collections/CollectionOverview";
+import CollectionSingle from "./components/collections/CollectionSingle";
 
 const router = createBrowserRouter([
   {
@@ -30,7 +31,11 @@ const router = createBrowserRouter([
     // element: (<RequireAuth loginPath='/login'>
     //             <Profile/>
     //           </RequireAuth>)
-    element: <Profile></Profile>
+    element: <Profile />
+  },
+  {
+    path: '/collections',
+    element: <CollectionOverview />
   }
 ])
 

@@ -3,6 +3,7 @@ import { ActionButtonGroupData, HeaderContext, HeaderContextProps } from "../../
 import { useNavigate } from "react-router-dom";
 import { Collection } from "../../types/types";
 import { getAllCollections } from "../../service/apiService";
+import CollectionList from "./CollectionList";
 
 export default function CollectionOverview () {
 
@@ -17,9 +18,11 @@ export default function CollectionOverview () {
 
   useEffect(() => {
     getAllCollections()
-      .then((collections) => setCollections(collections));
+      .then((collections) => setCollections(collections))
+      .catch((error) => console.log(error));
   }, []);
 
+  // Populate the Header component’s action button group
   useEffect(() => {
     const localActionButtonGroupData: ActionButtonGroupData = [
       {
@@ -29,7 +32,6 @@ export default function CollectionOverview () {
         }
       }
     ]
-
     setActionButtonGroupData(localActionButtonGroupData);
   }, []);
 
@@ -38,7 +40,7 @@ export default function CollectionOverview () {
   return (<>
     <div className="collection-overview">
       <h1>Collections</h1>
-      {/* {collections?.map((collection: Collection) => <div>{collection.name}</div>)} */}
+      {collections && <CollectionList collections={collections} />}
     </div>
   </>)
 }
