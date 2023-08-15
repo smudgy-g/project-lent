@@ -1,7 +1,7 @@
 import { LoginFormData } from "../components/auth/Login";
 import { RegisterFormData } from "../components/auth/Register"
 import { ProfileEditData } from "../components/profile/ProfileEdit";
-import { Collection, Item, User } from "../types/types";
+import { Chat, Collection, Item, User } from "../types/types";
 
 const baseUrl = "http://localhost:5001"
 
@@ -73,8 +73,9 @@ export async function putUser(profileEditData : ProfileEditData) {
 export async function deleteUser() {
   try {
     const response = await fetch(`${baseUrl}/user`, {
-      method: 'DELETE'
-    })
+      method: 'DELETE',
+      credentials: 'include'
+    });
     return await response.json()
   } catch (err) {
     console.log(err)
@@ -175,5 +176,58 @@ export async function getItemsByCollection (id: string): Promise<Item[]> {
   }
   catch (err) {
     throw new Error('An error occured');
+  }
+}
+
+/* Messaging */
+
+export async function getAllChats (): Promise<Chat[]> {
+  try {
+    const response = await fetch(`${baseUrl}/inbox`, {
+      credentials: 'include'
+    });
+
+    const data = await response.json();
+    console.log(data);
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+export async function getChatbyId (chatId: Chat['id']): Promise<Chat> {
+  try {
+    const response = await fetch(`${baseUrl}/inbox/${chatId}`, {
+      credentials: 'include'
+    });
+
+    const data = await response.json();
+    console.log(data);
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
+export async function deleteChat(chatId: Chat['id']) {
+  try {
+    const response = await fetch(`${baseUrl}/user/${chatId}`, {
+      method: 'DELETE',
+      credentials: 'include'
+    });
+    return await response.json()
+  } catch (err) {
+    console.log(err)
   }
 }
