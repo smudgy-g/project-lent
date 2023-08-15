@@ -23,7 +23,7 @@ function Chat() {
   
   /* Helper Functions */
 
-  // Helper Function to get the userId
+  // Helper Functions to retrieve the userId by the cookie
   function getCookieValue(cookieName : string)  {
     const cookies = document.cookie.split(';');
 
@@ -46,6 +46,7 @@ function Chat() {
     return '';
   }
 
+  // Helper Function to parse and set the userId
   function getUserId () {
     const userIdObject = getCookieValue('_auth_state');
     const parsedUserIdObject = JSON.parse(userIdObject);
