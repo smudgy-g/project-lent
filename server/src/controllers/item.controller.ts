@@ -74,8 +74,8 @@ export async function findItemsByCollectionId (ctx:Context) {
 
 export async function updateItemById (ctx: Context) {
   const id = ctx.params.id;
-  const { name, photo, value, description, lendable, collections } = ctx.request.body as Partial<IItem>;
-  const itemData = { name, photo, value, description, lendable, collections };
+  const { name, img_url, value, description, lendable, collections } = ctx.request.body as Partial<IItem>;
+  const itemData = { name, img_url, value, description, lendable, collections };
 
   if (!id) {
     ctx.status = 400;

@@ -3,7 +3,7 @@ import { Document, Schema } from 'mongoose';
 export interface IItem extends Document {
   user: Schema.Types.ObjectId; // user._id
   name: string;
-  photo?: string; // URL to cloudinary link
+  img_url?: string; // URL to cloudinary link
   value?: number;
   description: string;
   lendable: boolean;

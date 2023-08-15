@@ -4,7 +4,7 @@ import { IItem } from '../_types';
 const itemSchema = new Schema<IItem>({
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // user._id
   name: { type: String, required: true },
-  photo: { type: String }, // URL to cloudinary link
+  img_url: { type: String }, // URL to cloudinary link
   value: { type: Number },
   description: { type: String, required: true },
   lendable: { type: Boolean },

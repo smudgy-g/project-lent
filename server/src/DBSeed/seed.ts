@@ -115,7 +115,7 @@ async function seedDatabase() {
     const item1 = await Item.create({
       user: user1._id,
       name: 'Power Drill',
-      photo: 'http://5.imimg.com/data5/VW/FM/MY-38627328/cordless-hand-driller-500x500.jpg',
+      img_url: 'http://5.imimg.com/data5/VW/FM/MY-38627328/cordless-hand-driller-500x500.jpg',
       value: 300,
       description: 'Electric drill, good working condition.',
       lendable: true,
@@ -127,7 +127,7 @@ async function seedDatabase() {
     const item2 = await Item.create({
       user: user2._id,
       name: 'Vacuum Cleaner',
-      photo: 'https://www.electrolux.com.my/globalassets/appliances/vacuum-clearner/z931-fr-1500x1500.png?preset=medium',
+      img_url: 'https://www.electrolux.com.my/globalassets/appliances/vacuum-clearner/z931-fr-1500x1500.png?preset=medium',
       value: 200,
       description: 'It is no Dyson but it will do.',
       lendable: false,
@@ -139,7 +139,7 @@ async function seedDatabase() {
     const item3 = await Item.create({
       user: user2._id,
       name: 'Drill',
-      photo: 'https://d1b5h9psu9yexj.cloudfront.net/13147/Bosch-PS31-2A-12-Volt-Max-Drill-Driver-Kit_20181127-194416_full.jpg',
+      img_url: 'https://d1b5h9psu9yexj.cloudfront.net/13147/Bosch-PS31-2A-12-Volt-Max-Drill-Driver-Kit_20181127-194416_full.jpg',
       value: 200,
       description: 'Very nice Bosch drill',
       lendable: false,
