@@ -78,9 +78,9 @@ const router = createBrowserRouter([
     element: (<>
       <RequireAuth loginPath='/login'>
         <Inbox />
-      </RequireAuth>)
+      </RequireAuth>
       <TabNavigation />
-    </>
+    </>)
   }
 ])
 
