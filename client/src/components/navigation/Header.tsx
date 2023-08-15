@@ -17,7 +17,6 @@ export default function Header () {
   // and update the previousPagePath
   useEffect(() => {
     const previousPageName = lookUpPageNameFromPathName(window.location.pathname);
-    console.log(previousPageName);
     setPreviousPageName(previousPageName);
   }, [window.location.pathname]);
 
@@ -28,6 +27,7 @@ export default function Header () {
       {previousPageName &&
         <button className="button plain back">{previousPageName}</button>
       }
+      {!previousPageName && <div></div>}
       <div className="action-button-group">
         {actionButtonGroupData.map((item: (ActionButtonData | ActionButtonData[]), index: number) => {
           // If the item is an array of action button objects
@@ -45,10 +45,9 @@ export default function Header () {
 /* Helper Function */
 
 function lookUpPageNameFromPathName (pathname: string) {
-  const pathArray = pathname.split('/');
-  console.log(pathname);
+  const pathArray = pathname.slice(1).split('/');
 
   if (pathArray.length < 1) return undefined;
   if (pathname === '/' || pathname === '/register' || pathname === '/login' || pathname === '/profile' || pathname === '/collections' || pathname === '/inbox') return '';
-  else if (pathArray.length === 2) return pathArray[0].slice(0, 1).toUpperCase() + pathArray[0].slice(1);
+  else if (pathArray.length > 1) return pathArray[0].slice(0, 1).toUpperCase() + pathArray[0].slice(1);
 }
