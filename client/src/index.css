@@ -21,8 +21,56 @@ body,
 
 /* COMPONENTS */
 
+.app {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app > * {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.app > *:nth-child(2) {
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.tab-navigation {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Header */
+
+.action-button-group {
+  display: flex;
+}
+
+.dropdown-group {
+  position: relative;
+}
+
+.button-list {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: max-content;
+
+  display: flex;
+  flex-direction: column;
+}
+
 /* REGISTER */
-
-
 
 /* BASIC CLASSES */

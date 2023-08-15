@@ -1,7 +1,8 @@
 /* Imports */
 
 import { useContext, useEffect, useState } from "react";
-import { ActionButtonData, HeaderContext, HeaderContextProps } from "../contexts/HeaderContext";
+import { ActionButtonData, HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
+import DropdownButton from "./DropdownButton";
 
 /* Component Definition */
 
@@ -26,16 +27,12 @@ export default function Header () {
       {previousPageName &&
         <button className="button plain back">{previousPageName}</button>
       }
+      {!previousPageName && <div></div>}
       <div className="action-button-group">
         {actionButtonGroupData.map((item: (ActionButtonData | ActionButtonData[]), index: number) => {
           // If the item is an array of action button objects
           if (Array.isArray(item)) {
-            return (<>
-              <button key={index} className="button action multi">…</button>
-              <div key={`${index}-list`} className="button-list">
-                {item.map((item: ActionButtonData, index: number) => <button key={index} className="button" onClick={item.action}>{item.title}</button>)}
-              </div>
-            </>);
+            return <DropdownButton actionButtonDataArray={item} />;
           }
           // If the item is a action button object
           return <button key={index} className="button action" onClick={item.action}>{item.title}</button>
@@ -48,8 +45,9 @@ export default function Header () {
 /* Helper Function */
 
 function lookUpPageNameFromPathName (pathname: string) {
-  const pathArray = pathname.split('/');
+  const pathArray = pathname.slice(1).split('/');
+
   if (pathArray.length < 1) return undefined;
-  if (pathArray.length === 1) return pathname.slice(0, 1).toUpperCase() + pathname.slice(1);
-  else return pathArray[1];
+  if (pathname === '/' || pathname === '/register' || pathname === '/login' || pathname === '/profile' || pathname === '/collections' || pathname === '/inbox') return '';
+  else if (pathArray.length > 1) return pathArray[0].slice(0, 1).toUpperCase() + pathArray[0].slice(1);
 }
