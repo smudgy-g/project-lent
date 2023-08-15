@@ -55,20 +55,33 @@ export async function getUserById (ctx: Context) {
 }
 
 export async function updateUser (ctx: Context) {
+  console.log('hello update user');
   const id = ctx.userId;
   const { username, email, address } = ctx.request.body as Partial<IUser>;
   
+  console.log({ username, email, address });
   if (!username || !email || !address) {
     ctx.status = 400;
     ctx.body = { message: 'One or more fields missing.' };
     return;
   }
 
-  const detailsExist = await userModel.checkEmailUsernameExist(email, username);
-  if (detailsExist) {
-    ctx.status = 400;
-    ctx.body = { message: detailsExist.message };
-    return;
+  const user = await userModel.findUserById(id);
+
+  if (user?.username !== username) {
+    const checkUsername = await userModel.findUserByUsername(username);
+    if (checkUsername) {
+      ctx.status = 400;
+      ctx.body = { message: 'Username already exists.'};
+      return;
+    }
+  } else if (user?.email !== email) {
+     const checkEmail = await userModel.findUserByEmail(email);
+    if (checkEmail) {
+      ctx.status = 400;
+      ctx.body = { message: 'Email already exists.' };
+      return;
+    }
   }
 
   const userData = { username, email, address }
