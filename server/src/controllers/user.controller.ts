@@ -92,13 +92,9 @@ export async function deleteUser (ctx:Context) {
     return;
   }
   try {
-    const result = await userModel.deleteUserById(userId)
+    await userModel.deleteUserById(userId)
     ctx.status = 200;
-    ctx.body = { 
-      succcess: true,
-      message: 'User deleted.', 
-      result,
-    };
+    ctx.body = { success: true };
     return;
   } catch (error) {
     ctx.status = 500;

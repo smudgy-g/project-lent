@@ -102,9 +102,9 @@ export async function deleteItem (ctx:Context) {
   }
 
   try {
-    const result = await deleteOne(id);
+    await deleteOne(id);
     ctx.status = 200;
-    ctx.body = { message: 'success', result };
+    ctx.body = { success: true };
   } catch (error) {
     ctx.status = 500;
     ctx.body = { message: error };

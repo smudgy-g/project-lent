@@ -2,8 +2,9 @@ import Router from 'koa-router';
 import { authenticate } from './middleware/auth.middleware';
 import * as user from './controllers/user.controller';
 import * as collection from './controllers/collection.controller';
-import * as auth from './controllers/auth.controller'
-import * as item from './controllers/item.controller'
+import * as auth from './controllers/auth.controller';
+import * as item from './controllers/item.controller';
+import * as inbox from './controllers/inbox.controller';
 import { Context } from 'koa';
 
 const router = new Router();
@@ -12,11 +13,6 @@ const router = new Router();
 router.get('/user/:id', user.getUserById);
 router.put('/user', authenticate, user.updateUser);
 router.delete('/user', authenticate, user.deleteUser);
-
-/* Not sure if needed */
-// router.post('/user/', (ctx: Context) => {
-//   ctx.body ='Login'
-// });
 
 // collection routes
 
@@ -38,5 +34,11 @@ router.post('/item', authenticate, item.createItem);
 router.put('/item/:id', authenticate, item.updateItemById);
 router.delete('/item/:id', authenticate, item.deleteItem);
 
-// Add routes for app here
+// messaging routes
+router.get('/inbox', authenticate, inbox.getAllChats);
+router.get('/inbox/:chatid', authenticate);
+router.post('/inbox', authenticate);
+router.post('/inbox/:chatid', authenticate);
+router.delete('/inbox/:chatid', authenticate, inbox.deleteChat);
+
 export default router;

@@ -55,12 +55,12 @@ export async function createOne (userId: string, itemData: Partial<IItem>): Prom
   }
 }
 
-export async function findItemsByCollection(collectionId: string): Promise<IItem[] | null> {
+export async function findItemsByCollection(collectionId: string): Promise<Partial<IItem>[] | null> {
   try {
     // COnvert the collection ID to a objectId type
     const collectionIdObject = new mongoose.Types.ObjectId(collectionId);
    // Use the aggregation pipeline with $lookup to retrieve items for the collection
-      const items = await Collection.aggregate([
+      const data = await Collection.aggregate([
       {
         $match: {
           _id: collectionIdObject
@@ -79,6 +79,7 @@ export async function findItemsByCollection(collectionId: string): Promise<IItem
       },
       {
         $project: {
+          _id: 0,
           'items._id': 1,
           'items.name': 1,
           'items.description': 1,
@@ -89,6 +90,16 @@ export async function findItemsByCollection(collectionId: string): Promise<IItem
         }
       }
     ]);
+
+    const items = data.map(item => ({
+      id: item.items.id,
+      name: item.items.name,
+      img_url: item.items.img_url,
+      value: item.items.value,
+      description: item.items.description,
+      lendable: item.items.lendable,
+      available: item.items.available
+    }));
     
     return items;
   } catch (error) {

@@ -47,9 +47,9 @@ export async function deleteCollection (ctx:Context) {
   }
 
   try {
-    const result = await collectionModel.deleteOne(id);
+    await collectionModel.deleteOne(id);
     ctx.status = 200;
-    ctx.body = result;
+    ctx.body = { success: true };
   } catch (error) {
     ctx.status = 500;
     ctx.body = { message: error };
