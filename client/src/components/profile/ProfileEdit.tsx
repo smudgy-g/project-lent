@@ -73,7 +73,7 @@ function ProfileEdit() {
     event.preventDefault();
     console.log(profileEditData)
     putUser(profileEditData)
-    navigate(-1)
+    navigate('/profile')
   };
 
   /* Render Component */

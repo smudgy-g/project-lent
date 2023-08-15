@@ -97,7 +97,7 @@ export default function ChatSingle() {
           )
           }
         </div>
-    ))}
+      ))}
     </div>
     
   </>);

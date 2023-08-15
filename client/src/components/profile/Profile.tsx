@@ -60,6 +60,7 @@ function Profile() {
   /* Render Component */
 
   return (<>
+ 
     <div className="profile">
       <div>Name:</div>
       <div>{userData?.username}</div>
@@ -71,7 +72,6 @@ function Profile() {
       <div>Credits:</div>
       <div>{userData?.credits}</div>
     </div>
-      
   </>);
 }
 
