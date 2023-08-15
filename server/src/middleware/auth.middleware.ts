@@ -7,7 +7,8 @@ const secretKey = process.env.JWT_SECRET as string;
 
 export async function authenticate (ctx: Context, next: Next): Promise<void> {
   // extract token from authorisation header
-  const token = ctx.headers.authorization?.split(' ')[1];
+  const token = ctx.headers.cookie;
+  console.log(token)
 
   if (token) {
     try {
