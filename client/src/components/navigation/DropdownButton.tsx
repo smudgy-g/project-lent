@@ -1,0 +1,30 @@
+import { useState } from "react";
+import { ActionButtonData } from "../../contexts/HeaderContext"
+
+interface DropdownButtonProps {
+  actionButtonDataArray: ActionButtonData[];
+}
+
+export default function DropdownButton ({ actionButtonDataArray }: DropdownButtonProps) {
+
+  /* State variable */
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  /* Handler function */
+
+  function handleToggle () {
+    setIsOpen(!isOpen);
+  }
+
+  /* Render Component */
+
+  return (<>
+    <div className="dropdown-group">
+      <button className="button action multi" onClick={handleToggle}>…</button>
+      {isOpen && <div className="button-list">
+        {actionButtonDataArray.map((actionButtonData: ActionButtonData, index: number) => <button key={index} className="button" onClick={actionButtonData.action}>{actionButtonData.title}</button>)}
+      </div>}
+    </div>
+  </>)
+}

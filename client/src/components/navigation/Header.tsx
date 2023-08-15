@@ -1,7 +1,8 @@
 /* Imports */
 
 import { useContext, useEffect, useState } from "react";
-import { ActionButtonData, HeaderContext, HeaderContextProps } from "../contexts/HeaderContext";
+import { ActionButtonData, HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
+import DropdownButton from "./DropdownButton";
 
 /* Component Definition */
 
@@ -16,6 +17,7 @@ export default function Header () {
   // and update the previousPagePath
   useEffect(() => {
     const previousPageName = lookUpPageNameFromPathName(window.location.pathname);
+    console.log(previousPageName);
     setPreviousPageName(previousPageName);
   }, [window.location.pathname]);
 
@@ -30,12 +32,7 @@ export default function Header () {
         {actionButtonGroupData.map((item: (ActionButtonData | ActionButtonData[]), index: number) => {
           // If the item is an array of action button objects
           if (Array.isArray(item)) {
-            return (<>
-              <button key={index} className="button action multi">…</button>
-              <div key={`${index}-list`} className="button-list">
-                {item.map((item: ActionButtonData, index: number) => <button key={index} className="button" onClick={item.action}>{item.title}</button>)}
-              </div>
-            </>);
+            return <DropdownButton actionButtonDataArray={item} />;
           }
           // If the item is a action button object
           return <button key={index} className="button action" onClick={item.action}>{item.title}</button>
@@ -49,6 +46,7 @@ export default function Header () {
 
 function lookUpPageNameFromPathName (pathname: string) {
   const pathArray = pathname.split('/');
+  console.log(pathArray);
   if (pathArray.length < 1) return undefined;
   if (pathArray.length === 1) return pathname.slice(0, 1).toUpperCase() + pathname.slice(1);
   else return pathArray[1];
