@@ -12,7 +12,7 @@ const app = new Koa();
 
 // Middlewares
 
-app.use(cors());
+app.use(cors({ credentials: true }));
 app.use(parser());
 app.use(router.routes());
 app.use(router.allowedMethods());

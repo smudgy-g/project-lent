@@ -6,7 +6,7 @@ const baseUrl = "http://localhost:5001"
 
 /* Profile */
 
-// Helper Function to get the userId 
+// Helper Function to get the userId
 function getCookieValue(cookieName : string)  {
   const cookies = document.cookie.split(';');
 
@@ -17,10 +17,10 @@ function getCookieValue(cookieName : string)  {
     if (cookie.indexOf(cookieName + '=') === 0) {
       // Get the value of the cookie
       const cookieValue = cookie.substring(cookieName.length + 1);
-      
+
       // Decode the cookie value
       const decodedValue = decodeURIComponent(cookieValue);
-      
+
       // Return the decoded value
       return decodedValue;
     }
@@ -58,7 +58,8 @@ export async function registerUser (registerFormData: RegisterFormData) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(registerFormData)
+      body: JSON.stringify(registerFormData),
+      credentials: 'include'
     });
 
     console.log(await response.json());
@@ -74,7 +75,8 @@ export async function loginUser (loginFormData: LoginFormData) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(loginFormData)
+      body: JSON.stringify(loginFormData),
+      credentials: 'include'
     });
     return await response.json();
   } catch (err) {
@@ -86,7 +88,9 @@ export async function loginUser (loginFormData: LoginFormData) {
 
 export async function getAllCollections (): Promise<Collection[]> {
   try {
-    const response = await fetch(`${baseUrl}/collection/all`);
+    const response = await fetch(`${baseUrl}/collection/all`, {
+      credentials: 'include'
+    });
 
     const data = await response.json();
 
@@ -105,9 +109,12 @@ export async function getAllCollections (): Promise<Collection[]> {
 
 export async function getAllItems (): Promise<Item[]> {
   try {
-    const response = await fetch(`${baseUrl}/item/all`);
+    const response = await fetch(`${baseUrl}/item/all`, {
+      credentials: 'include'
+    });
 
     const data = await response.json();
+    console.log(data);
 
     if (!response.ok) {
       throw new Error(data.message);
@@ -122,7 +129,9 @@ export async function getAllItems (): Promise<Item[]> {
 
 export async function getItemsByCollection (id: string): Promise<Item[]> {
   try {
-    const response = await fetch(`${baseUrl}/item/all/${id}`);
+    const response = await fetch(`${baseUrl}/item/all/${id}`, {
+      credentials: 'include'
+    });
 
     const data = await response.json();
 
