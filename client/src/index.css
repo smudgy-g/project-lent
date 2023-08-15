@@ -51,8 +51,26 @@ body,
   justify-content: space-between;
 }
 
+/* Header */
+
+.action-button-group {
+  display: flex;
+}
+
+.dropdown-group {
+  position: relative;
+}
+
+.button-list {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: max-content;
+
+  display: flex;
+  flex-direction: column;
+}
+
 /* REGISTER */
-
-
 
 /* BASIC CLASSES */

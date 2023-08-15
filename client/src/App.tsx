@@ -4,9 +4,9 @@ import {
 } from "react-router-dom";
 import {AuthProvider, RequireAuth} from 'react-auth-kit';
 
-import Header from "./components/Header";
+import Header from "./components/navigation/Header";
 import HeaderProvider from "./contexts/HeaderContext";
-import TabNavigation from "./components/TabNavigation";
+import TabNavigation from "./components/navigation/TabNavigation";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Profile from "./components/profile/Profile";
