@@ -5,6 +5,7 @@ import { User } from "./user.schema";
 import mongoose, { Schema } from "mongoose";
 import { Collection } from "./collection.schema";
 
+// need to return all the item data
 export async function getAll (id: string): Promise<IItem[] | null> {
   try {
     const userId = new mongoose.Types.ObjectId(id);
@@ -14,6 +15,7 @@ export async function getAll (id: string): Promise<IItem[] | null> {
     throw error;
   }
 }
+
 export async function findItemById (id: string): Promise<IItem | null> {
   try {
     const itemId = new mongoose.Types.ObjectId(id);
@@ -92,7 +94,7 @@ export async function findItemsByCollection(collectionId: string): Promise<Parti
     ]);
 
     const items = data.map(item => ({
-      id: item.items.id,
+      id: item.items._id,
       name: item.items.name,
       img_url: item.items.img_url,
       value: item.items.value,

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { IChat } from "../_types";
 import { Chat } from "./chat.schema";
 import { User } from "./user.schema";
+import { getUsername } from "./user.model";
 
 export async function deleteOne (id:string): Promise<IChat | null> {
   try {
@@ -11,7 +12,7 @@ export async function deleteOne (id:string): Promise<IChat | null> {
   }
 }
 
-export async function getAllChats (userId:string): Promise<Partial<IChat>[] | null> {
+export async function getAllChats (userId:string): Promise<any[] | null> {
   try {
     const data = await User.aggregate([
       {
@@ -49,32 +50,35 @@ export async function getAllChats (userId:string): Promise<Partial<IChat>[] | nu
           _id: 0,
           'chats._id': 1,
           'chats.item': 1,
+          'chats.users': 1,
           'item.name': 1,
           'messages.body': 1,
           'chats.updatedAt': 1
         }
       }
     ])
-    const chats = data.map(chat => ({
-      id: chat.chats._id,
-      itemId: chat.chats.item,
-      itemName: chat.item[0].name,
-      message: chat.messages[0].body,
-      updatedAt: chat.chats.updatedAt
-    }));
+
+    const chats = await Promise.all(
+      data.map(async (chat) => {
+        const foreignUsers = await Promise.all(
+        chat.chats.users
+          .filter((user: any) => user._id.toString() !== userId)
+          .map(async (user: any) => await getUsername(user.toString()))
+      );
+
+        return {
+          id: chat.chats._id,
+          itemId: chat.chats.item,
+          itemName: chat.item[0].name,
+          foreignUser: foreignUsers[0],
+          message: chat.messages[0].body,
+          updatedAt: chat.chats.updatedAt,
+        };
+      })
+    );
+    console.log(chats)
     return chats;
   } catch (error) {
     throw error
   }
-  // return array
-  /* 
-  {
-    id:
-    itemId:
-    itemName:
-    message:
-    foreignUser:
-    updatedAt:
-  }
-  */
 }

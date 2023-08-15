@@ -214,6 +214,7 @@ async function seedDatabase() {
 
     await Chat.findByIdAndUpdate(chat._id, {
       messages: [message1._id, message2._id],
+      users: [user1._id, user2._id]
     });
 
     console.log('Seed data inserted successfully.');
