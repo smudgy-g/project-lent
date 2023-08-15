@@ -46,8 +46,9 @@ export default function Header () {
 
 function lookUpPageNameFromPathName (pathname: string) {
   const pathArray = pathname.split('/');
-  console.log(pathArray);
+  console.log(pathname);
+
   if (pathArray.length < 1) return undefined;
-  if (pathArray.length === 1) return pathname.slice(0, 1).toUpperCase() + pathname.slice(1);
-  else return pathArray[1];
+  if (pathname === '/' || pathname === '/register' || pathname === '/login' || pathname === '/profile' || pathname === '/collections' || pathname === '/inbox') return '';
+  else if (pathArray.length === 2) return pathArray[0].slice(0, 1).toUpperCase() + pathArray[0].slice(1);
 }
