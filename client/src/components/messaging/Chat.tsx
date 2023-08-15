@@ -1,25 +1,29 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Chat } from "../../types/types";
+import { useParams } from 'react-router-dom'
 import { getChatbyId } from "../../service/apiService";
 
 function Chat() {
 
   /* State Variables */
 
-  // const [currentChat, setCurrentChat] = useState<Chat | null>(null)
+  const [currentChat, setCurrentChat] = useState<Chat | null>(null)
 
-  // /* Use Effect */
+  /* Hooks */
+  const {chatId} = useParams()
 
-  // useEffect(() => {
-  //   getChatbyId(chatId)
-  //     .then((chat) => setCurrentChat(chat))
-  //     .catch((error) => console.log(error));
-  // }, []);
+  /* Use Effect */
+  useEffect(() => {
+    getChatbyId(chatId)
+      .then((chat) => setCurrentChat(chat))
+      .catch((error) => console.log(error));
+  })
 
   /* Render Component */
 
   return (<>
     <div className="chat">
-
+      
     </div>
     
   </>);
