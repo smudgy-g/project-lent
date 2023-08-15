@@ -102,3 +102,6 @@ export async function checkEmailUsernameExist(email: string, username: string) {
 export async function findUserByUsername(username:string) {
    return await User.findOne({ username });
 }
+export async function findUserByEmail(email:string) {
+   return await User.findOne({ email });
+}
