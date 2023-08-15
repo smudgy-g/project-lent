@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import { ICollection, IUser } from '../_types';
+import mongoose, { ObjectId } from 'mongoose';
+import { ICollection } from '../_types';
 import { Collection } from './collection.schema';
 import * as user from './user.model';
 import { User } from './user.schema';
@@ -12,10 +12,7 @@ export async function createOne (name: string, userId: string): Promise<ICollect
     });
     return newCollection.save().then((savedCollection) => {
       const collectionId = savedCollection._id;
-      // update user collections array
       user.addToUserCollection(userId, collectionId);
-
-      // Return the newly created collection
     })
     .then(() => newCollection);
   } catch (error) {
@@ -33,7 +30,7 @@ export async function findCollectionById (id: string): Promise<ICollection | nul
 
 export async function findCollectionByName (name: string): Promise<ICollection | null> {
   try {
-    return await Collection.findOne({ name }).lean();
+    return await Collection.findOne({ name });
   } catch (error) {
     throw error;
   }
@@ -42,7 +39,6 @@ export async function findCollectionByName (name: string): Promise<ICollection |
 
 export async function getAll (userId: string): Promise<any | null> {
   try {
-    // const { collections } = (await user.findUserById(userId)) as IUser;
     const data = await User.aggregate([
       {
         $match: {
@@ -90,8 +86,10 @@ export async function getAll (userId: string): Promise<any | null> {
 
 export async function addItemToCollection (collectionId: string, itemId: string) {
   try {
+    const itemIdObject = new mongoose.Types.ObjectId(itemId);
+
     return await Collection.findByIdAndUpdate(collectionId, 
-      { $push: { items: itemId }},
+      { $push: { items: itemIdObject }},
       { new: true } )
   } catch (error) {
     throw error;
