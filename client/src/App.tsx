@@ -36,6 +36,10 @@ const router = createBrowserRouter([
   {
     path: '/collections',
     element: <CollectionOverview />
+  },
+  {
+    path: '/collection/:collectionId',
+    element: <CollectionSingle />
   }
 ])
 
