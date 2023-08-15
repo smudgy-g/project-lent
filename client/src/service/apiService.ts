@@ -1,6 +1,6 @@
 import { LoginFormData } from "../components/auth/Login";
 import { RegisterFormData } from "../components/auth/Register"
-import { User } from "../types/types";
+import { Collection, Item, User } from "../types/types";
 
 const baseUrl = "http://localhost:5001"
 
@@ -51,7 +51,7 @@ export async function getUser(): Promise<User> {
 
 /* Authentication */
 
-export async function registerUser(registerFormData: RegisterFormData) {
+export async function registerUser (registerFormData: RegisterFormData) {
   try{
     const response = await fetch(`${baseUrl}/register`, {
       method: 'POST',
@@ -67,7 +67,7 @@ export async function registerUser(registerFormData: RegisterFormData) {
   };
 };
 
-export async function loginUser(loginFormData: LoginFormData) {
+export async function loginUser (loginFormData: LoginFormData) {
   try{
     const response = await fetch(`${baseUrl}/login`, {
       method: 'POST',
@@ -81,3 +81,58 @@ export async function loginUser(loginFormData: LoginFormData) {
     console.log(err);
   };
 };
+
+/* Collection */
+
+export async function getAllCollections (): Promise<Collection[]> {
+  try {
+    const response = await fetch(`${baseUrl}/collection/all`);
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
+/* Item */
+
+export async function getAllItems (): Promise<Item[]> {
+  try {
+    const response = await fetch(`${baseUrl}/item/all`);
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
+export async function getItemsByCollection (id: string): Promise<Item[]> {
+  try {
+    const response = await fetch(`${baseUrl}/item/all/${id}`);
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
