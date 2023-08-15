@@ -26,8 +26,8 @@ router.post('/register', user.createOne);
 router.post('/login', auth.login);
 
 // item routes
-router.get('/item/all', authenticate, item.getAllItems);
-router.get('/item/all/:collectionid', authenticate, item.findItemsByCollectionId);
+router.get('/item/all', authenticate, item.getAllItems); //
+router.get('/item/all/:collectionid', authenticate, item.findItemsByCollectionId); //
 router.get('/item/all/discover', );
 router.get('/item/:id', authenticate, item.findItem);
 router.post('/item', authenticate, item.createItem);

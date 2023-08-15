@@ -105,3 +105,9 @@ export async function findUserByUsername(username:string) {
 export async function findUserByEmail(email:string) {
    return await User.findOne({ email });
 }
+
+export async function getUsername (userId: string) {
+  const user = await User.findById(userId);
+  if (user) return user.username;
+  else return null;
+}
