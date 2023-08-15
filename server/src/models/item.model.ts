@@ -7,7 +7,8 @@ import { Collection } from "./collection.schema";
 
 export async function getAll (id: string): Promise<IItem[] | null> {
   try {
-    const items = await Item.find({ user: id }).lean();
+    const userId = new mongoose.Types.ObjectId(id);
+    const items = await Item.find({ user: userId });
     return items;
   } catch (error) {
     throw error;
@@ -15,7 +16,8 @@ export async function getAll (id: string): Promise<IItem[] | null> {
 }
 export async function findItemById (id: string): Promise<IItem | null> {
   try {
-    return await Item.findById(id).lean();
+    const itemId = new mongoose.Types.ObjectId(id);
+    return await Item.findById(itemId);
   } catch (error) {
     throw error;
   }
@@ -23,7 +25,8 @@ export async function findItemById (id: string): Promise<IItem | null> {
 
 export async function createOne (userId: string, itemData: Partial<IItem>): Promise<IItem | null> {
   try {
-    const user = await User.findById(userId);
+    const userIdObject = new mongoose.Types.ObjectId(userId);
+    const user = await User.findById(userIdObject);
     if (!user) {
       throw new Error('User not found.');
     }
@@ -36,7 +39,7 @@ export async function createOne (userId: string, itemData: Partial<IItem>): Prom
     }
 
     const newItem = new Item({
-      user: userId,
+      user: userIdObject,
       collections: [...(itemData.collections || []), allCollectionId],
       ...itemData,
     });
@@ -51,25 +54,6 @@ export async function createOne (userId: string, itemData: Partial<IItem>): Prom
     throw error;
   }
 }
-
-// export async function findItemsByCollection (collectionId: string): Promise<IItem[] | null> {
-//   try {
-//     // return only the items from the collection, and only a plain JJS object to reduce load (mongo doc is bigger)
-//     const collection = await findCollectionById(collectionId);
-
-//     if (!collection || ! collection.items) return [];
-    
-//     // Create an array of promises representing the retirieval of an item by id
-//     const itemPromises = collection.items.map(itemId => 
-//       Item.findById(itemId)
-//     );
-
-//     const items = await Promise.all(itemPromises);
-//     return items.filter(item => item !== null) as IItem[];
-//   } catch (error) {
-//     throw error;
-//   }
-// }
 
 export async function findItemsByCollection(collectionId: string): Promise<IItem[] | null> {
   try {

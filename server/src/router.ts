@@ -10,10 +10,8 @@ const router = new Router();
 
 // user routes
 router.get('/user/:id', user.getUserById);
-router.put('/user/:id', (ctx: Context) => {
-  ctx.body ='Update User'
-});
-router.delete('/user/:id', authenticate, user.deleteUser);
+router.put('/user', authenticate, user.updateUser);
+router.delete('/user', authenticate, user.deleteUser);
 
 /* Not sure if needed */
 // router.post('/user/', (ctx: Context) => {

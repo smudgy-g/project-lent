@@ -3,7 +3,7 @@ import { IAddress, IUser } from '../_types';
 import * as userModel from '../models/user.model';
 
 
-export async function createOne (ctx: Context, next: () => Promise<any>) {
+export async function createOne (ctx: Context) {
   const user = ctx.request.body as Partial<IUser>;
   // check all details are there
   if (!user.username || !user.email || !user.password || !user.address) {
@@ -12,19 +12,13 @@ export async function createOne (ctx: Context, next: () => Promise<any>) {
     return;
   }
   try {
-    const emailExists = await userModel.findUserByEmail(user.email);
-    if (emailExists) {
+    const detailsExist = await userModel.checkEmailUsernameExist(user.email, user.email);
+    if (detailsExist) {
       ctx.status = 400;
-      ctx.body = { message: 'Email already exists.' };
+      ctx.body = { message: detailsExist.message };
       return;
     }
 
-    const usernameExists = await userModel.findUserByUsername(user.username);
-    if (usernameExists) {
-      ctx.status = 400;
-      ctx.body = { message: 'Username already exists.' };
-      return;
-    }
     // create welcome chat!
     // then add that to the user inbox 🙃
     const newUser = await userModel.createUser(
@@ -50,13 +44,43 @@ export async function getUserById (ctx: Context) {
     return;
   }
   try {
-    const result = await userModel.findUserById(id);
+    const user = await userModel.findUserById(id);
 
     ctx.status = 200;
-    ctx.body = result;
+    ctx.body = user;
   } catch (error) {
     ctx.status = 500;
     ctx.body = { message: error };
+  }
+}
+
+export async function updateUser (ctx: Context) {
+  const id = ctx.userId;
+  const { username, email, address } = ctx.request.body as Partial<IUser>;
+  
+  if (!username || !email || !address) {
+    ctx.status = 400;
+    ctx.body = { message: 'One or more fields missing.' };
+    return;
+  }
+
+  const detailsExist = await userModel.checkEmailUsernameExist(email, username);
+  if (detailsExist) {
+    ctx.status = 400;
+    ctx.body = { message: detailsExist.message };
+    return;
+  }
+
+  const userData = { username, email, address }
+
+  try {
+    const updatedUser = await userModel.updateUserDetails(id, userData);
+    ctx.status = 200;
+    ctx.body = updatedUser;
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = { message: error };
+    return;
   }
 }
 
