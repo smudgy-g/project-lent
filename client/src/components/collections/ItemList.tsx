@@ -23,7 +23,7 @@ export default function ItemList ({ items }: ItemListProps) {
     <div className="collection-list">
       {items.map((item) => (
         <Link key={item.id} to={`/collection/${item.id}`}>
-          <ItemListItem key={item.id} item={item} />
+          <ItemListItem item={item} />
         </Link>
       ))}
     </div>

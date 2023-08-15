@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Collection } from "../../types/types"
 import CollectionListItem from "./CollectionListItem";
 import { useEffect } from "react";
+import { toKebabCase } from "../../utilities/utilities";
 
 /* Type Definition */
 

@@ -53,6 +53,7 @@ export default function CollectionSingle () {
 
   return (<>
     <div className="collection-single">
+      <h1>Collection: {collectionId}</h1>
       {items && <ItemList items={items} />}
     </div>
   </>)
