@@ -1,5 +1,6 @@
 import { Context } from 'koa';
-import { getAll, createOne, findItemById, deleteOne } from '../models/item.model';
+import { getAll, createOne, findItemById, deleteOne, findItemsByCollection, updateOne } from '../models/item.model';
+import { IItem } from '../_types';
 
 export async function getAllItems (ctx: Context) {
   const id = ctx.userId;
@@ -20,16 +21,17 @@ export async function getAllItems (ctx: Context) {
 
 export async function createItem (ctx:Context) {
   const userId = ctx.userId;
-  const { name } = ctx.request.body as any;
-  if (!name) {
+  const itemData = ctx.request.body as Partial<IItem>;
+  if (!itemData) {
     ctx.status = 400;
     ctx.body = { messsage: 'No data was supplied.' };
     return;
   }
   try {
-    const newItem = await createOne(name, userId);
+    const newItem = await createOne(userId, itemData);
     ctx.status = 201;
     ctx.body = newItem;
+    console.log('success')
   } catch (error) {
     ctx.status = 500;
     ctx.body = { message: error };
@@ -53,15 +55,36 @@ export async function findItem (ctx:Context) {
   }
 }
 
-export async function findItemsByCollection (ctx:Context) {
-  const id = ctx.params.id;
-  if (!id) {
+export async function findItemsByCollectionId (ctx:Context) {
+  const collectionId = ctx.params.collectionid;
+  if (!collectionId) {
     ctx.status = 400;
     ctx.body = { messsage: 'No collection ID supplied.' };
     return;
   }
   try {
-    const items = await findItemsByCollection(id);
+    const items = await findItemsByCollection(collectionId);
+    ctx.status = 201;
+    ctx.body = items;
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = { message: error };
+  }
+}
+
+export async function updateItemById (ctx: Context) {
+  const id = ctx.params.id;
+  const { name, img_url, value, description, lendable, collections } = ctx.request.body as Partial<IItem>;
+  const itemData = { name, img_url, value, description, lendable, collections };
+
+  if (!id) {
+    ctx.status = 400;
+    ctx.body = { messsage: 'No item ID supplied.' };
+    return;
+  }
+
+  try {
+    const items = await updateOne(id, itemData);
     ctx.status = 201;
     ctx.body = items;
   } catch (error) {

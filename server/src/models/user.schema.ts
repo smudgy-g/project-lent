@@ -27,8 +27,8 @@ const userSchema = new Schema<IUser>({
   geoLocation: { type: geoLocationSchema, required: true },
   credits: { type: Number },
   reputation: { type: Number },
-  collections: [String],
-  inbox: [String],
+  collections: [{ type: Schema.Types.ObjectId, ref: 'Collection' }],
+  inbox: [{ type: Schema.Types.ObjectId, ref: 'Chat' }],
 }, { timestamps: true });
 
 export const User = model<IUser>('User', userSchema);

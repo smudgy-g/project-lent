@@ -1,8 +1,7 @@
 import { Context } from 'koa';
-import { getAllCollections, createOne, deleteOne, updateName } from '../models/collection.model';
-import { Collection } from '../models/collection.schema';
+import * as collectionModel from '../models/collection.model';
 
-export async function getAllCollecttions (ctx: Context) {
+export async function getAllCollections (ctx: Context) {
   /* This will be the user id from the JWT */
   const id = ctx.userId;
   if (!id) {
@@ -11,7 +10,7 @@ export async function getAllCollecttions (ctx: Context) {
     return;
   }
   try {
-    const result = await getAllCollections(id);
+    const result = await collectionModel.getAll(id);
     ctx.status = 200;
     ctx.body = result;
   } catch (error) {
@@ -30,7 +29,7 @@ export async function createCollection (ctx:Context) {
   }
   
   try {
-    const newCollection = await createOne(name, userId);
+    const newCollection = await collectionModel.createOne(name, userId);
     ctx.status = 201;
     ctx.body = newCollection;
   } catch (error) {
@@ -48,7 +47,7 @@ export async function deleteCollection (ctx:Context) {
   }
 
   try {
-    const result = await deleteOne(id);
+    const result = await collectionModel.deleteOne(id);
     ctx.status = 200;
     ctx.body = result;
   } catch (error) {
@@ -66,7 +65,7 @@ export async function updateCollectionName (ctx: Context) {
   }
 
   try {
-    const result = await updateName(id, newName);
+    const result = await collectionModel.updateName(id, newName);
     ctx.status = 200;
     ctx.body = result;
   } catch (error) {

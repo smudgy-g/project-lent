@@ -66,7 +66,8 @@ export async function addToUserCollection (userId: string, collectionId: string)
   try {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { $push: { collections: collectionId } }
+      { $push: { collections: collectionId } },
+      { new: true }
     );
     return updatedUser;
   } catch (err) {

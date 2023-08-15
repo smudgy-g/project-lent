@@ -22,7 +22,7 @@ router.delete('/user/:id', authenticate, user.deleteUser);
 
 // collection routes
 
-router.get('/collection/all', authenticate, collection.getAllCollecttions);
+router.get('/collection/all', authenticate, collection.getAllCollections);
 router.post('/collection', authenticate, collection.createCollection);
 router.delete('/collection/:id', authenticate, collection.deleteCollection);
 router.put('/collection', authenticate, collection.updateCollectionName);
@@ -33,12 +33,12 @@ router.post('/login', auth.login);
 
 // item routes
 router.get('/item/all', authenticate, item.getAllItems);
-router.get('/item/all/:collectionid', authenticate, item.findItemsByCollection);
+router.get('/item/all/:collectionid', authenticate, item.findItemsByCollectionId);
 router.get('/item/all/discover', );
 router.get('/item/:id', authenticate, item.findItem);
 router.post('/item', authenticate, item.createItem);
-router.put('/item/:id', );
-router.delete('/item/:id', );
+router.put('/item/:id', authenticate, item.updateItemById);
+router.delete('/item/:id', authenticate, item.deleteItem);
 
 // Add routes for app here
 export default router;
