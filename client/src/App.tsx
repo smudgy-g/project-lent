@@ -4,8 +4,8 @@ import {
 } from "react-router-dom";
 import {AuthProvider, RequireAuth} from 'react-auth-kit';
 
-import Header from "./components/navigation/Header";
 import HeaderProvider from "./contexts/HeaderContext";
+import Header from "./components/navigation/Header";
 import TabNavigation from "./components/navigation/TabNavigation";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
@@ -20,6 +20,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: (<>
+      <Header />
       <RequireAuth loginPath='/login'>
         <CollectionOverview />
       </RequireAuth>
@@ -41,6 +42,7 @@ const router = createBrowserRouter([
   {
     path: '/profile',
     element: (<>
+      <Header />
       <RequireAuth loginPath='/login'>
         <Profile/>
       </RequireAuth>
@@ -50,6 +52,7 @@ const router = createBrowserRouter([
   {
     path: '/profile/edit',
     element: (<>
+      <Header />
       <RequireAuth loginPath='/login'>
         <ProfileEdit/>
       </RequireAuth>
@@ -59,6 +62,7 @@ const router = createBrowserRouter([
   {
     path: '/collections',
     element: (<>
+      <Header />
       <RequireAuth loginPath='/login'>
         <CollectionOverview />
       </RequireAuth>
@@ -68,6 +72,7 @@ const router = createBrowserRouter([
   {
     path: '/collection/:collectionId',
     element: (<>
+      <Header />
       <RequireAuth loginPath='/login'>
         <CollectionSingle />
       </RequireAuth>
@@ -77,6 +82,7 @@ const router = createBrowserRouter([
   {
     path: '/inbox',
     element: (<>
+      <Header />
       <RequireAuth loginPath='/login'>
         <Inbox />
       </RequireAuth>
@@ -86,6 +92,7 @@ const router = createBrowserRouter([
   {
     path: '/chat/:chatId',
     element: (<>
+      <Header />
       <RequireAuth loginPath='/login'>
         <ChatSingle />
       </RequireAuth>
@@ -102,7 +109,6 @@ function App() {
                     cookieDomain={window.location.hostname}
                     cookieSecure={window.location.protocol === 'https:'}>
         <HeaderProvider>
-          <Header />
           <RouterProvider router={router} />
         </HeaderProvider>
       </AuthProvider>
