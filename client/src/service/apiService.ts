@@ -1,6 +1,6 @@
 import { LoginFormData } from "../components/auth/Login";
 import { RegisterFormData } from "../components/auth/Register"
-import { Collection, User } from "../types/types";
+import { Collection, Item, User } from "../types/types";
 
 const baseUrl = "http://localhost:5001"
 
@@ -51,6 +51,54 @@ export async function loginUser (loginFormData: LoginFormData) {
 /* Collection */
 
 export async function getAllCollections (): Promise<Collection[]> {
-  const response = await fetch(`${baseUrl}/collection/all`);
-  return await response.json();
+  try {
+    const response = await fetch(`${baseUrl}/collection/all`);
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
+/* Item */
+
+export async function getAllItems (): Promise<Item[]> {
+  try {
+    const response = await fetch(`${baseUrl}/item/all`);
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
+export async function getItemsByCollection (id: string): Promise<Item[]> {
+  try {
+    const response = await fetch(`${baseUrl}/item/all/${id}`);
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
 }
