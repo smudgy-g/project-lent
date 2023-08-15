@@ -52,9 +52,6 @@ export async function getUser(): Promise<User> {
 
 export async function putUser(profileEditData : ProfileEditData) {
   try {
-    // const userIdObject = getCookieValue('_auth_state');
-    // const parsedUserIdObject = JSON.parse(userIdObject);
-    // const userId = parsedUserIdObject._id;
 
     const response = await fetch(`${baseUrl}/user`, {
       method: 'PUT',
