@@ -81,7 +81,7 @@ function ProfileEdit() {
   /* Render Component */
 
   return (<>
-    <div className="profile">
+    <div className="profile-edit">
     <form onSubmit={handleSubmit}>
             <div className="form-element">
               <label>

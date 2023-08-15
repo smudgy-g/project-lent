@@ -13,6 +13,7 @@ import Profile from "./components/profile/Profile";
 import CollectionOverview from "./components/collections/CollectionOverview";
 import CollectionSingle from "./components/collections/CollectionSingle";
 import ProfileEdit from "./components/profile/ProfileEdit";
+import Inbox from "./components/messaging/Inbox";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,12 @@ const router = createBrowserRouter([
     path: '/collection/:collectionId',
     element: (<RequireAuth loginPath='/login'>
                 <CollectionSingle />
+              </RequireAuth>)
+  },
+  {
+    path: '/inbox',
+    element: (<RequireAuth loginPath='/login'>
+                <Inbox />
               </RequireAuth>)
   }
 ])
