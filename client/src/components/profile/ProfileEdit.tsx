@@ -157,6 +157,14 @@ function ProfileEdit() {
 
             <div className="form-element">
               <button type="submit"
+              disabled={
+                profileEditData.username === '' ||
+                profileEditData.email === '' ||
+                profileEditData.address.streetName === '' ||
+                profileEditData.address.streetNumber === '' ||
+                profileEditData.address.postalCode === '' ||
+                profileEditData.address.city === ''
+              }
               >Save Changes</button>
             </div>
           </form>
