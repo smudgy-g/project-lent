@@ -24,12 +24,12 @@ function Inbox() {
       <div>Chats</div>
       {chats?.map((chat) => (
         <Link key={chat.id} to="/chat/chatid">
-        <div className="chat-thumbnail" key={chat.id}>
-          <div>{chat.foreignUser}</div>
-          <div>{chat.itemName}</div>
-          {/* <div>{chat.message}</div> */}
-          <button>Delete Chat</button>
-        </div>
+          <div className="chat-thumbnail" key={chat.id}>
+            <div>{chat.foreignUser}</div>
+            <div>{chat.itemName}</div>
+            {/* <div>{chat.message}</div> */}
+            <button>Delete Chat</button>
+          </div>
         </Link>
       ))}
     </div>
