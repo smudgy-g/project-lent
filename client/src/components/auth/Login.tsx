@@ -2,6 +2,7 @@ import { useState } from "react";
 import { loginUser } from "../../service/apiService";
 import { useSignIn } from 'react-auth-kit'
 import { useNavigate } from 'react-router-dom'
+import { log } from "console";
 
 /* Type Definitions */
 
@@ -48,9 +49,9 @@ function Login() {
       if (response.token) {
         signIn({
           token: response.token,
-          expiresIn: 3600,
+          expiresIn: 60 * 60,
           tokenType: 'Bearer',
-          authState: { loginFormData }
+          authState: { _id: response.user._id }
         });
         navigate('/')
       } else {

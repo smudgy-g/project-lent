@@ -1,9 +1,11 @@
+import { Address } from "../components/auth/Register";
+
 export interface User {
   id: string;
   username: string;
   password: string;
   email: string;
-  address: string;
+  address: Address;
   geoLocation: GeolocationPosition,
   credits: number;
   collections: Collection[];
