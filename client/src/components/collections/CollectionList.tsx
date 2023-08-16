@@ -17,8 +17,8 @@ export default function CollectionList ({ collections }: CollectionListProps) {
   return (<>
     <div className="collection-list">
       {collections.map((collection) => (
-        <Link key={collection.id} to={`/collection/${collection.id}`}>
-          <CollectionListItem key={collection.id} collection={collection} />
+        <Link key={collection._id} to={`/collection/${collection._id}`}>
+          <CollectionListItem key={collection._id} collection={collection} />
         </Link>
       ))}
     </div>

@@ -6,6 +6,7 @@ import { deleteItem, getItemById } from "../../service/apiService";
 
 export default function ItemSingle () {
 
+  /* State Variable */
 
   const [item, setItem] = useState<Item | null>(null);
 
@@ -27,35 +28,66 @@ export default function ItemSingle () {
 
   // Populate the Header component’s action button group
   useEffect(() => {
-    const localActionButtonGroupData: ActionButtonGroupData = [
-      {
-        title: 'Edit Item',
-        action: () => {
-          if (itemId) {
-            navigate(`/item/${itemId}/edit`);
-          }
-        }
-      },
-      [
+    if (item) {
+      // If the user is the item’s owner
+      const localActionButtonGroupDataOwner: ActionButtonGroupData = [
         {
-          title: 'Delete Item',
+          title: 'Edit Item',
           action: () => {
             if (itemId) {
-              deleteItem(itemId);
-              navigate(-1);
+              navigate(`/item/${itemId}/edit`);
             }
           }
-        }
-      ]
-    ]
-    setActionButtonGroupData(localActionButtonGroupData);
+        },
+        [
+          {
+            title: 'Delete Item',
+            action: () => {
+              if (itemId) {
+                deleteItem(itemId);
+                navigate(-1);
+              }
+            }
+          }
+        ]
+      ];
+      // If the user is NOT the item’s owner
+      const localActionButtonGroupDataBorrower: ActionButtonGroupData = [];
+
+      // Set the action button data accordingly
+      setActionButtonGroupData(
+        item.distance
+        ? localActionButtonGroupDataOwner
+        : localActionButtonGroupDataBorrower
+      );
+    }
   }, [itemId]);
 
   /* Render Component */
 
   return (<>
-    <div className="item-single">
-      <h1>{item?.name}</h1>
-    </div>
+    {item && (
+      <div className="item-single">
+        <div className="image" style={{backgroundImage: `url(${item?.img_url})`}}></div>
+
+        <div className="metadata">
+          {item.distance && <span className="distance">{item.distance.toFixed(2)} km</span>}
+          {item.value && <span className="value">{item.value} credits</span>}
+          {item.lendable && item.available && <span className="status">available</span>}
+          {item.lendable && !item.available && !item.borrowed && <span className="status">reserved</span>}
+          {item.lendable && !item.available && item.borrowed && <span className="status">borrowed</span>}
+        </div>
+
+        <h1 className="title">{item.name}</h1>
+        <p className="description">{item.description}</p>
+
+        {item.distance && (
+          <div className="button-group">
+            {item.lendable && item.available && <button className="button">{`Reserve (${item.value} ¢)`}</button>}
+            {item.lendable && !item.available && <button className="button" disabled>Unavailable</button>}
+          </div>
+        )}
+      </div>
+    )}
   </>);
 }
