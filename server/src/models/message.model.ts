@@ -16,10 +16,7 @@ export async function postMessage (message: IMessage, chatId: string): Promise<I
     const chatIdObject = new mongoose.Types.ObjectId(chatId);
     await Chat.findByIdAndUpdate(chatIdObject, {
       $push: {
-        messages: {
-          $each: newMessage._id, 
-          $position: 0
-        }
+        messages: newMessage._id
       }
     });
 

@@ -73,7 +73,7 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
           itemId: chat.chats.item,
           itemName: chat.item[0].name,
           foreignUser: foreignUsers[0],
-          message: chat.messages[0].body,
+          message: chat.messages[chat.messages.length - 1].body,
           updatedAt: chat.chats.updatedAt,
         };
       })
