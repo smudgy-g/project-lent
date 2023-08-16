@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { getAllChats } from "../../service/apiService";
+import { deleteChat, getAllChats } from "../../service/apiService";
 import { Chat, ChatPreview } from "../../types/types";
 import { Link } from 'react-router-dom'
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
@@ -13,6 +13,18 @@ function Inbox() {
   /* Hooks */
 
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
+
+  /* Handler Functions */
+
+  function handleDeleteChat (chatId: string) {
+    deleteChat(chatId)
+      .then(() => {
+        getAllChats()
+          .then((chats) => setChats(chats))
+          .catch((error)=> console.log(error))
+      })
+      .catch((error) => console.log(error));
+  }
 
   /* Use Effect */
 
@@ -30,17 +42,29 @@ function Inbox() {
 
   return (<>
     <div className="inbox">
+
       <div>Chats</div>
+
       {chats && chats.map((chat) => (
-        <Link key={chat.id} to={`/chat/${chat.id}`}>
-          <div className="chat-thumbnail" key={chat.id}>
-            <div>{chat.updatedAt}</div>
-            <div>{chat.foreignUser}</div>
-            <div>{chat.itemName}</div>
-            <div>{chat.message}</div>
-            <button>Delete Chat</button>
+        <div className="chat-preview" key={chat.id}>
+          <Link key={chat.id} to={`/chat/${chat.id}`}>
+              <div className="chat-preview-text">
+                <div>{new Date(chat.updatedAt).toLocaleString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  hour: "numeric",
+                  timeZone: "UTC"
+                })}</div>
+                <div>{chat.foreignUser}</div>
+                <div>{chat.itemName}</div>
+                <div>{chat.message}...</div>
+              </div>
+          </Link>
+          <div>
+            <button onClick={() => handleDeleteChat(chat.id)}>Delete</button>
           </div>
-        </Link>
+        </div>
       ))}
     </div>
     

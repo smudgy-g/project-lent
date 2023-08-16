@@ -13,10 +13,10 @@ export interface RegisterFormData {
 };
 
 export interface Address {
-  streetName: string;
-  streetNumber: string;
-  postalCode: string;
-  city: string;
+  streetName: string | undefined;
+  streetNumber: string | undefined;
+  postalCode: string | undefined;
+  city: string | undefined;
 };
 
 function Register() {
