@@ -81,7 +81,7 @@ export default function ChatSingle() {
     getChatbyId(chatId)
       .then((chat) => setCurrentChat(chat))
       .catch((error) => console.log(error));
-  }, []);
+  }, [handleClick]);
 
 
   useEffect(() => (
@@ -108,6 +108,8 @@ export default function ChatSingle() {
                   {message.body}
                 </div>
               </div>
+
+              
             ) : (
               <div className="message user">
                 <div className="time">
@@ -125,18 +127,40 @@ export default function ChatSingle() {
           </div>
         ))}
       </div>
-
-      <div className="chat-input">
-        <input
-        type="text"
-        name="message"
-        value={inputValue}
-        onChange={handleChange}
-        />
-        <button
-        onClick={handleClick}
-        >Send</button>
+      
+      {/* {currentChat?.item.user === userId ? (
+      <div className="chat-action-buttons button">
+        <button onClick={cancelTransaction}>Cancel</button>
+        <button onClick={handleReturnItem}>Returned Item</button>
       </div>
+      ) : (
+        <div className="chat-action-buttons button">
+        <button onClick={cancelTransaction}>Cancel</button>
+        <button onClick={handleReceiveItem}>Received Item</button>
+      </div>
+      )
+      } */}
+
+      <div className="chat-input-container">
+
+        <div className="chat-input input">
+          <input
+            type="text"
+            name="message"
+            value={inputValue}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="chat-button button">
+          <button
+            onClick={handleClick}
+            >Send
+          </button>
+        </div>
+
+      </div>
+
 
     </div>
     
