@@ -1,5 +1,6 @@
 import { Context } from 'koa';
 import * as chatModel from '../models/chat.model'
+import { IMessage } from '../_types';
 
 export async function getAllChats (ctx: Context) {
   const userId = ctx.userId;
@@ -17,8 +18,10 @@ export async function getAllChats (ctx: Context) {
 
 export async function getChatById (ctx: Context) {
   const chatId = ctx.params.chatid;
+  const userId = ctx.userId;
+
   try {
-    const chat = await chatModel.getChatById(chatId);
+    const chat = await chatModel.getChatById(chatId, userId);
     ctx.status = 200;
     ctx.body = chat;
   } catch (error) {
@@ -47,19 +50,14 @@ export async function deleteChat (ctx:Context) {
   }
 }
 
-// export async function getAllCollections (ctx: Context) {
-//   /* This will be the user id from the JWT */
-//   const id = ctx.userId;
-//   if (!id) {
-//     ctx.status = 400;
-//     ctx.body = { message: 'User ID was not supplied.' };
-//     return;
-//   }
-//   try {
-//     const result = await collectionModel.getAll(id);
-//     ctx.status = 200;
-//     ctx.body = result;
-//   } catch (error) {
-//     ctx.status = 500;
-//     ctx.body = { message: error };
-//   }
+export async function postMessage (ctx: Context) {
+  const message = ctx.request.body as IMessage;
+
+  try {
+    ctx.status = 201;
+    ctx.body = message;
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = { messsage: error };
+  }
+}

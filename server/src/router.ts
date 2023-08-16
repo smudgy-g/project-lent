@@ -37,7 +37,7 @@ router.delete('/item/:id', authenticate, item.deleteItem);
 // messaging routes
 router.get('/inbox', authenticate, inbox.getAllChats);
 router.get('/inbox/:chatid', authenticate, inbox.getChatById);
-router.post('/inbox', authenticate);
+router.post('/inbox', authenticate, inbox.postMessage);
 router.post('/inbox/:chatid', authenticate);
 router.delete('/inbox/', authenticate, inbox.deleteChat);
 

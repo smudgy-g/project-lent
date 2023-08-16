@@ -87,7 +87,7 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
   }
 }
 
-export async function getChatById (chatId: string): Promise<any | null> {
+export async function getChatById (chatId: string, userId: string): Promise<any | null> {
   try {
     const chatIdObject = new mongoose.Types.ObjectId(chatId);
     
@@ -140,18 +140,32 @@ export async function getChatById (chatId: string): Promise<any | null> {
         },
       },
     ]);
-   const result: any = {
-      _id: data[0]._id,
-      users: data[0].users,
-      item: data[0].item[0],
-      messages: data[0].messages.map((message: any) => ({
-        from: message.from,
-        to: message.to,
-        body: message.body,
-        seen: message.seen,
-        createdAt: message.createdAt
-      })).sort((a: any, b: any) => b.createdAt - a.createdAt)
-    }
+
+    
+    const result: any = await (async () => {
+      const foreignUsers = await Promise.all(
+        data[0].users
+          .filter((user: any) => user._id.toString() !== userId)
+          .map(async (user: any) => await getUsername(user.toString()))
+      );
+
+      return {
+        _id: data[0]._id,
+        users: data[0].users,
+        foreignUser: foreignUsers[0],
+        item: data[0].item[0],
+        messages: data[0].messages
+          .map((message: any) => ({
+            from: message.from,
+            to: message.to,
+            body: message.body,
+            seen: message.seen,
+            createdAt: message.createdAt
+          }))
+          .sort((a: any, b: any) => b.createdAt - a.createdAt)
+      };
+    })();
+    console.log(result);
     return result;
   } catch (error) {
     console.error(error);
