@@ -25,6 +25,7 @@ export async function getAll (id: string): Promise<Partial<IItem>[] | null> {
     console.log(items);
     return items;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 }
@@ -34,6 +35,7 @@ export async function findItemById (id: string): Promise<IItem | null> {
     const itemId = new mongoose.Types.ObjectId(id);
     return await Item.findById(itemId);
   } catch (error) {
+    console.error(error);
     throw error;
   }
 }
@@ -120,6 +122,7 @@ export async function findItemsByCollection(collectionId: string): Promise<Parti
     
     return items;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 }
@@ -130,6 +133,7 @@ export async function updateOne (id: string, itemData: Partial<IItem>) {
     const updatedItem = await Item.findByIdAndUpdate(id, updatedData, { new: true });
     return updatedItem;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 }
@@ -138,6 +142,7 @@ export async function deleteOne (id:string): Promise<IItem | null> {
   try {
     return Item.findByIdAndDelete(id);
   } catch (error) {
+    console.error(error);
     throw error
   }
 }

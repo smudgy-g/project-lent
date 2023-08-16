@@ -17,7 +17,6 @@ export async function getAllChats (ctx: Context) {
 
 export async function getChatById (ctx: Context) {
   const chatId = ctx.params.chatid;
-
   try {
     const chat = await chatModel.getChatById(chatId);
     ctx.status = 200;

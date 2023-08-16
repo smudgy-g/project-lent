@@ -16,6 +16,7 @@ export async function createOne (name: string, userId: string): Promise<ICollect
     })
     .then(() => newCollection);
   } catch (error) {
+    console.error(error);
     throw error;
   }
 }
@@ -24,6 +25,7 @@ export async function findCollectionById (id: string): Promise<ICollection | nul
   try {
     return await Collection.findById(id);
   } catch (error) {
+    console.error(error);
     throw error;
   }
 }
@@ -32,6 +34,7 @@ export async function findCollectionByName (name: string): Promise<ICollection |
   try {
     return await Collection.findOne({ name });
   } catch (error) {
+    console.error(error);
     throw error;
   }
 }
@@ -80,6 +83,7 @@ export async function getAll (userId: string): Promise<any | null> {
 
     return collections;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 }
@@ -92,6 +96,7 @@ export async function addItemToCollection (collectionId: string, itemId: string)
       { $push: { items: itemIdObject }},
       { new: true } )
   } catch (error) {
+    console.error(error);
     throw error;
   }
 }
@@ -101,6 +106,7 @@ export async function updateName (id: string, newName: string) {
     return await Collection.findByIdAndUpdate(id, 
       {name: newName}, { new: true });
   } catch (error) {
+    console.error(error);
     throw error;
   }
 }
@@ -109,6 +115,7 @@ export async function deleteOne (id:string): Promise<ICollection | null> {
   try {
     return Collection.findByIdAndDelete(id);
   } catch (error) {
+    console.error(error);
     throw error
   }
 }
