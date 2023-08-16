@@ -26,7 +26,7 @@ export default function ChatSingle() {
       {
         body: inputValue,
         from: userId,
-        to: 'addLater',
+        to: currentChat?.foreignUserId,
         seen: false,
       })
   };
@@ -81,7 +81,7 @@ export default function ChatSingle() {
   useEffect(() => {
     getChatbyId(chatId)
       // .then((result) => console.log('THAT', result.users.filter((id : string) => id !== userId)))
-      .then((chat) => setCurrentChat(chat))
+      .then((chat) => console.log(chat))
       .catch((error) => console.log(error));
   }, []);
 
@@ -89,14 +89,6 @@ export default function ChatSingle() {
   useEffect(() => (
     getUserId()
   ));
-
-  // useEffect(() => (
-  //   function getOtherUserId() {
-  //     let foreignUserID = currentChat!.users!.filter((id) => id !== userId!).join('')
-  //     console.log(foreignUserID)
-  //   }
-  // ));
- 
 
   /* Render Component */
 
@@ -106,13 +98,13 @@ export default function ChatSingle() {
       <div className="message-container">
         {currentChat?.messages.map((message) => (
           <div key={message.id}>
-            {currentChat.foreignUser !== userId ? (
+            {message.from !== userId ? (
               <div className="message foreign-user">
                 <div className="time">
                   {message.createdAt}
                 </div>
                 <div className="username">
-                  {message.foreignUsername}
+                  {currentChat.foreignUserName}
                 </div>
                 <div className="message-body">
                   {message.body}

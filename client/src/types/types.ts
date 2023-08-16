@@ -38,7 +38,8 @@ export interface Chat {
   item: string[];
   messages: Message[];
   users: string[];
-  foreignUser: string;
+  foreignUserName: string;
+  foreignUserId: string;
 }
 
 export interface ChatPreview {
@@ -54,7 +55,7 @@ export interface Message {
   id: string;
   body: string;
   from: User['id'];
-  foreignUsername: string | undefined;
+  foreignUserName: string | undefined;
   to: User['id'];
   createdAt: number;
   seen: boolean;
@@ -62,7 +63,7 @@ export interface Message {
 
 export interface MessageToSend {
   body: string;
-  from: User['id'];
-  to: User['id'];
+  from: string;
+  to: string |undefined;
   seen: boolean;
 }
