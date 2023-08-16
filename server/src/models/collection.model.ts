@@ -70,7 +70,7 @@ export async function getAll (userId: string): Promise<any | null> {
           _id: 0,
           'collections._id': 1,
           'collections.name': 1,
-          'items.img_url': { $slice: ['$items.img_url', 4] }
+          'items': { $slice: ['$items', 4] }
         }
       }
     ]);
@@ -78,7 +78,7 @@ export async function getAll (userId: string): Promise<any | null> {
     const collections = data.map(item => ({
       _id: item.collections._id,
       name: item.collections.name,
-      items: item.items.flatMap((item: { img_url: any }) => ({img_url: item.img_url[0]}))
+      items: item.items.map((item: any) => ({img_url: item.img_url}))
     }));
 
     return collections;
