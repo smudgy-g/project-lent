@@ -1,4 +1,4 @@
-import mongoose, { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 import { ICollection } from '../_types';
 import { Collection } from './collection.schema';
 import * as user from './user.model';
@@ -45,7 +45,7 @@ export async function getAll (userId: string): Promise<any | null> {
     const data = await User.aggregate([
       {
         $match: {
-          _id: new mongoose.Types.ObjectId(userId)
+          _id: new Types.ObjectId(userId)
         }
       },
       {
@@ -90,7 +90,7 @@ export async function getAll (userId: string): Promise<any | null> {
 
 export async function addItemToCollection (collectionId: string, itemId: string) {
   try {
-    const itemIdObject = new mongoose.Types.ObjectId(itemId);
+    const itemIdObject = new Types.ObjectId(itemId);
 
     return await Collection.findByIdAndUpdate(collectionId, 
       { $push: { items: itemIdObject }},

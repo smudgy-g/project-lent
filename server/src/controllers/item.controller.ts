@@ -102,6 +102,13 @@ export async function reserveItem (ctx: Context) {
     ctx.body = { message: 'No item ID was supplied.' };
     return;
   }
+
+  try {
+    const result = await itemModel.reserveItem(userId, itemId);
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = { message: error };
+  }
 }
 
 export async function deleteItem (ctx:Context) {

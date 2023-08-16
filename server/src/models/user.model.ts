@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import { Types } from 'mongoose';
 import { IAddress, IUser } from '../_types';
 import convertAddressToGeoCode from '../helpers/geocoding';
 import * as collection from './collection.model';
@@ -50,7 +50,7 @@ export async function findUserById (id: string): Promise<IUser | null> {
 
 export async function addToUserCollection (userId: string, collectionId: string): Promise<any> {
   try {
-    const collectionIdObject = new mongoose.Types.ObjectId(collectionId);
+    const collectionIdObject = new Types.ObjectId(collectionId);
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $push: { collections: collectionIdObject } },
@@ -82,7 +82,7 @@ export async function updateUserDetails (id: string, { username, email, address 
 
 export async function deleteUserById (userId: string): Promise<IUser | null> {
   try {
-    const userIdObject = new mongoose.Types.ObjectId(userId);
+    const userIdObject = new Types.ObjectId(userId);
     return await User.findByIdAndDelete(userIdObject);
   } catch (error) {
     console.error(error);

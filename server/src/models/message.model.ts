@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { Types } from "mongoose";
 import { IMessage } from "../_types";
 import { Message } from "./message.schema";
 import { Chat } from "./chat.schema";
@@ -13,7 +13,7 @@ export async function postMessage (message: IMessage, chatId: string): Promise<I
     });
 
     // Push new message into the chat document
-    const chatIdObject = new mongoose.Types.ObjectId(chatId);
+    const chatIdObject = new Types.ObjectId(chatId);
     await Chat.findByIdAndUpdate(chatIdObject, {
       $push: {
         messages: newMessage._id

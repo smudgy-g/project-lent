@@ -68,9 +68,9 @@ export async function createChat (ctx: Context) {
   const { itemId, ownerId } = ctx.request.body as any;
   const userId = ctx.userId;
   try {
-    const result = await chatModel.createChat(itemId, ownerId, userId, false);
+    const result = await chatModel.createChat(itemId, ownerId, userId);
     ctx.status = 201;
-    ctx.body = 'new chat';
+    ctx.body = result;
   } catch (error) {
     ctx.status = 500;
     ctx.body = { message: error };
