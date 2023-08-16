@@ -236,14 +236,13 @@ export async function getAllChats (): Promise<ChatPreview[]> {
   }
 }
 
-export async function getChatbyId (chatId: Chat['id'] | undefined): Promise<Chat> {
+export async function getChatbyId (chatId: string | undefined) {
   try {
     const response = await fetch(`${baseUrl}/inbox/${chatId}`, {
       credentials: 'include'
     });
 
     const data = await response.json();
-    console.log(data);
 
     if (!response.ok) {
       throw new Error(data.message);
@@ -256,7 +255,7 @@ export async function getChatbyId (chatId: Chat['id'] | undefined): Promise<Chat
   }
 }
 
-export async function deleteChat(chatId: Chat['id']) {
+export async function deleteChat(chatId: string) {
   try {
     const response = await fetch(`${baseUrl}/inbox/${chatId}`, {
       method: 'DELETE',
