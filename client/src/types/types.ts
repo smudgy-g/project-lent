@@ -34,11 +34,10 @@ export interface Collection {
 }
 
 export interface Chat {
-  id: string;
-  item: Item['_id'];
-  itemName: string;
+  _id: string;
+  item: string[];
   messages: Message[];
-  updatedAt: number;
+  users: string[];
   foreignUser: string;
 }
 

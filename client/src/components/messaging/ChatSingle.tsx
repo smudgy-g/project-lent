@@ -11,6 +11,7 @@ export default function ChatSingle() {
   const [inputValue, setInputValue] = useState<string>('');
   const [currentChat, setCurrentChat] = useState<Chat | null>(null);
   const [userId, setUserId] = useState<User['id']>('');
+  // const [foreignUserId, setForeignUserId] = useState<string>('')
   const [currentMessageData, setCurrentMessageData] = useState<MessageToSend | null>();
 
   /* Hooks */
@@ -31,8 +32,8 @@ export default function ChatSingle() {
   };
   
   function handleClick() {
-    console.log(currentMessageData)
-    console.log(chatId)
+    console.log('currentMessage', currentMessageData)
+    console.log('chatID', chatId)
     setInputValue('')
     // postMessage(currentMessageData, chatId!)
   };
@@ -62,13 +63,14 @@ export default function ChatSingle() {
     return '';
   };
 
-  // Helper Function to parse and set the userId
+  // Helper function to parse and set the userId
   function getUserId () {
     const userIdObject = getCookieValue('_auth_state');
     const parsedUserIdObject = JSON.parse(userIdObject);
     const userId = parsedUserIdObject._id;
     setUserId(userId);
   };
+
 
   /* Use Effect */
 
@@ -78,13 +80,23 @@ export default function ChatSingle() {
 
   useEffect(() => {
     getChatbyId(chatId)
-      .then((result) => setCurrentChat(result))
+      // .then((result) => console.log('THAT', result.users.filter((id : string) => id !== userId)))
+      .then((chat) => setCurrentChat(chat))
       .catch((error) => console.log(error));
   }, []);
+
 
   useEffect(() => (
     getUserId()
   ));
+
+  // useEffect(() => (
+  //   function getOtherUserId() {
+  //     let foreignUserID = currentChat!.users!.filter((id) => id !== userId!).join('')
+  //     console.log(foreignUserID)
+  //   }
+  // ));
+ 
 
   /* Render Component */
 
