@@ -72,8 +72,7 @@ export async function updateUserDetails (id: string, { username, email, address 
         email, 
         address, 
         geoLocation 
-      }, { new: true })
-    console.log(updatedUser);
+      }, { new: true });
     return updatedUser;
   } catch (error) {
     console.error(error);

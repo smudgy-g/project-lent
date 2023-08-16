@@ -22,7 +22,6 @@ export async function getAll (id: string): Promise<Partial<IItem>[] | null> {
       borrowed: item.borrowed,
     }));
 
-    console.log(items);
     return items;
   } catch (error) {
     console.error(error);

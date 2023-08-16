@@ -1,8 +1,9 @@
+import mongoose from "mongoose";
 import { IMessage } from "../_types";
 import { Message } from "./message.schema";
-import { User } from "./user.schema";
+import { Chat } from "./chat.schema";
 
-export async function postMessage (message: IMessage): Promise<IMessage | null> {
+export async function postMessage (message: IMessage, chatId: string): Promise<IMessage | null> {
   try {
     const newMessage = await Message.create({
       body: message.body,
@@ -10,12 +11,14 @@ export async function postMessage (message: IMessage): Promise<IMessage | null> 
       to: message.to,
       seen: message.seen,
     });
-    
-    // need the chatid to update the
-    await Chat.findByIdAndUpdate(**chatid**, {
+
+    // Push new message into the chat document
+    const chatIdObject = new mongoose.Types.ObjectId(chatId);
+    await Chat.findByIdAndUpdate(chatIdObject, {
       $push: {
         messages: {
-          $each: newMessage._id
+          $each: newMessage._id, 
+          $position: 0
         }
       }
     });
