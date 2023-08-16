@@ -6,10 +6,23 @@ import mongoose, { Schema } from "mongoose";
 import { Collection } from "./collection.schema";
 
 // need to return all the item data
-export async function getAll (id: string): Promise<IItem[] | null> {
+export async function getAll (id: string): Promise<Partial<IItem>[] | null> {
   try {
     const userId = new mongoose.Types.ObjectId(id);
-    const items = await Item.find({ user: userId });
+    const data = await Item.find({ user: userId });
+
+    const items = data.map(item => ({
+      _id: item._id.toString(),
+      name: item.name,
+      img_url: item.img_url,
+      value: item.value,
+      description: item.description,
+      lendable: item.lendable,
+      available: item.available,
+      borrowed: item.borrowed,
+    }));
+
+    console.log(items);
     return items;
   } catch (error) {
     throw error;
@@ -95,7 +108,7 @@ export async function findItemsByCollection(collectionId: string): Promise<Parti
     ]);
 
     const items = data.map(item => ({
-      _id: item.items._id,
+      _id: item.items._id.toString(),
       name: item.items.name,
       img_url: item.items.img_url,
       value: item.items.value,

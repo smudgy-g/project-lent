@@ -14,7 +14,7 @@ export interface User {
 }
 
 export interface Item {
-  id: string;
+  _id: string;
   user: User;
   name: string;
   img_url: string;
@@ -24,18 +24,19 @@ export interface Item {
   lendable: boolean;
   available: boolean;
   borrowed: boolean;
+  distance?: number;
 }
 
 export interface Collection {
-  id: string;
+  _id: string;
   name: string;
   items: Item[]
 }
 
 export interface Chat {
   id: string;
-  item: Item['id'];
-  itemName: string; 
+  item: Item['_id'];
+  itemName: string;
   messages: Message[];
   updatedAt: number;
   foreignUser: string;

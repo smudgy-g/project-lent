@@ -2,6 +2,16 @@
 
 /* VARIABLES */
 
+:root {
+  --p-xxs: 4px;
+  --p-xs: 8px;
+  --p-sm: 12px;
+  --p-md: 16px;
+  --p-lg: 24px;
+  --p-xl: 48px;
+  --p-xxl: 64px;
+}
+
 /* BASICS */
 
 * {
@@ -48,8 +58,9 @@ body,
 }
 
 .tab-navigation {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  justify-items: center;
 }
 
 /* Header */
@@ -99,6 +110,29 @@ body,
   grid-template-rows: repeat(2, 1fr);
 }
 
+/* ItemSingle */
+
+.image {
+  width: 100%;
+  aspect-ratio: 1.16;
+
+  background-position: center;
+  background-size: cover;
+}
+
 /* REGISTER */
 
 /* BASIC CLASSES */
+
+.button {
+  padding: var(--p-xxs);
+}
+
+/* MESSAGING */
+
+.chat-preview {
+  display: flex;
+  gap: 10px;
+  background: rgb(224, 224, 224);
+  justify-content: space-between;
+}

@@ -15,7 +15,7 @@ export default function ItemListItem ({ item }: ItemListItemProps) {
   return (<>
     <div className="list-item">
       <div className="preview-container">
-        <div key={item.id} className="item-preview" style={{backgroundImage: `url(${item.img_url})`}}></div>
+        <div key={item._id} className="item-preview" style={{backgroundImage: `url(${item.img_url})`}}></div>
       </div>
       <h2>{item.name}</h2>
     </div>
