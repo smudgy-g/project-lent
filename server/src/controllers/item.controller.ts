@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { getAll, createOne, findItemById, deleteOne, findItemsByCollection, updateOne } from '../models/item.model';
+import * as itemModel from '../models/item.model';
 import { IItem } from '../_types';
 
 export async function getAllItems (ctx: Context) {
@@ -10,7 +10,8 @@ export async function getAllItems (ctx: Context) {
     return;
   }
   try {
-    const result = await getAll(id);
+    const result = await itemModel.getAll(id);
+    console.log(result);
     ctx.status = 200;
     ctx.body = result;
   } catch (error) {
@@ -28,7 +29,7 @@ export async function createItem (ctx:Context) {
     return;
   }
   try {
-    const newItem = await createOne(userId, itemData);
+    const newItem = await itemModel.createOne(userId, itemData);
     ctx.status = 201;
     ctx.body = newItem;
     console.log('success')
@@ -46,7 +47,7 @@ export async function findItem (ctx:Context) {
     return;
   }
   try {
-    const item = await findItemById(id);
+    const item = await itemModel.findItemById(id);
     ctx.status = 201;
     ctx.body = item;
   } catch (error) {
@@ -63,7 +64,8 @@ export async function findItemsByCollectionId (ctx:Context) {
     return;
   }
   try {
-    const items = await findItemsByCollection(collectionId);
+    const items = await itemModel.findItemsByCollection(collectionId);
+    console.log(items);
     ctx.status = 201;
     ctx.body = items;
   } catch (error) {
@@ -84,7 +86,7 @@ export async function updateItemById (ctx: Context) {
   }
 
   try {
-    const items = await updateOne(id, itemData);
+    const items = await itemModel.updateOne(id, itemData);
     ctx.status = 201;
     ctx.body = items;
   } catch (error) {
@@ -102,7 +104,7 @@ export async function deleteItem (ctx:Context) {
   }
 
   try {
-    await deleteOne(id);
+    await itemModel.deleteOne(id);
     ctx.status = 200;
     ctx.body = { success: true };
   } catch (error) {
