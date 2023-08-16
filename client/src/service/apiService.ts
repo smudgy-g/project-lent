@@ -257,7 +257,7 @@ export async function getChatbyId (chatId: Chat['id'] | undefined): Promise<Chat
 
 export async function deleteChat(chatId: Chat['id']) {
   try {
-    const response = await fetch(`${baseUrl}/user/${chatId}`, {
+    const response = await fetch(`${baseUrl}/inbox/${chatId}`, {
       method: 'DELETE',
       credentials: 'include'
     });

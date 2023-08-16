@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { getAllChats } from "../../service/apiService";
+import { deleteChat, getAllChats } from "../../service/apiService";
 import { Chat, ChatPreview } from "../../types/types";
 import { Link } from 'react-router-dom'
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
@@ -16,7 +16,8 @@ function Inbox() {
 
   /* Handler Functions */
 
-  function handleDeleteChat () {
+  function handleDeleteChat (chatId: string) {
+    deleteChat(chatId)
     console.log('executed')
   }
 
@@ -56,7 +57,7 @@ function Inbox() {
               </div>
           </Link>
           <div>
-            <button>Delete</button>
+            <button onClick={() => handleDeleteChat(chat.id)}>Delete</button>
           </div>
         </div>
       ))}
