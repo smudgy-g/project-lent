@@ -18,7 +18,12 @@ function Inbox() {
 
   function handleDeleteChat (chatId: string) {
     deleteChat(chatId)
-    console.log('executed')
+      .then(() => {
+        getAllChats()
+          .then((chats) => setChats(chats))
+          .catch((error)=> console.log(error))
+      })
+      .catch((error) => console.log(error));
   }
 
   /* Use Effect */
