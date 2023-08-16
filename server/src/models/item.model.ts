@@ -115,7 +115,7 @@ export async function findItemsByCollection(collectionId: string): Promise<Parti
       description: item.items.description,
       lendable: item.items.lendable,
       available: item.items.available,
-      borrowed: item.items.borrowed,
+      borrowed: item.items.borrowed
     }));
     
     return items;
