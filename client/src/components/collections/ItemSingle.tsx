@@ -53,7 +53,6 @@ export default function ItemSingle () {
       // If the user is NOT the item’s owner
       const localActionButtonGroupDataBorrower: ActionButtonGroupData = [];
 
-      console.log(item.distance);
       // Set the action button data accordingly
       setActionButtonGroupData(
         item.distance

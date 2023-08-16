@@ -19,6 +19,7 @@ export default function CollectionOverview () {
   useEffect(() => {
     getAllCollections()
       .then((collections) => setCollections(collections))
+      .then(() => console.log(collections))
       .catch((error) => console.log(error));
   }, []);
 
@@ -29,6 +30,12 @@ export default function CollectionOverview () {
         title: 'Add Collection',
         action: () => {
           navigate('/collection/add');
+        }
+      },
+      {
+        title: 'Add Item',
+        action: () => {
+          navigate('/item/add');
         }
       }
     ]

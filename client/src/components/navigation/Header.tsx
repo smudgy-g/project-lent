@@ -44,7 +44,7 @@ export default function Header () {
         {actionButtonGroupData.map((item: (ActionButtonData | ActionButtonData[]), index: number) => {
           // If the item is an array of action button objects
           if (Array.isArray(item)) {
-            return <DropdownButton actionButtonDataArray={item} />;
+            return <DropdownButton key={index} actionButtonDataArray={item} />;
           }
           // If the item is a action button object
           return <button key={index} className="button action" onClick={item.action}>{item.title}</button>
