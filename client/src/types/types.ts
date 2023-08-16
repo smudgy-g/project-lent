@@ -38,13 +38,13 @@ export interface Chat {
   item: string[];
   messages: Message[];
   users: string[];
-  foreignUserName: string;
+  foreignUserName: User['id'];
   foreignUserId: string;
 }
 
 export interface ChatPreview {
   id: string;
-  item: Item['_id'];
+  itemId: Item['_id'];
   itemName: string;
   message: string;
   updatedAt: number;
@@ -55,7 +55,7 @@ export interface Message {
   id: string;
   body: string;
   from: User['id'];
-  foreignUserName: string | undefined;
+  foreignUserName: string ;
   to: User['id'];
   createdAt: number;
   seen: boolean;
@@ -63,7 +63,7 @@ export interface Message {
 
 export interface MessageToSend {
   body: string;
-  from: string;
-  to: string |undefined;
+  from: User['id'];
+  to?: User['id'] ;
   seen: boolean;
 }

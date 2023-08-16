@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { deleteChat, getAllChats } from "../../service/apiService";
-import { Chat, ChatPreview } from "../../types/types";
+import { ChatPreview } from "../../types/types";
 import { Link } from 'react-router-dom'
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 
@@ -16,14 +16,14 @@ function Inbox() {
 
   /* Handler Functions */
 
-  function handleDeleteChat (chatId: string) {
-    deleteChat(chatId)
-      .then(() => {
-        getAllChats()
-          .then((chats) => setChats(chats))
-          .catch((error)=> console.log(error))
-      })
-      .catch((error) => console.log(error));
+  async function handleDeleteChat (chatId: string) {
+    await deleteChat(chatId)
+      // .then(() => {
+      //   getAllChats()
+      //     .then((chats) => setChats(chats))
+      //     .catch((error)=> console.log(error))
+      // })
+      // .catch((error) => console.log(error));
   }
 
   /* Use Effect */
