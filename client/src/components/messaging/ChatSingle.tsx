@@ -80,8 +80,7 @@ export default function ChatSingle() {
 
   useEffect(() => {
     getChatbyId(chatId)
-      // .then((result) => console.log('THAT', result.users.filter((id : string) => id !== userId)))
-      .then((chat) => console.log(chat))
+      .then((chat) => setCurrentChat(chat))
       .catch((error) => console.log(error));
   }, []);
 
