@@ -14,6 +14,12 @@ function Inbox() {
 
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
 
+  /* Handler Functions */
+
+  function handleDeleteChat () {
+    console.log('executed')
+  }
+
   /* Use Effect */
 
   useEffect(() => {
@@ -30,17 +36,29 @@ function Inbox() {
 
   return (<>
     <div className="inbox">
+
       <div>Chats</div>
+
       {chats && chats.map((chat) => (
-        <Link key={chat.id} to={`/chat/${chat.id}`}>
-          <div className="chat-thumbnail" key={chat.id}>
-            <div>{chat.updatedAt}</div>
-            <div>{chat.foreignUser}</div>
-            <div>{chat.itemName}</div>
-            <div>{chat.message}</div>
-            <button>Delete Chat</button>
+        <div className="chat-preview" key={chat.id}>
+          <Link key={chat.id} to={`/chat/${chat.id}`}>
+              <div className="chat-preview-text">
+                <div>{new Date(chat.updatedAt).toLocaleString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  hour: "numeric",
+                  timeZone: "UTC"
+                })}</div>
+                <div>{chat.foreignUser}</div>
+                <div>{chat.itemName}</div>
+                <div>{chat.message}...</div>
+              </div>
+          </Link>
+          <div>
+            <button>Delete</button>
           </div>
-        </Link>
+        </div>
       ))}
     </div>
     
