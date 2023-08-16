@@ -33,16 +33,18 @@ export async function createUser (
       await collection.createOne('Lent Out', id);
     })
     .then(() => newUser);
-  } catch (err) {
-    throw err;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 }
 
 export async function findUserById (id: string): Promise<IUser | null> {
   try {
     return await User.findById(id);
-  } catch (err) {
-    throw err;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 }
 
@@ -55,8 +57,9 @@ export async function addToUserCollection (userId: string, collectionId: string)
       { new: true }
     );
     return updatedUser;
-  } catch (err) {
-    throw err;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 }
 
@@ -72,8 +75,9 @@ export async function updateUserDetails (id: string, { username, email, address 
       }, { new: true })
     console.log(updatedUser);
     return updatedUser;
-  } catch (err) {
-    throw err;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 }
 
@@ -81,8 +85,9 @@ export async function deleteUserById (userId: string): Promise<IUser | null> {
   try {
     const userIdObject = new mongoose.Types.ObjectId(userId);
     return await User.findByIdAndDelete(userIdObject);
-  } catch (err) {
-    throw err;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 }
 
@@ -103,6 +108,7 @@ export async function checkEmailUsernameExist(email: string, username: string) {
 export async function findUserByUsername(username:string) {
    return await User.findOne({ username });
 }
+
 export async function findUserByEmail(email:string) {
    return await User.findOne({ email });
 }

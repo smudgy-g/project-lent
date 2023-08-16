@@ -15,16 +15,30 @@ export async function getAllChats (ctx: Context) {
   
 }
 
+export async function getChatById (ctx: Context) {
+  const chatId = ctx.params.chatid;
+  try {
+    const chat = await chatModel.getChatById(chatId);
+    ctx.status = 200;
+    ctx.body = chat;
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = { message: error };
+  }
+  
+}
+
 export async function deleteChat (ctx:Context) {
-  const id = ctx.params.id;
-  if (!id) {
+  const { chatId }: any = ctx.request.body;
+
+  if (!chatId) {
     ctx.status = 400;
-    ctx.body = { message: 'No collection ID was supplied.' };
+    ctx.body = { message: 'No chat ID was supplied.' };
     return;
   }
 
   try {
-    await chatModel.deleteOne(id);
+    await chatModel.deleteOne(chatId);
     ctx.status = 200;
     ctx.body = { success: true };
   } catch (error) {

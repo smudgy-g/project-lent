@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { IAddress, IUser } from '../_types';
+import { IUser } from '../_types';
 import * as userModel from '../models/user.model';
 
 
