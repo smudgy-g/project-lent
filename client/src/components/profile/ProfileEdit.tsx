@@ -1,9 +1,10 @@
 import { useEffect, useState, useContext } from "react";
-import { HeaderContext } from "../../contexts/HeaderContext";
-import { HeaderContextProps } from "../../contexts/HeaderContext";
+import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { Address } from "../auth/Register";
 import { putUser } from "../../service/apiService";
 import { useNavigate } from 'react-router-dom';
+import { getUser } from "../../service/apiService";
+import { User } from "../../types/types";
 
 export interface ProfileEditData {
   username: string;
@@ -15,6 +16,7 @@ function ProfileEdit() {
 
   /* State Variables */
 
+  const [profileEditPlaceholderData, setProfileEditPlaceholderData] = useState<User | null>(null)
   const [profileEditData, setProfileEditData] = useState<ProfileEditData>({
     username: '',
     email: '',
@@ -35,6 +37,12 @@ function ProfileEdit() {
 
   useEffect(() => {
     setActionButtonGroupData([]);
+  }, []);
+ 
+  useEffect(() => {
+    getUser()
+      .then((user) => setProfileEditPlaceholderData(user))
+      .catch((error) => console.log(error));
   }, []);
 
 
@@ -66,16 +74,6 @@ function ProfileEdit() {
     console.log(profileEditData)
     putUser(profileEditData)
     navigate('/profile')
-    setProfileEditData({
-      username: '',
-      email: '',
-      address: {
-        streetName: '',
-        streetNumber: '',
-        postalCode: '',
-        city: '',
-      },
-    });
   };
 
   /* Render Component */
@@ -89,6 +87,7 @@ function ProfileEdit() {
                 <input
                   type="text"
                   name="username"
+                  placeholder={profileEditPlaceholderData?.username}
                   value={profileEditData.username}
                   onChange={handleChange}
                 />
@@ -101,6 +100,7 @@ function ProfileEdit() {
                 <input
                   type="text"
                   name="email"
+                  placeholder={profileEditPlaceholderData?.email}
                   value={profileEditData.email}
                   onChange={handleChange}
                 />
@@ -113,6 +113,7 @@ function ProfileEdit() {
                 <input
                   type="text"
                   name="streetName"
+                  placeholder={profileEditPlaceholderData?.address.streetName}
                   value={profileEditData.address.streetName}
                   onChange={handleChange}
                 />
@@ -125,6 +126,7 @@ function ProfileEdit() {
                 <input
                   type="text"
                   name="streetNumber"
+                  placeholder={profileEditPlaceholderData?.address.streetNumber}
                   value={profileEditData.address.streetNumber}
                   onChange={handleChange}
                 />
@@ -137,6 +139,7 @@ function ProfileEdit() {
                 <input
                   type="text"
                   name="postalCode"
+                  placeholder={profileEditPlaceholderData?.address.postalCode}
                   value={profileEditData.address.postalCode}
                   onChange={handleChange}
                 />
@@ -149,6 +152,7 @@ function ProfileEdit() {
                 <input
                   type="text"
                   name="city"
+                  placeholder={profileEditPlaceholderData?.address.city}
                   value={profileEditData.address.city}
                   onChange={handleChange}
                 />
