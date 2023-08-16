@@ -44,8 +44,8 @@ export interface Chat {
 
 export interface ChatPreview {
   id: string;
-  item: Item['id'];
-  itemName: string; 
+  item: Item['_id'];
+  itemName: string;
   message: string;
   updatedAt: number;
   foreignUser: string;
