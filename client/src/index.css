@@ -142,3 +142,16 @@ body,
   bottom: 40px;
   right: 0px; 
 }
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.foreign-user {
+text-align: left;  
+}
+
+.user {
+text-align: right;  
+}
