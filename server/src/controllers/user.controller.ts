@@ -105,7 +105,8 @@ export async function deleteUser (ctx:Context) {
     return;
   }
   try {
-    await userModel.deleteUserById(userId)
+    await userModel.deleteUserById(userId);
+
     ctx.status = 200;
     ctx.body = { success: true };
     return;

@@ -1,7 +1,7 @@
 import { LoginFormData } from "../components/auth/Login";
 import { RegisterFormData } from "../components/auth/Register"
 import { ProfileEditData } from "../components/profile/ProfileEdit";
-import { Chat, Collection, Item, User } from "../types/types";
+import { Chat, ChatPreview, Collection, Item, User } from "../types/types";
 
 const baseUrl = "http://localhost:5001"
 
@@ -216,7 +216,7 @@ export async function deleteItem (id: string): Promise<Item> {
 
 /* Messaging */
 
-export async function getAllChats (): Promise<Chat[]> {
+export async function getAllChats (): Promise<ChatPreview[]> {
   try {
     const response = await fetch(`${baseUrl}/inbox`, {
       credentials: 'include'
@@ -257,7 +257,7 @@ export async function getChatbyId (chatId: Chat['id'] | undefined): Promise<Chat
 
 export async function deleteChat(chatId: Chat['id']) {
   try {
-    const response = await fetch(`${baseUrl}/user/${chatId}`, {
+    const response = await fetch(`${baseUrl}/inbox/${chatId}`, {
       method: 'DELETE',
       credentials: 'include'
     });

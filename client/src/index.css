@@ -127,3 +127,12 @@ body,
 .button {
   padding: var(--p-xxs);
 }
+
+/* MESSAGING */
+
+.chat-preview {
+  display: flex;
+  gap: 10px;
+  background: rgb(224, 224, 224);
+  justify-content: space-between;
+}

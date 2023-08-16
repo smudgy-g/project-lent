@@ -1,13 +1,14 @@
 import { useEffect, useState, useContext } from "react";
-import { HeaderContext } from "../../contexts/HeaderContext";
-import { HeaderContextProps } from "../../contexts/HeaderContext";
+import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { Address } from "../auth/Register";
 import { putUser } from "../../service/apiService";
 import { useNavigate } from 'react-router-dom';
+import { getUser } from "../../service/apiService";
+import { User } from "../../types/types";
 
 export interface ProfileEditData {
-  username: string;
-  email: string;
+  username: string | undefined;
+  email: string | undefined;
   address: Address;
 };
 
@@ -36,6 +37,12 @@ function ProfileEdit() {
   useEffect(() => {
     setActionButtonGroupData([]);
   }, []);
+ 
+  useEffect(() => {
+    getUser()
+      .then((user) => setProfileEditData(user))
+      .catch((error) => console.log(error));
+  }, []);
 
 
   /* Handler Functions */
@@ -61,21 +68,11 @@ function ProfileEdit() {
     };
   };
 
-  function handleSubmit(event: React.FormEvent) {
+  async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     console.log(profileEditData)
-    putUser(profileEditData)
+    await putUser(profileEditData)
     navigate('/profile')
-    setProfileEditData({
-      username: '',
-      email: '',
-      address: {
-        streetName: '',
-        streetNumber: '',
-        postalCode: '',
-        city: '',
-      },
-    });
   };
 
   /* Render Component */
