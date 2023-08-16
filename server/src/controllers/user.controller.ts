@@ -55,11 +55,8 @@ export async function getUserById (ctx: Context) {
 }
 
 export async function updateUser (ctx: Context) {
-  console.log('hello update user');
   const id = ctx.userId;
   const { username, email, address } = ctx.request.body as Partial<IUser>;
-  
-  console.log({ username, email, address });
   if (!username || !email || !address) {
     ctx.status = 400;
     ctx.body = { message: 'One or more fields missing.' };

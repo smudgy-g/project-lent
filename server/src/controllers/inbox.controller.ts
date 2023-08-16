@@ -53,9 +53,9 @@ export async function deleteChat (ctx:Context) {
 
 export async function postMessage (ctx: Context) {
   const message = ctx.request.body as IMessage;
-  const userId = ctx.userId;
+  const chatId = ctx.params.chatid;
   try {
-    const result = await messageModel.postMessage(message);
+    const result = await messageModel.postMessage(message, chatId);
     ctx.status = 201;
     ctx.body = result;
   } catch (error) {

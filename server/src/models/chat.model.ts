@@ -78,7 +78,6 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
         };
       })
     );
-    console.log(chats)
     return chats;
   } catch (error) {
     console.error(error);
@@ -168,7 +167,6 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
           .sort((a: any, b: any) => b.createdAt - a.createdAt)
       };
     })();
-    console.log(result);
     return result;
   } catch (error) {
     console.error(error);

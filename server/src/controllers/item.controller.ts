@@ -11,7 +11,6 @@ export async function getAllItems (ctx: Context) {
   }
   try {
     const result = await itemModel.getAll(id);
-    console.log(result);
     ctx.status = 200;
     ctx.body = result;
   } catch (error) {
@@ -65,7 +64,6 @@ export async function findItemsByCollectionId (ctx:Context) {
   }
   try {
     const items = await itemModel.findItemsByCollection(collectionId);
-    console.log(items);
     ctx.status = 201;
     ctx.body = items;
   } catch (error) {
