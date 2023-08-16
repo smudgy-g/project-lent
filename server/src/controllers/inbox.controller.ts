@@ -1,7 +1,7 @@
 import { Context } from 'koa';
 import * as chatModel from '../models/chat.model';
 import * as messageModel from '../models/message.model';
-import { IMessage } from '../_types';
+import { IChat, IMessage } from '../_types';
 
 export async function getAllChats (ctx: Context) {
   const userId = ctx.userId;
@@ -61,5 +61,18 @@ export async function postMessage (ctx: Context) {
   } catch (error) {
     ctx.status = 500;
     ctx.body = { messsage: error };
+  }
+}
+
+export async function createChat (ctx: Context) {
+  const { itemId, ownerId } = ctx.request.body as any;
+  const userId = ctx.userId;
+  try {
+    const result = await chatModel.createChat(itemId, ownerId, userId, false);
+    ctx.status = 201;
+    ctx.body = 'new chat';
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = { message: error };
   }
 }

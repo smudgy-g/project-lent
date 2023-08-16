@@ -3,14 +3,14 @@ import * as itemModel from '../models/item.model';
 import { IItem } from '../_types';
 
 export async function getAllItems (ctx: Context) {
-  const id = ctx.userId;
-  if (!id) {
+  const userId = ctx.userId;
+  if (!userId) {
     ctx.status = 400;
     ctx.body = { message: 'User ID was not supplied.' };
     return;
   }
   try {
-    const result = await itemModel.getAll(id);
+    const result = await itemModel.getAll(userId);
     ctx.status = 200;
     ctx.body = result;
   } catch (error) {
@@ -39,14 +39,14 @@ export async function createItem (ctx:Context) {
 }
 
 export async function findItem (ctx:Context) {
-  const id = ctx.params.id;
-  if (!id) {
+  const itemId = ctx.params.itemid;
+  if (!itemId) {
     ctx.status = 400;
     ctx.body = { messsage: 'No item ID supplied.' };
     return;
   }
   try {
-    const item = await itemModel.findItemById(id);
+    const item = await itemModel.findItemById(itemId);
     ctx.status = 201;
     ctx.body = item;
   } catch (error) {
@@ -73,18 +73,18 @@ export async function findItemsByCollectionId (ctx:Context) {
 }
 
 export async function updateItemById (ctx: Context) {
-  const id = ctx.params.id;
+  const itemId = ctx.params.itemid;
   const { name, img_url, value, description, lendable, collections } = ctx.request.body as Partial<IItem>;
   const itemData = { name, img_url, value, description, lendable, collections };
 
-  if (!id) {
+  if (!itemId) {
     ctx.status = 400;
     ctx.body = { messsage: 'No item ID supplied.' };
     return;
   }
 
   try {
-    const items = await itemModel.updateOne(id, itemData);
+    const items = await itemModel.updateOne(itemId, itemData);
     ctx.status = 201;
     ctx.body = items;
   } catch (error) {
@@ -93,16 +93,27 @@ export async function updateItemById (ctx: Context) {
   }
 }
 
+export async function reserveItem (ctx: Context) {
+  const userId = ctx.userId;
+  const itemId = ctx.params.itemid;
+
+  if (!itemId) {
+    ctx.status = 400;
+    ctx.body = { message: 'No item ID was supplied.' };
+    return;
+  }
+}
+
 export async function deleteItem (ctx:Context) {
-  const id = ctx.params.id;
-  if (!id) {
+  const itemId = ctx.params.itemid;
+  if (!itemId) {
     ctx.status = 400;
     ctx.body = { message: 'No item ID was supplied.' };
     return;
   }
 
   try {
-    await itemModel.deleteOne(id);
+    await itemModel.deleteOne(itemId);
     ctx.status = 200;
     ctx.body = { success: true };
   } catch (error) {

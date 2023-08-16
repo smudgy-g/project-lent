@@ -29,15 +29,16 @@ router.post('/login', auth.login);
 router.get('/item/all', authenticate, item.getAllItems); //
 router.get('/item/all/:collectionid', authenticate, item.findItemsByCollectionId); //
 router.get('/item/all/discover', );
-router.get('/item/:id', authenticate, item.findItem);
+router.get('/item/:itemid', authenticate, item.findItem);
 router.post('/item', authenticate, item.createItem);
-router.put('/item/:id', authenticate, item.updateItemById);
-router.delete('/item/:id', authenticate, item.deleteItem);
+router.put('/item/:itemid', authenticate, item.updateItemById);
+router.put('/item/:itemid/reserve', authenticate, item.reserveItem);
+router.delete('/item/:itemid', authenticate, item.deleteItem);
 
 // messaging routes
 router.get('/inbox', authenticate, inbox.getAllChats);
 router.get('/inbox/:chatid', authenticate, inbox.getChatById);
-// router.post('/inbox/', authenticate, inbox.postMessage);
+// router.post('/inbox/', authenticate, inbox.createChat);
 router.post('/inbox/:chatid', authenticate, inbox.postMessage);
 router.delete('/inbox/', authenticate, inbox.deleteChat);
 

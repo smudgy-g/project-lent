@@ -122,6 +122,7 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
           users: 1,
           'item._id': 1,
           'item.name': 1,
+          'item.user': 1,
           messages: {
             // For each message map each message to the output we need. $$message references the "as: 'message'".
             $map: {
@@ -140,7 +141,6 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
       },
     ]);
 
-    
     const result: any = await (async () => {
       const foreignUserName = await Promise.all(
         data[0].users
@@ -167,9 +167,28 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
           .sort((a: any, b: any) => b.createdAt - a.createdAt)
       };
     })();
+    console.log(result);
     return result;
   } catch (error) {
     console.error(error);
     throw error;
+  }
+}
+
+export async function createChat (itemId: string, ownerId: string, userId: string, requestLend: boolean): Promise<IChat | null> {
+  try {
+    const ownerIdObject = new mongoose.Types.ObjectId(ownerId);
+    const userIdObject = new mongoose.Types.ObjectId(userId);
+
+
+    const newChat = new Chat({
+      item: itemId,
+      messages: [],
+      users: [ownerIdObject, userIdObject]
+    });
+    return newChat.save();
+  } catch (error) {
+    console.error(error);
+    throw error
   }
 }
