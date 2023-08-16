@@ -1,12 +1,13 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, SchemaType, Types } from "mongoose";
 import { IChat, IMessage } from "../_types";
 import { Chat } from "./chat.schema";
 import { User } from "./user.schema";
 import { getUsername } from "./user.model";
+import { postMessage } from '../models/message.model';
 
 export async function deleteOne (id:string): Promise<IChat | null> {
   try {
-    const chatIdObject = new mongoose.Types.ObjectId(id);
+    const chatIdObject = new Types.ObjectId(id);
     return Chat.findByIdAndDelete(chatIdObject);
   } catch (error) {
     console.error(error);
@@ -19,7 +20,7 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
     const data = await User.aggregate([
       {
         $match: {
-          _id: new mongoose.Types.ObjectId(userId)
+          _id: new Types.ObjectId(userId)
         }
       },
       {
@@ -88,7 +89,7 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
 
 export async function getChatById (chatId: string, userId: string): Promise<any | null> {
   try {
-    const chatIdObject = new mongoose.Types.ObjectId(chatId);
+    const chatIdObject = new Types.ObjectId(chatId);
     
     const data = await Chat.aggregate([
       // Use the objectId to find the chat
@@ -175,18 +176,30 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
   }
 }
 
-export async function createChat (itemId: string, ownerId: string, userId: string, requestLend: boolean): Promise<IChat | null> {
+export async function createChat (itemId: string, ownerId: string, userId: string, message?: string): Promise<IChat | null> {
   try {
-    const ownerIdObject = new mongoose.Types.ObjectId(ownerId);
-    const userIdObject = new mongoose.Types.ObjectId(userId);
+    const ownerIdObject = new Types.ObjectId(ownerId);
+    const userIdObject = new Types.ObjectId(userId);
+    const itemIdObject = new Types.ObjectId(itemId);
 
-
-    const newChat = new Chat({
-      item: itemId,
-      messages: [],
+    const newChatData: Partial<IChat> = new Chat({
+      item: itemIdObject,
       users: [ownerIdObject, userIdObject]
     });
-    return newChat.save();
+
+    const newChat = await Chat.create(newChatData);
+
+    if (message) {
+      const newMessage = {
+        body: message,
+        from: userIdObject,
+        to: ownerIdObject,
+        seen: false
+      }
+      await postMessage(newMessage as IMessage, newChat._id);
+      return Chat.findById(newChat._id)
+    }
+    return newChat;
   } catch (error) {
     console.error(error);
     throw error

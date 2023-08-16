@@ -1,14 +1,15 @@
 import { IItem } from "../_types";
 import { Item } from "./item.schema";
-import { addItemToCollection, findCollectionById, findCollectionByName } from "./collection.model";
+import { addItemToCollection, findCollectionByName } from "./collection.model";
 import { User } from "./user.schema";
-import mongoose, { Schema } from "mongoose";
+import { Types } from "mongoose";
 import { Collection } from "./collection.schema";
+import { createChat } from "../models/chat.model";
 
 // need to return all the item data
 export async function getAll (id: string): Promise<Partial<IItem>[] | null> {
   try {
-    const userId = new mongoose.Types.ObjectId(id);
+    const userId = new Types.ObjectId(id);
     const data = await Item.find({ user: userId });
 
     const items = data.map(item => ({
@@ -31,7 +32,7 @@ export async function getAll (id: string): Promise<Partial<IItem>[] | null> {
 
 export async function findItemById (id: string): Promise<IItem | null> {
   try {
-    const itemId = new mongoose.Types.ObjectId(id);
+    const itemId = new Types.ObjectId(id);
     return await Item.findById(itemId);
   } catch (error) {
     console.error(error);
@@ -41,7 +42,7 @@ export async function findItemById (id: string): Promise<IItem | null> {
 
 export async function createOne (userId: string, itemData: Partial<IItem>): Promise<IItem | null> {
   try {
-    const userIdObject = new mongoose.Types.ObjectId(userId);
+    const userIdObject = new Types.ObjectId(userId);
     const user = await User.findById(userIdObject);
     if (!user) {
       throw new Error('User not found.');
@@ -52,7 +53,7 @@ export async function createOne (userId: string, itemData: Partial<IItem>): Prom
     if (!allCollection) {
       throw new Error('Could not find the "All" collection.');
     }
-    const allCollectionId = new mongoose.Types.ObjectId(allCollection._id);
+    const allCollectionId = new Types.ObjectId(allCollection._id);
 
     const newItem = new Item({
       user: userIdObject,
@@ -74,7 +75,7 @@ export async function createOne (userId: string, itemData: Partial<IItem>): Prom
 export async function findItemsByCollection(collectionId: string): Promise<Partial<IItem>[] | null> {
   try {
     // COnvert the collection ID to a objectId type
-    const collectionIdObject = new mongoose.Types.ObjectId(collectionId);
+    const collectionIdObject = new Types.ObjectId(collectionId);
    // Use the aggregation pipeline with $lookup to retrieve items for the collection
       const data = await Collection.aggregate([
       {
@@ -137,9 +138,9 @@ export async function updateOne (id: string, itemData: Partial<IItem>) {
   }
 }
 
-export async function deleteOne (id:string): Promise<IItem | null> {
+export async function deleteOne (itemId:string): Promise<IItem | null> {
   try {
-    return Item.findByIdAndDelete(id);
+    return Item.findByIdAndDelete(itemId);
   } catch (error) {
     console.error(error);
     throw error
@@ -147,3 +148,27 @@ export async function deleteOne (id:string): Promise<IItem | null> {
 }
 
 // reserve item function
+
+export async function reserveItem (userId: string, itemId: string) {
+  try {
+    const itemIdObject = new Types.ObjectId(itemId);
+    // get owner id from item
+    const ownerId = await Item.findById(itemIdObject).select({ 'user': 1, '_id': 0 });
+    const itemName = await Item.findById(itemIdObject).select({ 'name': 1, '_id': 0 });
+
+    if (ownerId && itemName ) {
+      await Item.findByIdAndUpdate(itemIdObject, {
+        $set: { available: false }
+      });
+      // create  new chat with message 'Interest in your item'
+      const message = `There is interest in the ${itemName}!`
+      const newChat = await createChat(itemId, ownerId.toString(), userId, message);
+      // return new cchat id
+      console.log(newChat)
+      return newChat?._id;
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

@@ -1,7 +1,7 @@
-import { Document, Schema } from 'mongoose';
+import { Document, Schema, Types } from 'mongoose';
 
 export interface IItem extends Document {
-  user: Schema.Types.ObjectId; // user._id
+  user: Types.ObjectId; // user._id
   name: string;
   img_url?: string; // URL to cloudinary link
   value?: number;
@@ -18,21 +18,21 @@ export interface ILogin {
 }
 
 export interface IChat extends Document {
-  item: Schema.Types.ObjectId; // item._id
-  messages: Schema.Types.ObjectId[];
-  users: Schema.Types.ObjectId[];
+  item: Types.ObjectId; // item._id
+  messages: Types.ObjectId[];
+  users: Types.ObjectId[];
 }
 
 export interface IMessage extends Document {
   body: string;
-  from: Schema.Types.ObjectId; // A user._id
-  to: Schema.Types.ObjectId; // B user._id
+  from: Types.ObjectId; // A user._id
+  to: Types.ObjectId; // B user._id
   seen: boolean;
 }
 
 export interface ICollection extends Document {
   name: string;
-  items: Schema.Types.ObjectId[]; // item._id
+  items: Types.ObjectId[]; // item._id
 }
 
 export interface IUser extends Document {
@@ -43,8 +43,8 @@ export interface IUser extends Document {
   geoLocation: IGeoLocation; // or stored geo-location
   credits: number;
   reputation: number;
-  collections: Schema.Types.ObjectId[]; // collection._id
-  inbox: Schema.Types.ObjectId[]; // chat._id
+  collections: Types.ObjectId[]; // collection._id
+  inbox: Types.ObjectId[]; // chat._id
 }
 
 export interface IGeoLocation {
