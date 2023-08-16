@@ -1,5 +1,6 @@
 import { Context } from 'koa';
-import * as chatModel from '../models/chat.model'
+import * as chatModel from '../models/chat.model';
+import * as messageModel from '../models/message.model';
 import { IMessage } from '../_types';
 
 export async function getAllChats (ctx: Context) {
@@ -52,10 +53,11 @@ export async function deleteChat (ctx:Context) {
 
 export async function postMessage (ctx: Context) {
   const message = ctx.request.body as IMessage;
-
+  const userId = ctx.userId;
   try {
+    const result = await messageModel.postMessage(message);
     ctx.status = 201;
-    ctx.body = message;
+    ctx.body = result;
   } catch (error) {
     ctx.status = 500;
     ctx.body = { messsage: error };
