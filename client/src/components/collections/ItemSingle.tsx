@@ -10,14 +10,13 @@ export default function ItemSingle () {
 
   const [item, setItem] = useState<Item | null>(null);
 
-  /* Hooks */
-
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
   const navigate = useNavigate();
   const { itemId } = useParams();
 
   /* Use Effect */
 
+  // There is some more commenting going on
   useEffect(() => {
     if (itemId) {
       getItemById(itemId)
@@ -28,7 +27,7 @@ export default function ItemSingle () {
 
   // Populate the Header component’s action button group
   useEffect(() => {
-    if (item) {
+    if (item && itemId) {
       // If the user is the item’s owner
       const localActionButtonGroupDataOwner: ActionButtonGroupData = [
         {
@@ -54,14 +53,15 @@ export default function ItemSingle () {
       // If the user is NOT the item’s owner
       const localActionButtonGroupDataBorrower: ActionButtonGroupData = [];
 
+      console.log(item.distance);
       // Set the action button data accordingly
       setActionButtonGroupData(
         item.distance
-        ? localActionButtonGroupDataOwner
-        : localActionButtonGroupDataBorrower
+        ? localActionButtonGroupDataBorrower
+        : localActionButtonGroupDataOwner
       );
     }
-  }, [itemId]);
+  }, [item]);
 
   /* Render Component */
 
