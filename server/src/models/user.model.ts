@@ -79,7 +79,8 @@ export async function updateUserDetails (id: string, { username, email, address 
 
 export async function deleteUserById (userId: string): Promise<IUser | null> {
   try {
-    return await User.findByIdAndDelete({ userId });
+    const userIdObject = new mongoose.Types.ObjectId(userId);
+    return await User.findByIdAndDelete(userIdObject);
   } catch (err) {
     throw err;
   }
