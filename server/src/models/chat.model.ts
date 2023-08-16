@@ -143,16 +143,19 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
 
     
     const result: any = await (async () => {
-      const foreignUsers = await Promise.all(
+      const foreignUserName = await Promise.all(
         data[0].users
           .filter((user: any) => user._id.toString() !== userId)
           .map(async (user: any) => await getUsername(user.toString()))
       );
 
+      const foreignUserId = data[0].users.filter((user: any) => user._id.toString() !== userId)
+
       return {
         _id: data[0]._id,
         users: data[0].users,
-        foreignUser: foreignUsers[0],
+        foreignUserName: foreignUserName[0],
+        foreignUserId: foreignUserId[0],
         item: data[0].item[0],
         messages: data[0].messages
           .map((message: any) => ({
