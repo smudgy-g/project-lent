@@ -6,7 +6,8 @@ import { getUsername } from "./user.model";
 
 export async function deleteOne (id:string): Promise<IChat | null> {
   try {
-    return Chat.findByIdAndDelete(id);
+    const chatIdObject = new mongoose.Types.ObjectId(id);
+    return Chat.findByIdAndDelete(chatIdObject);
   } catch (error) {
     throw error
   }
@@ -80,5 +81,41 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
     return chats;
   } catch (error) {
     throw error
+  }
+}
+
+export async function getChatById (chatId: string) {
+  try {
+    const chatIdObject = new mongoose.Types.ObjectId(chatId);
+    const data = await Chat.aggregate([
+      {
+        $match: {
+          _id: chatIdObject
+        }
+      },
+      // {
+      //   $lookup: {
+
+      //   }
+      // }
+    ]);
+    /* 
+    {
+      _id: chat id
+      itemId:
+      itemName:
+      messages: [
+        message object1,
+        message oobject2
+      ]
+      users: [
+        userId1,
+        userId2
+      ]
+    }
+    */
+    console.log(data);
+  } catch (error) {
+    
   }
 }

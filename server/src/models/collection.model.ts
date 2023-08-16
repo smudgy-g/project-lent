@@ -73,7 +73,7 @@ export async function getAll (userId: string): Promise<any | null> {
     ]);
 
     const collections = data.map(item => ({
-      id: item.collections._id,
+      _id: item.collections._id,
       name: item.collections.name,
       items: item.items.flatMap((item: { img_url: any }) => ({img_url: item.img_url[0]}))
     }));
