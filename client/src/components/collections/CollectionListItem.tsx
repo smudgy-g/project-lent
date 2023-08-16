@@ -16,7 +16,7 @@ export default function CollectionListItem ({ collection }: CollectionListItemPr
     <div className="list-item">
       <div className="preview-container">
       {collection.items.map((item) => (
-        <div key={item.id} className="item-preview" style={{backgroundImage: `url(${item.img_url})`}}></div>
+        <div key={item._id} className="item-preview" style={{backgroundImage: `url(${item.img_url})`}}></div>
       ))}
       </div>
       <h2>{collection.name}</h2>
