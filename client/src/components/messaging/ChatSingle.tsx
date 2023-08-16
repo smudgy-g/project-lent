@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
-import { Chat, User, Message, MessageToSend} from "../../types/types";
+import { Chat, User, MessageToSend} from "../../types/types";
 import { useParams } from 'react-router-dom'
-import { getChatbyId } from "../../service/apiService";
+import { getChatbyId, postMessage } from "../../service/apiService";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 
 export default function ChatSingle() {
@@ -11,7 +11,6 @@ export default function ChatSingle() {
   const [inputValue, setInputValue] = useState<string>('');
   const [currentChat, setCurrentChat] = useState<Chat | null>(null);
   const [userId, setUserId] = useState<User['id']>('');
-  // const [foreignUserId, setForeignUserId] = useState<string>('')
   const [currentMessageData, setCurrentMessageData] = useState<MessageToSend | null>();
 
   /* Hooks */
@@ -31,11 +30,11 @@ export default function ChatSingle() {
       })
   };
   
-  function handleClick() {
-    console.log('currentMessage', currentMessageData)
-    console.log('chatID', chatId)
-    setInputValue('')
-    // postMessage(currentMessageData, chatId!)
+  async function handleClick() {
+    console.log('currentMessage', currentMessageData);
+    console.log('chatID', chatId);
+    setInputValue('');
+    await postMessage(currentMessageData!, chatId!);
   };
        
   /* Helper Functions */
@@ -95,7 +94,7 @@ export default function ChatSingle() {
     <div className="chat">
 
       <div className="message-container">
-        {currentChat?.messages.map((message) => (
+        {currentChat && currentChat.messages.map((message) => (
           <div key={message.id}>
             {message.from !== userId ? (
               <div className="message foreign-user">
