@@ -54,8 +54,15 @@ export interface Message {
   id: string;
   body: string;
   from: User['id'];
-  foreignUsername: string;
+  foreignUsername: string | undefined;
   to: User['id'];
   createdAt: number;
+  seen: boolean;
+}
+
+export interface MessageToSend {
+  body: string;
+  from: User['id'];
+  to: User['id'];
   seen: boolean;
 }

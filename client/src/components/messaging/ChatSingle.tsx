@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { Chat, User} from "../../types/types";
+import { Chat, User, Message, MessageToSend} from "../../types/types";
 import { useParams } from 'react-router-dom'
 import { getChatbyId } from "../../service/apiService";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
@@ -8,12 +8,34 @@ export default function ChatSingle() {
 
   /* State Variables */
 
-  const [currentChat, setCurrentChat] = useState<Chat | null>(null)
-  const [userId, setUserId] = useState<User['id'] | null>(null)
+  const [inputValue, setInputValue] = useState<string>('');
+  const [currentChat, setCurrentChat] = useState<Chat | null>(null);
+  const [userId, setUserId] = useState<User['id']>('');
+  const [currentMessageData, setCurrentMessageData] = useState<MessageToSend | null>();
 
   /* Hooks */
   const {chatId} = useParams()
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
+
+  /* Handler Functions */
+
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setInputValue(event.target.value)
+    setCurrentMessageData(
+      {
+        body: inputValue,
+        from: userId,
+        to: 'addLater',
+        seen: false,
+      })
+  };
+  
+  function handleClick() {
+    console.log(currentMessageData)
+    console.log(chatId)
+    setInputValue('')
+    // postMessage(currentMessageData, chatId!)
+  };
        
   /* Helper Functions */
 
@@ -34,11 +56,11 @@ export default function ChatSingle() {
 
         // Return the decoded value
         return decodedValue;
-      }
-    }
+      };
+    };
     // Cookie not found
     return '';
-  }
+  };
 
   // Helper Function to parse and set the userId
   function getUserId () {
@@ -46,7 +68,7 @@ export default function ChatSingle() {
     const parsedUserIdObject = JSON.parse(userIdObject);
     const userId = parsedUserIdObject._id;
     setUserId(userId);
-  }
+  };
 
   /* Use Effect */
 
@@ -58,47 +80,63 @@ export default function ChatSingle() {
     getChatbyId(chatId)
       .then((result) => setCurrentChat(result))
       .catch((error) => console.log(error));
-  }, [])
+  }, []);
 
   useEffect(() => (
     getUserId()
-  ))
+  ));
 
   /* Render Component */
 
   return (<>
     <div className="chat">
-      {currentChat?.messages.map((message) => (
-        <div key={message.id}>
-          {message.to !== userId ? (
-            <div className="message foreign-user">
-              <div className="time">
-                {message.createdAt}
+
+      <div className="message-container">
+        {currentChat?.messages.map((message) => (
+          <div key={message.id}>
+            {currentChat.foreignUser !== userId ? (
+              <div className="message foreign-user">
+                <div className="time">
+                  {message.createdAt}
+                </div>
+                <div className="username">
+                  {message.foreignUsername}
+                </div>
+                <div className="message-body">
+                  {message.body}
+                </div>
               </div>
-              <div className="username">
-                {message.foreignUsername}
+            ) : (
+              <div className="message user">
+                <div className="time">
+                  {message.createdAt}
+                </div>
+                <div className="username">
+                  You:
+                </div>
+                <div className="message-body">
+                  {message.body}
+                </div>
               </div>
-              <div className="message-body">
-                {message.body}
-              </div>
-            </div>
-          ) : (
-            <div className="message user">
-              <div className="time">
-                {message.createdAt}
-              </div>
-              <div className="username">
-                You:
-              </div>
-              <div className="message-body">
-                {message.body}
-              </div>
-            </div>
-          )
-          }
-        </div>
-      ))}
+            )
+            }
+          </div>
+        ))}
+      </div>
+
+      <div className="chat-input">
+        <input
+        type="text"
+        name="message"
+        value={inputValue}
+        onChange={handleChange}
+        />
+        <button
+        onClick={handleClick}
+        >Send</button>
+      </div>
+
     </div>
     
   </>);
-}
+};

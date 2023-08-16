@@ -113,3 +113,9 @@ body,
   background: rgb(224, 224, 224);
   justify-content: space-between;
 }
+
+.chat-input{
+  position: absolute;
+  bottom: 40px;
+  right: 0px; 
+}

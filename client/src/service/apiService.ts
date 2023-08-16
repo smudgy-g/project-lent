@@ -1,7 +1,7 @@
 import { LoginFormData } from "../components/auth/Login";
 import { RegisterFormData } from "../components/auth/Register"
 import { ProfileEditData } from "../components/profile/ProfileEdit";
-import { Chat, ChatPreview, Collection, Item, User } from "../types/types";
+import { Chat, ChatPreview, Collection, Item, Message, User } from "../types/types";
 
 const baseUrl = "http://localhost:5001"
 
@@ -235,6 +235,7 @@ export async function getAllChats (): Promise<ChatPreview[]> {
     throw new Error('An error occured');
   }
 }
+
 export async function getChatbyId (chatId: Chat['id'] | undefined): Promise<Chat> {
   try {
     const response = await fetch(`${baseUrl}/inbox/${chatId}`, {
@@ -266,3 +267,19 @@ export async function deleteChat(chatId: Chat['id']) {
     console.log(err)
   }
 }
+
+export async function postMessage (currentMessageData: Message, chatId: string | undefined) {
+  try{
+    const response = await fetch(`${baseUrl}/inbox/${chatId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(currentMessageData),
+      credentials: 'include'
+    });
+    return await response.json();
+  } catch (err) {
+    console.log(err);
+  };
+};
