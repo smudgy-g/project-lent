@@ -1,5 +1,6 @@
 import { LoginFormData } from "../components/auth/Login";
 import { RegisterFormData } from "../components/auth/Register"
+import { ItemEditFormData } from "../components/collections/ItemEdit";
 import { ProfileEditData } from "../components/profile/ProfileEdit";
 import { Chat, ChatPreview, Collection, Item, User } from "../types/types";
 
@@ -178,6 +179,30 @@ export async function getItemsByCollection (id: string): Promise<Item[]> {
 export async function getItemById (id: string): Promise<Item> {
   try {
     const response = await fetch(`${baseUrl}/item/${id}`, {
+      credentials: 'include'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
+export async function putItemById (id: string, item: ItemEditFormData): Promise<Item> {
+  try {
+    const response = await fetch(`${baseUrl}/item/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(item),
       credentials: 'include'
     });
 

@@ -4,7 +4,6 @@ import { Address } from "../auth/Register";
 import { putUser } from "../../service/apiService";
 import { useNavigate } from 'react-router-dom';
 import { getUser } from "../../service/apiService";
-import { User } from "../../types/types";
 
 export interface ProfileEditData {
   username: string | undefined;
@@ -31,13 +30,13 @@ function ProfileEdit() {
 
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
   const navigate = useNavigate();
-      
+
   /* Use Effects */
 
   useEffect(() => {
     setActionButtonGroupData([]);
   }, []);
- 
+
   useEffect(() => {
     getUser()
       .then((user) => setProfileEditData(user))
@@ -58,7 +57,7 @@ function ProfileEdit() {
           [name]: value
         }
       }))
-    } 
+    }
     // Access the non-nested properties of the registerFormData object
     else {
       setProfileEditData((prevProfileData) => ({
@@ -166,7 +165,7 @@ function ProfileEdit() {
             </div>
           </form>
     </div>
-      
+
   </>);
 }
 

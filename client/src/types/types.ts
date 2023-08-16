@@ -14,7 +14,7 @@ export interface User {
 }
 
 export interface Item {
-  _id: string;
+  _id?: string;
   user: User;
   name: string;
   img_url: string;
@@ -28,7 +28,7 @@ export interface Item {
 }
 
 export interface Collection {
-  _id: string;
+  _id?: string;
   name: string;
   items: Item[]
 }
