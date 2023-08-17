@@ -187,6 +187,8 @@ export async function getItemsDiscover (): Promise<Item[]> {
       throw new Error(data.message);
     }
 
+    console.log(data);
+
     return data;
   }
   catch (err) {
@@ -266,6 +268,30 @@ export async function putItemById (id: string, item: Item): Promise<Item> {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(item),
+      credentials: 'include'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
+export async function putItemReserve (id: string): Promise<Chat> {
+  try {
+    const response = await fetch(`${baseUrl}/item/${id}/reserve`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({}),
       credentials: 'include'
     });
 
