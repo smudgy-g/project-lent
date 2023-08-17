@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 import { IAddress, IGeoLocation, IUser } from '../types';
-import convertAddressToGeoCode from '../helpers/geocoding';
+import convertAddressToGeoCode from '../utilities/geocoding';
 import * as collection from './collection.model';
 import { User } from './schemas/user.schema';
 import bcrypt from 'bcrypt';
@@ -92,7 +92,8 @@ export async function deleteUserById (userId: string): Promise<IUser | null> {
 
 export async function getUserGeoLocation(userId: Types.ObjectId) {
   const user = await User.findById(userId);
-  return user!.geoLocation;
+  if (user) return user!.geoLocation;
+  return null;
 }
 
 export async function findUserByUsername(username:string) {

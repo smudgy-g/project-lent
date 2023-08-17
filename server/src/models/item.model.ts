@@ -5,7 +5,7 @@ import { User } from "./schemas/user.schema";
 import { Types } from "mongoose";
 import { Collection } from "./schemas/collection.schema";
 import { createChat } from "../models/chat.model";
-import { getItemLocations, sortByDistanceFromUser } from '../helpers/location';
+import { getItemLocations, sortByDistanceFromUser, itemDistanceFromUser } from '../utilities/location';
 
 export async function getAll (id: string): Promise<Partial<IItem>[] | null> {
   try {
@@ -30,10 +30,30 @@ export async function getAll (id: string): Promise<Partial<IItem>[] | null> {
   }
 }
 
-export async function findItemById (id: string): Promise<IItem | null> {
-  try {
-    const itemId = new Types.ObjectId(id);
-    return await Item.findById(itemId);
+//// add distance
+
+export async function findItemById (itemId: string, userId: string, userLocation: IGeoLocation) {
+ try {
+    const itemIdObject = new Types.ObjectId(itemId);
+    const item = await Item.findById(itemIdObject);
+
+    if (!item) return null;
+    if (userId === item.user.toString()) return item;
+    
+    const distance = await itemDistanceFromUser(userLocation, item.user);
+    return ({
+      _id: item._id,
+      user: item.user,
+      name: item.name,
+      img_url: item.img_url,
+      value: item.value,
+      description: item.description,
+      lendable: item.lendable,
+      available: item.available,
+      collections: item.collections,
+      borrowed: item.borrowed, 
+      distance: distance
+    })
   } catch (error) {
     console.error(error);
     throw error;
