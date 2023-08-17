@@ -34,11 +34,11 @@ export default function ChatSingle() {
 
   function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
     if(event.key === 'Enter') {
-      handleClick();
+      handleSendClick();
     }
   };
   
-  async function handleClick() {
+  async function handleSendClick() {
     await postMessage(currentMessageData!, chatId!);
     setInputValue('');
     getChatbyId(chatId!)
@@ -56,7 +56,7 @@ export default function ChatSingle() {
     console.log(itemReceivedData);
   };
  
-  async function handleDeleteChatClick() {
+  async function handleCancelClick() {
     await deleteChat(currentChat?._id!)
     navigate(-1)
   };
@@ -114,7 +114,6 @@ export default function ChatSingle() {
   useEffect(() => (
     getUserId()
   ));
-
 
   useEffect(() => {
     if(currentChat?.item._id){
@@ -205,12 +204,12 @@ export default function ChatSingle() {
     <div>
       {currentChat && currentChat.item.user === userId ? (
         <div className="button-group">
-          <button className="button" onClick={() => handleDeleteChatClick()} disabled={cancelButton}>Cancel</button>
+          <button className="button" onClick={() => handleCancelClick()} disabled={cancelButton}>Cancel</button>
           <button className="button" onClick={() => handleItemReturnClick(currentChat?.item!._id)} disabled={returnedButton}>Returned Item</button>
         </div>
         ) : (
           <div className="button-group">
-          <button className="button" disabled={cancelButton} onClick={() => handleDeleteChatClick()}>Cancel</button>
+          <button className="button" disabled={cancelButton} onClick={() => handleCancelClick()}>Cancel</button>
           <button className="button" onClick={() => handleItemReceiveClick(currentChat!.item!._id)} disabled={receivedButton}>Received Item</button>
         </div>
         )
@@ -228,7 +227,7 @@ export default function ChatSingle() {
       />
 
       <button className="button"
-        onClick={handleClick}
+        onClick={handleSendClick}
         >Send
       </button>
 
