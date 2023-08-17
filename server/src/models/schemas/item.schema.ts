@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { IItem } from '../_types';
+import { IItem } from '../../types';
 
 const itemSchema = new Schema<IItem>({
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // user._id

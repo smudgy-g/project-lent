@@ -2,7 +2,7 @@ import { Context } from 'koa';
 import { findUserByUsername } from '../models/user.model';
 import bcrypt from 'bcrypt';
 import { generateJWT } from '../helpers/webToken';
-import { ILogin } from '../_types'
+import { ILogin } from '../types'
 
 
 export async function login (ctx: Context): Promise<any | null> {

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { IGeoLocation } from '../_types';
+import { IGeoLocation } from '../types';
 
 
 dotenv.config();

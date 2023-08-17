@@ -6,10 +6,10 @@ dotenv.config();
 
 // Import models from the schema files
 import { User } from "../models/user.schema";
-import { Item } from "../models/item.schema";
-import { Collection } from "../models/collection.schema";
-import { Chat } from "../models/chat.schema";
-import { Message } from "../models/message.schema";
+import { Item } from "../models/schemas/item.schema";
+import { Collection } from "../models/schemas/collection.schema";
+import { Chat } from "../models/schemas/chat.schema";
+import { Message } from "../models/schemas/message.schema";
 
 
 async function seedDatabase() {

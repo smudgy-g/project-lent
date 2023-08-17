@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { IChat } from '../_types';
+import { IChat } from '../../types';
 
 const chatSchema = new Schema<IChat>(
   {

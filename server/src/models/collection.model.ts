@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
-import { ICollection } from '../_types';
-import { Collection } from './collection.schema';
+import { ICollection } from '../types';
+import { Collection } from './schemas/collection.schema';
 import * as user from './user.model';
 import { User } from './user.schema';
 

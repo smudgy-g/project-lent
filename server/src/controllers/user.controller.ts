@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { IUser } from '../_types';
+import { IUser } from '../types';
 import * as userModel from '../models/user.model';
 
 
@@ -12,15 +12,19 @@ export async function createOne (ctx: Context) {
     return;
   }
   try {
-    const detailsExist = await userModel.checkEmailUsernameExist(user.email, user.email);
-    if (detailsExist) {
+    const emailExists = await userModel.findUserByEmail(user.email);
+    const usernameExists = await userModel.findUserByUsername(user.username);
+
+    if (emailExists) {
       ctx.status = 400;
-      ctx.body = { message: detailsExist.message };
+      ctx.body = { message: 'Email already exists.' };
+      return;
+    } else if (usernameExists) {
+      ctx.status = 400;
+      ctx.body = { message: 'Username already exists.' };
       return;
     }
 
-    // create welcome chat!
-    // then add that to the user inbox 🙃
     const newUser = await userModel.createUser(
       user.username,
       user.email,

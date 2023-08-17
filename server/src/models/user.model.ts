@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { IAddress, IUser } from '../_types';
+import { IAddress, IUser } from '../types';
 import convertAddressToGeoCode from '../helpers/geocoding';
 import * as collection from './collection.model';
 import { User } from './user.schema';
@@ -88,20 +88,6 @@ export async function deleteUserById (userId: string): Promise<IUser | null> {
     console.error(error);
     throw error;
   }
-}
-
-export async function checkEmailUsernameExist(email: string, username: string) {
-  const emailExists = await User.findOne({ email });
-  if (emailExists) {
-    return { message: 'Email already exists.' };
-  }
-
-  const usernameExists = await User.findOne({ username });
-  if (usernameExists) {
-    return { message: 'Username already exists.' };
-  }
-
-  return null;
 }
 
 export async function findUserByUsername(username:string) {
