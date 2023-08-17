@@ -156,9 +156,30 @@ export async function getAllItems (): Promise<Item[]> {
   }
 }
 
-export async function getItemsByCollection (id: string): Promise<Item[]> {
+export async function getItemsById (id: string): Promise<Item[]> {
   try {
     const response = await fetch(`${baseUrl}/item/all/${id}`, {
+      credentials: 'include'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
+export async function getItemsByQuery (query: string): Promise<Item[]> {
+  try {
+    const encodedQuery = encodeURIComponent(query);
+
+    const response = await fetch(`${baseUrl}/search?q=${encodedQuery}`, {
       credentials: 'include'
     });
 

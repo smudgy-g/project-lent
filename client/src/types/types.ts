@@ -16,7 +16,7 @@ export interface User {
 export interface Item {
   _id?: string;
   user?: User;
-  name: string;
+  name?: string;
   img_url?: string | undefined;
   value?: number;
   description?: string;

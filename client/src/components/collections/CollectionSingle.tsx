@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Item } from "../../types/types";
 import { ActionButtonGroupData, HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { getAllItems, getItemsByCollection } from "../../service/apiService";
+import { getAllItems, getItemsByQuery } from "../../service/apiService";
 import ItemList from "./ItemList";
 
 export default function CollectionSingle () {
@@ -24,7 +24,7 @@ export default function CollectionSingle () {
         .catch((error) => console.log(error));
     }
     else {
-      getItemsByCollection(collectionId!)
+      getItemsByQuery(collectionId!)
         .then((items) => setItems(items))
         .catch((error) => console.log(error));
     }

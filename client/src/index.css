@@ -30,6 +30,10 @@ body,
 
 /* TAGS */
 
+input {
+  width: 100%;
+}
+
 /* COMPONENTS */
 
 .app {
@@ -130,7 +134,12 @@ body,
   background-size: cover;
 }
 
-/* REGISTER */
+/* Search */
+
+.search {
+  display: flex;
+  width: 100%;
+}
 
 /* BASIC CLASSES */
 
@@ -156,11 +165,12 @@ body,
 .chat-input-container{
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
 }
 
-input[name="message"] {
-  width: 100%;
+.chat-action-buttons{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .message-container {

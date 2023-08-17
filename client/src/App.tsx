@@ -18,6 +18,7 @@ import ChatSingle from "./components/messaging/ChatSingle";
 import ItemSingle from "./components/collections/ItemSingle";
 import ItemEdit from "./components/collections/ItemEdit";
 import ItemAdd from "./components/collections/ItemAdd";
+import Discover from "./components/discover/Discover";
 
 const router = createBrowserRouter([
   {
@@ -108,6 +109,16 @@ const router = createBrowserRouter([
       <Header />
       <RequireAuth loginPath="/login">
         <ItemEdit />
+      </RequireAuth>
+      <TabNavigation />
+    </>)
+  },
+  {
+    path: '/discover',
+    element: (<>
+      <Header />
+      <RequireAuth loginPath="/login">
+        <Discover />
       </RequireAuth>
       <TabNavigation />
     </>)
