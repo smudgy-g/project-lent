@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext, useRef } from "react";
-import { Chat, User, MessageToSend} from "../../types/types";
+import { Chat, User, MessageToSend, Item} from "../../types/types";
 import { useParams } from 'react-router-dom'
-import { getChatbyId, postMessage } from "../../service/apiService";
+import { getChatbyId, postMessage, putItemById } from "../../service/apiService";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 
 export default function ChatSingle() {
@@ -12,24 +12,54 @@ export default function ChatSingle() {
   const [currentChat, setCurrentChat] = useState<Chat | null>(null);
   const [userId, setUserId] = useState<User['id']>('');
   const [currentMessageData, setCurrentMessageData] = useState<MessageToSend | null>();
+  const [itemReceivedData, setItemReceivedData] = useState<Item | null>();
+  const [itemReturnedData, setItemReturnedData] = useState<Item | null>();
+
+  /* State Variables Buttons */
+
+  const [cancelButtonIsDisabled, setCancelButtonIsDisabled] = useState<boolean>(false);
+  const [receivedButtonBorrowerIsDisabled, setReceivedButtonBorrowerIsDisabled] = useState<boolean>(false);
+  const [returnedButtonBorrowerIsDisabled, setReturnedButtonBorrowerIsDisabled] = useState<boolean>(true);
+  const [receivedButtonOwnerIsDisabled, setReceivedButtonOwnerIsDisabled] = useState<boolean>(true);
+  const [returnedButtonOwnerIsDisabled, setReturnedButtonOwnerIsDisabled] = useState<boolean>(true);
 
   /* Hooks */
-  const {chatId} = useParams()
+  const {chatId} = useParams();
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
   const messageEndRef = useRef<HTMLDivElement>(null);
 
   /* Handler Functions */
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setInputValue(event.target.value)
+    setInputValue(event.target.value);
   };  
+
+  function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
+    if(event.key === 'Enter') {
+      handleClick();
+    }
+  };
   
   async function handleClick() {
     await postMessage(currentMessageData!, chatId!);
     setInputValue('');
     getChatbyId(chatId!)
-    .then((chat) => setCurrentChat(chat))
-    .catch((error) => console.log(error));
+      .then((chat) => setCurrentChat(chat))
+      .catch((error) => console.log(error));
+  };
+
+  async function handleItemReturned(itemId : string) {
+    // await putItemById(itemId, itemReturnedData!);
+    console.log(itemReturnedData);
+    setReceivedButtonOwnerIsDisabled(true);
+  };
+
+  async function handleItemReceived(itemId: string) {
+    // await putItemById(itemId, itemReceivedData!);
+    console.log(itemReceivedData);
+    setReturnedButtonBorrowerIsDisabled(false);
+    setCancelButtonIsDisabled(true);
+    setReceivedButtonOwnerIsDisabled(false);
   };
        
   /* Helper Functions */
@@ -66,9 +96,9 @@ export default function ChatSingle() {
   };
 
   // Helper function to scroll down to the lowest message
-   function scrollToBottom () {
-    messageEndRef.current?.scrollIntoView({behavior: undefined})
-   }
+  function scrollToBottom () {
+    messageEndRef.current?.scrollIntoView({behavior: undefined});
+  };
 
   /* Use Effect */
 
@@ -94,11 +124,26 @@ export default function ChatSingle() {
       to: currentChat?.foreignUserId,
       seen: false,
     });
-  }, [inputValue, userId, currentChat]);
+  }, [inputValue]);
+
+  useEffect(() => {
+    setItemReturnedData({
+      _id: currentChat?.item._id!,
+      borrowed: false,
+    });
+  }, [currentChat]);
+
+  useEffect(() => {
+    setItemReceivedData({
+      _id: currentChat?.item._id!,
+      borrowed: true,
+    });
+  }, [currentChat]);
 
   useEffect(()=> (
     scrollToBottom()
-  ), [currentChat?.messages])
+  ), [currentChat?.messages]);
+
   /* Render Component */
 
   return (<>
@@ -141,20 +186,24 @@ export default function ChatSingle() {
           </div>
         ))}
       </div>
-      
-      {/* {currentChat?.item.user === userId ? (
-      <div className="chat-action-buttons button">
-        <button onClick={cancelTransaction}>Cancel</button>
-        <button onClick={handleReturnItem}>Returned Item</button>
-      </div>
-      ) : (
-        <div className="chat-action-buttons button">
-        <button onClick={cancelTransaction}>Cancel</button>
-        <button onClick={handleReceiveItem}>Received Item</button>
-      </div>
-      )
-      } */}
 
+    </div>
+    
+    <div>
+      {currentChat && currentChat.item.user === userId ? (
+        <div className="button-group">
+          <button className="button" disabled={cancelButtonIsDisabled}>Cancel</button>
+          <button className="button" disabled={receivedButtonOwnerIsDisabled}>Received Item</button>
+          <button className="button" onClick={() => handleItemReturned(currentChat?.item!._id)} disabled={returnedButtonOwnerIsDisabled}>Returned Item</button>
+        </div>
+        ) : (
+          <div className="button-group">
+          <button className="button" disabled={cancelButtonIsDisabled} >Cancel</button>
+          <button className="button" disabled={returnedButtonBorrowerIsDisabled}>Returned Item</button>
+          <button className="button" onClick={() => handleItemReceived(currentChat!.item!._id)} disabled={receivedButtonBorrowerIsDisabled}>Received Item</button>
+        </div>
+        )
+      }
     </div>
 
     <div className="chat-input-container">
@@ -164,6 +213,7 @@ export default function ChatSingle() {
         name="message"
         value={inputValue}
         onChange={handleChange}
+        onKeyPress={handleKeyPress}
       />
 
       <button className="button"

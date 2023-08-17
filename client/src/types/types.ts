@@ -15,15 +15,15 @@ export interface User {
 
 export interface Item {
   _id?: string;
-  user: User;
-  name: string;
-  img_url: string;
-  value: number;
-  description: string;
-  collections: Collection[];
-  lendable: boolean;
-  available: boolean;
-  borrowed: boolean;
+  user?: User;
+  name?: string;
+  img_url?: string;
+  value?: number;
+  description?: string;
+  collections?: Collection[];
+  lendable?: boolean;
+  available?: boolean;
+  borrowed?: boolean;
   distance?: number;
 }
 
@@ -35,7 +35,11 @@ export interface Collection {
 
 export interface Chat {
   _id: string;
-  item: string[];
+  item: {
+    name: string;
+    user: string;
+    _id: string;
+  };
   messages: Message[];
   users: string[];
   foreignUserName: User['id'];
