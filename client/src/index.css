@@ -120,6 +120,16 @@ body,
   background-size: cover;
 }
 
+/* ItemEdit */
+
+.image-thumbnail {
+  width: 80px;
+  aspect-ratio: 1;
+
+  background-position: center;
+  background-size: cover;
+}
+
 /* REGISTER */
 
 /* BASIC CLASSES */
@@ -140,7 +150,7 @@ body,
 .chat-input{
   position: absolute;
   bottom: 40px;
-  right: 0px; 
+  right: 0px;
 }
 
 .message-container {
@@ -149,9 +159,9 @@ body,
 }
 
 .foreign-user {
-text-align: left;  
+text-align: left;
 }
 
 .user {
-text-align: right;  
+text-align: right;
 }

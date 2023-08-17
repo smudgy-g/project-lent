@@ -2,25 +2,18 @@ import { useEffect, useState, useContext } from "react";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate } from 'react-router-dom';
 import { postItem } from "../../service/apiService";
-
-export interface ItemAddFormData {
-  name: string;
-  description: string;
-  img_url: string | null;
-  lendable: boolean;
-  value: number;
-};
+import { Item } from "../../types/types";
 
 export default function ItemAdd() {
 
   /* State Variables */
 
-  const [formData, setFormData] = useState<ItemAddFormData>({
+  const [formData, setFormData] = useState<Item>({
     name: '',
     description: '',
-    img_url: null,
+    img_url: undefined,
     lendable: false,
-    value: 0
+    value: 999
   });
 
   /* Hooks */
@@ -33,7 +26,6 @@ export default function ItemAdd() {
   useEffect(() => {
     setActionButtonGroupData([]);
   }, []);
-
 
   /* Handler Functions */
 
@@ -80,7 +72,7 @@ export default function ItemAdd() {
   };
 
   // When the user clicks the “Add Item” button,
-  // post the item using the API service
+  // POST the item using the API service
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     const response = await postItem(formData);
@@ -134,23 +126,24 @@ export default function ItemAdd() {
             <input
               type="checkbox"
               name="lendable"
-              value={String(formData.lendable)}
               onChange={handleChange}
             />
           </label>
         </div>
 
-        <div className="form-element">
-          <label>
-            Value:
-            <input
-              type="number"
-              name="value"
-              value={formData.value}
-              onChange={handleChange}
-            />
-          </label>
-        </div>
+        {formData.lendable && (
+          <div className="form-element">
+            <label>
+              Value:
+              <input
+                type="number"
+                name="value"
+                value={formData.value}
+                onChange={handleChange}
+              />
+            </label>
+          </div>
+        )}
 
         <div className="form-element">
           <button type="submit"

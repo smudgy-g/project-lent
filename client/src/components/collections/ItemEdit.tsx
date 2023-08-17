@@ -2,23 +2,16 @@ import { useEffect, useState, useContext } from "react";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate, useParams } from 'react-router-dom';
 import { getItemById, putItemById } from "../../service/apiService";
-
-export interface ItemEditFormData {
-  name: string;
-  description: string;
-  img_url: string | null;
-  lendable: boolean;
-  value: number;
-};
+import { Item } from "../../types/types";
 
 export default function ItemEdit() {
 
   /* State Variables */
 
-  const [formData, setFormData] = useState<ItemEditFormData>({
+  const [formData, setFormData] = useState<Item>({
     name: '',
     description: '',
-    img_url: null,
+    img_url: undefined,
     lendable: false,
     value: 0
   });
@@ -43,19 +36,52 @@ export default function ItemEdit() {
     }
   }, [itemId]);
 
-
   /* Handler Functions */
 
+  // When the user changes one of the form inputs,
+  // update the formData state variable
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, type, value, checked, files } = event.target;
-    const fieldValue = type === 'checkbox' ? checked : type === 'file' ? files![0] : value; // FIX "files!" <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: fieldValue
-    }));
+    // By default, set the input value as the fieldValue
+    let fieldValue: boolean | string = value;
+
+    // If the target is a checkbox input, set the fieldValue
+    // according to the checked state of the input
+    if (type === 'checkbox') fieldValue = checked;
+
+    // If the target is a file input, convert the file to
+    // a base64 string and set it as the fieldValue
+    if (type === 'file') {
+      // Use the first file of the input’s FilesList
+      const file = files![0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64String = reader.result as string;
+          fieldValue = base64String;
+          // Update the form data with the changed data
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: fieldValue
+          }));
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // If the target is not a file input:
+    else {
+      // Update the form data with the changed data
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: fieldValue
+      }));
+    }
   };
 
+  // When the user clicks the “Save Changes” button,
+  // PUT the item using the API service
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     if (itemId) {
@@ -93,14 +119,15 @@ export default function ItemEdit() {
           </label>
         </div>
 
+        <div className="image-thumbnail" style={{backgroundImage: `url(${formData.img_url})`}}></div>
+
         <div className="form-element">
           <label>
             Photo:
             <input
               type="file"
-              name="image"
+              name="img_url"
               accept="image/*"
-              capture="environment"
               onChange={handleChange}
             />
           </label>
@@ -112,23 +139,25 @@ export default function ItemEdit() {
             <input
               type="checkbox"
               name="lendable"
-              value={String(formData.lendable)}
               onChange={handleChange}
+              checked={formData.lendable}
             />
           </label>
         </div>
 
-        <div className="form-element">
-          <label>
-            Value:
-            <input
-              type="number"
-              name="value"
-              value={formData.value}
-              onChange={handleChange}
-            />
-          </label>
-        </div>
+        {formData.lendable && (
+          <div className="form-element">
+            <label>
+              Value:
+              <input
+                type="number"
+                name="value"
+                value={formData.value}
+                onChange={handleChange}
+              />
+            </label>
+          </div>
+        )}
 
         <div className="form-element">
           <button type="submit"

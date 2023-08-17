@@ -19,7 +19,6 @@ export default function CollectionOverview () {
   useEffect(() => {
     getAllCollections()
       .then((collections) => setCollections(collections))
-      .then(() => console.log(collections))
       .catch((error) => console.log(error));
   }, []);
 

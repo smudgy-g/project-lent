@@ -1,9 +1,7 @@
 import { LoginFormData } from "../components/auth/Login";
 import { RegisterFormData } from "../components/auth/Register"
-import { ItemAddFormData } from "../components/collections/ItemAdd";
-import { ItemEditFormData } from "../components/collections/ItemEdit";
 import { ProfileEditData } from "../components/profile/ProfileEdit";
-import { Chat, ChatPreview, Collection, Item, Message, MessageToSend, User } from "../types/types";
+import { Chat, ChatPreview, Collection, Item, MessageToSend, User } from "../types/types";
 
 const baseUrl = "http://localhost:5001"
 
@@ -196,7 +194,7 @@ export async function getItemById (id: string): Promise<Item> {
   }
 }
 
-export async function postItem (item: ItemAddFormData): Promise<Item> {
+export async function postItem (item: Item): Promise<Item> {
   try {
     const response = await fetch(`${baseUrl}/item`, {
       method: 'POST',
@@ -220,7 +218,7 @@ export async function postItem (item: ItemAddFormData): Promise<Item> {
   }
 }
 
-export async function putItemById (id: string, item: ItemEditFormData): Promise<Item> {
+export async function putItemById (id: string, item: Item): Promise<Item> {
   try {
     const response = await fetch(`${baseUrl}/item/${id}`, {
       method: 'PUT',

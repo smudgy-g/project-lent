@@ -15,15 +15,15 @@ export interface User {
 
 export interface Item {
   _id?: string;
-  user: User;
+  user?: User;
   name: string;
-  img_url: string;
-  value: number;
-  description: string;
-  collections: Collection[];
-  lendable: boolean;
-  available: boolean;
-  borrowed: boolean;
+  img_url?: string | undefined;
+  value?: number;
+  description?: string;
+  collections?: Collection[];
+  lendable?: boolean;
+  available?: boolean;
+  borrowed?: boolean;
   distance?: number;
 }
 
