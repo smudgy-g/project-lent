@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext, useRef } from "react";
 import { Chat, User, MessageToSend, Item} from "../../types/types";
-import { useParams } from 'react-router-dom'
-import { getChatbyId, postMessage, putItemById } from "../../service/apiService";
+import { useParams, useNavigate } from 'react-router-dom'
+import { deleteChat, getChatbyId, getItemById, postMessage, putItemById } from "../../service/apiService";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 
 export default function ChatSingle() {
@@ -14,19 +14,17 @@ export default function ChatSingle() {
   const [currentMessageData, setCurrentMessageData] = useState<MessageToSend | null>();
   const [itemReceivedData, setItemReceivedData] = useState<Item | null>();
   const [itemReturnedData, setItemReturnedData] = useState<Item | null>();
+  const [currentItem, setCurrentItem] = useState<Item | null>();
 
-  /* State Variables Buttons */
-
-  const [cancelButtonIsDisabled, setCancelButtonIsDisabled] = useState<boolean>(false);
-  const [receivedButtonBorrowerIsDisabled, setReceivedButtonBorrowerIsDisabled] = useState<boolean>(false);
-  const [returnedButtonBorrowerIsDisabled, setReturnedButtonBorrowerIsDisabled] = useState<boolean>(true);
-  const [receivedButtonOwnerIsDisabled, setReceivedButtonOwnerIsDisabled] = useState<boolean>(true);
-  const [returnedButtonOwnerIsDisabled, setReturnedButtonOwnerIsDisabled] = useState<boolean>(true);
+  const [cancelButton, setCancelButton] = useState<boolean>(false)
+  const [receivedButton, setReceivedButton] = useState<boolean>(false)
+  const [returnedButton, setReturnedButton] = useState<boolean>(true)
 
   /* Hooks */
   const {chatId} = useParams();
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
   const messageEndRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate()
 
   /* Handler Functions */
 
@@ -48,18 +46,19 @@ export default function ChatSingle() {
       .catch((error) => console.log(error));
   };
 
-  async function handleItemReturned(itemId : string) {
-    // await putItemById(itemId, itemReturnedData!);
+  async function handleItemReturnClick(itemId : string) {
+    await putItemById(itemId, itemReturnedData!);
     console.log(itemReturnedData);
-    setReceivedButtonOwnerIsDisabled(true);
   };
 
-  async function handleItemReceived(itemId: string) {
-    // await putItemById(itemId, itemReceivedData!);
+  async function handleItemReceiveClick(itemId: string) {
+    await putItemById(itemId, itemReceivedData!);
     console.log(itemReceivedData);
-    setReturnedButtonBorrowerIsDisabled(false);
-    setCancelButtonIsDisabled(true);
-    setReceivedButtonOwnerIsDisabled(false);
+  };
+ 
+  async function handleDeleteChatClick() {
+    await deleteChat(currentChat?._id!)
+    navigate(-1)
   };
        
   /* Helper Functions */
@@ -112,10 +111,24 @@ export default function ChatSingle() {
       .catch((error) => console.log(error));
   }, []);
 
-
   useEffect(() => (
     getUserId()
   ));
+
+
+  useEffect(() => {
+    if(currentChat?.item._id){
+    getItemById(currentChat?.item!._id!)
+      .then((item) => setCurrentItem(item))
+      .catch((error) => console.log(error));
+    };
+    if(currentItem?.borrowed === true) {
+      setReceivedButton(true)
+      setReturnedButton(false);
+      setCancelButton(true);
+    };
+  }, [currentChat]);
+ 
 
   useEffect(() => {
     setCurrentMessageData({
@@ -192,15 +205,13 @@ export default function ChatSingle() {
     <div>
       {currentChat && currentChat.item.user === userId ? (
         <div className="button-group">
-          <button className="button" disabled={cancelButtonIsDisabled}>Cancel</button>
-          <button className="button" disabled={receivedButtonOwnerIsDisabled}>Received Item</button>
-          <button className="button" onClick={() => handleItemReturned(currentChat?.item!._id)} disabled={returnedButtonOwnerIsDisabled}>Returned Item</button>
+          <button className="button" onClick={() => handleDeleteChatClick()} disabled={cancelButton}>Cancel</button>
+          <button className="button" onClick={() => handleItemReturnClick(currentChat?.item!._id)} disabled={returnedButton}>Returned Item</button>
         </div>
         ) : (
           <div className="button-group">
-          <button className="button" disabled={cancelButtonIsDisabled} >Cancel</button>
-          <button className="button" disabled={returnedButtonBorrowerIsDisabled}>Returned Item</button>
-          <button className="button" onClick={() => handleItemReceived(currentChat!.item!._id)} disabled={receivedButtonBorrowerIsDisabled}>Received Item</button>
+          <button className="button" disabled={cancelButton} onClick={() => handleDeleteChatClick()}>Cancel</button>
+          <button className="button" onClick={() => handleItemReceiveClick(currentChat!.item!._id)} disabled={receivedButton}>Received Item</button>
         </div>
         )
       }

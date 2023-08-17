@@ -18,12 +18,12 @@ function Inbox() {
 
   async function handleDeleteChat (chatId: string) {
     await deleteChat(chatId)
-      // .then(() => {
-      //   getAllChats()
-      //     .then((chats) => setChats(chats))
-      //     .catch((error)=> console.log(error))
-      // })
-      // .catch((error) => console.log(error));
+      .then(() => {
+        getAllChats()
+          .then((chats) => setChats(chats))
+          .catch((error)=> console.log(error))
+      })
+      .catch((error) => console.log(error));
   }
 
   /* Use Effect */
