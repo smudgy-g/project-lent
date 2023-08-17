@@ -45,4 +45,11 @@ router.delete('/inbox/:chatid', authenticate, inbox.deleteChat);
 // search routes
 router.get('/search', authenticate, search.searchItem);
 
+// Lending lifecycle routes
+// router.put('/item/:itemid/reserve', authenticate, item.updateItemById);
+// router.put('/item/:itemid/receive', authenticate, item.updateItemById);
+// router.put('/item/:itemid/return', authenticate, item.updateItemById);
+// router.put('/item/:itemid/cancel', authenticate, item.updateItemById);
+
+
 export default router;
