@@ -9,6 +9,7 @@ export async function getAllItems (ctx: Context) {
     ctx.body = { message: 'User ID was not supplied.' };
     return;
   }
+
   try {
     const result = await itemModel.getAll(userId);
     ctx.status = 200;
@@ -22,11 +23,12 @@ export async function getAllItems (ctx: Context) {
 export async function createItem (ctx:Context) {
   const userId = ctx.userId;
   const itemData = ctx.request.body as Partial<IItem>;
+
   if (!itemData) {
     ctx.status = 400;
     ctx.body = { messsage: 'No data was supplied.' };
     return;
-  } else if (!itemData) {
+  } else if (!userId) {
     ctx.status = 400;
     ctx.body = { messsage: 'No user ID was supplied.' };
     return;
@@ -46,6 +48,7 @@ export async function findItem (ctx:Context) {
   const itemId = ctx.params.itemid;
   const userId = ctx.userId;
   const userLocation = ctx.location;
+
   if (!itemId) {
     ctx.status = 400;
     ctx.body = { messsage: 'No item ID supplied.' };
@@ -60,8 +63,6 @@ export async function findItem (ctx:Context) {
     return;
   }
   
-
-
   try {
     const item = await itemModel.findItemById(itemId, userId, userLocation);
     ctx.status = 201;
@@ -74,11 +75,13 @@ export async function findItem (ctx:Context) {
 
 export async function findItemsByCollectionId (ctx:Context) {
   const collectionId = ctx.params.collectionid;
+
   if (!collectionId) {
     ctx.status = 400;
     ctx.body = { messsage: 'No collection ID supplied.' };
     return;
   }
+
   try {
     const items = await itemModel.findItemsByCollection(collectionId);
     ctx.status = 201;
@@ -130,6 +133,7 @@ export async function reserveItem (ctx: Context) {
 
 export async function deleteItem (ctx:Context) {
   const itemId = ctx.params.itemid;
+
   if (!itemId) {
     ctx.status = 400;
     ctx.body = { message: 'No item ID was supplied.' };
@@ -145,5 +149,7 @@ export async function deleteItem (ctx:Context) {
     ctx.body = { message: error };
   }
 }
+
+
 
 

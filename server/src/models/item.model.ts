@@ -78,6 +78,7 @@ export async function createOne (userId: string, itemData: Partial<IItem>): Prom
     const newItem = new Item({
       user: userIdObject,
       collections: [...(itemData.collections || []), allCollectionId],
+      available: true,
       ...itemData,
     });
 
