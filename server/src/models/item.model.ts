@@ -1,9 +1,9 @@
-import { IItem } from "../_types";
-import { Item } from "./item.schema";
+import { IItem } from "../types";
+import { Item } from "./schemas/item.schema";
 import { addItemToCollection, findCollectionByName } from "./collection.model";
 import { User } from "./user.schema";
 import { Types } from "mongoose";
-import { Collection } from "./collection.schema";
+import { Collection } from "./schemas/collection.schema";
 import { createChat } from "../models/chat.model";
 
 // need to return all the item data

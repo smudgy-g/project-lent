@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { ICollection } from '../_types';
+import { ICollection } from '../../types';
 
 // Schema for the collection
 const collectionSchema = new Schema<ICollection>({

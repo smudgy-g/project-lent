@@ -1,7 +1,7 @@
 import { Context } from 'koa';
 import * as chatModel from '../models/chat.model';
 import * as messageModel from '../models/message.model';
-import { IChat, IMessage } from '../_types';
+import { IChat, IMessage } from '../types';
 
 export async function getAllChats (ctx: Context) {
   const userId = ctx.userId;

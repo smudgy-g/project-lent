@@ -1,6 +1,7 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { Context, Next } from 'koa';
+import { findUserById } from '../models/user.model';
 
 dotenv.config();
 const secretKey = process.env.JWT_SECRET as string;
@@ -14,11 +15,14 @@ export async function authenticate (ctx: Context, next: Next): Promise<void> {
       // Verify and decode the token
       const decodedToken = jwt.verify(token, secretKey) as JwtPayload;
 
-      // Extract the user ID and the geolocation
-      ctx.userId = decodedToken.userId;
-      ctx.location = decodedToken.location;
+     const userExists = await findUserById(decodedToken.userId)
+      if (userExists) {
+        // Extract the user ID and the geolocation
+        ctx.userId = decodedToken.userId;
+        ctx.location = decodedToken.location;
+        await next()
+      }
 
-      await next()
     } catch (error) {
       ctx.status = 401;
       ctx.body = { message: 'Invalid token.' };

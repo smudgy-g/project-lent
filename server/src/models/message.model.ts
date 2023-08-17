@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
-import { IMessage } from "../_types";
-import { Message } from "./message.schema";
-import { Chat } from "./chat.schema";
+import { IMessage } from "../types";
+import { Message } from "./schemas/message.schema";
+import { Chat } from "./schemas/chat.schema";
 
 export async function postMessage (message: IMessage, chatId: string): Promise<IMessage | null> {
   try {

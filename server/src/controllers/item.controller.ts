@@ -1,6 +1,6 @@
 import { Context } from 'koa';
 import * as itemModel from '../models/item.model';
-import { IItem } from '../_types';
+import { IItem } from '../types';
 
 export async function getAllItems (ctx: Context) {
   const userId = ctx.userId;
