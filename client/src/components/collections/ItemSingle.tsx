@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Item } from "../../types/types";
 import { ActionButtonGroupData, HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteItem, getItemById } from "../../service/apiService";
+import { deleteItem, getItemById, putItemById, putItemReserve } from "../../service/apiService";
 
 export default function ItemSingle () {
 
@@ -62,6 +62,16 @@ export default function ItemSingle () {
     }
   }, [item]);
 
+  /* Event Handlers */
+
+  function handleClickReserve () {
+    if (item && item._id) {
+      putItemReserve(item._id)
+        .then((chat) => navigate(`/chat/${chat._id}`))
+        .catch((error) => console.log(error));
+    }
+  }
+
   /* Render Component */
 
   return (<>
@@ -82,7 +92,7 @@ export default function ItemSingle () {
 
         {item.distance && (
           <div className="button-group">
-            {item.lendable && item.available && <button className="button">{`Reserve (${item.value} ¢)`}</button>}
+            {item.lendable && item.available && <button className="button" onClick={handleClickReserve}>{`Reserve (${item.value} ¢)`}</button>}
             {item.lendable && !item.available && <button className="button" disabled>Unavailable</button>}
           </div>
         )}
