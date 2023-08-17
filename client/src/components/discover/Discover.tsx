@@ -13,14 +13,16 @@ export default function Discover () {
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
 
   useEffect(() => {
-    getItemsDiscover()
-      .then((items) => setItems(items))
-      .catch((error) => console.log(error));
-  }, []);
+    setActionButtonGroupData([])
+  }, [setActionButtonGroupData]);
 
   useEffect(() => {
-    setActionButtonGroupData([])
-  }, []);
+    if (!searchActive) {
+      getItemsDiscover()
+        .then((items) => setItems(items))
+        .catch((error) => console.log(error));
+    }
+  }, [searchActive]);
 
   /* Render Component */
 
@@ -28,7 +30,7 @@ export default function Discover () {
     <div className="discover">
       <Search setItems={setItems} setSearchActive={setSearchActive} />
       <h1>Around you</h1>
-      {!searchActive && <ItemList items={items} />}
+      <ItemList items={items} />
     </div>
   </>)
 }

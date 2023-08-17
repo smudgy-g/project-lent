@@ -16,7 +16,7 @@ export default function Search ({ setItems, setSearchActive }: SearchProps) {
   useEffect(() => {
     const delay = setTimeout(() => {
       setDebouncedQuery(query);
-    }, 300);
+    }, 100);
 
     return () => clearTimeout(delay);
   }, [query]);

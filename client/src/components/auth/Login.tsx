@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { loginUser } from "../../service/apiService";
 import { useSignIn } from 'react-auth-kit'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { HeaderContext } from "../../contexts/HeaderContext";
 import { HeaderContextProps } from "../../contexts/HeaderContext";
 
@@ -27,7 +27,7 @@ function Login() {
   const signIn = useSignIn();
   const navigate = useNavigate();
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
-        
+
   /* Use Effects */
 
   useEffect(() => {
@@ -101,7 +101,7 @@ function Login() {
             </div>
 
             <div className="form-element">
-              <button type="submit"
+              <button className="button" type="submit"
               disabled={
                 loginFormData.username === '' ||
                 loginFormData.password === ''
@@ -109,6 +109,10 @@ function Login() {
               >Log In</button>
             </div>
           </form>
+          <div>
+            <p>Don’t have an account yet?</p>
+            <Link to={'/register'}><button className="button">Register</button></Link>
+          </div>
         </div>
       </div>
     </>
