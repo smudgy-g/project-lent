@@ -5,6 +5,7 @@ import * as collection from './controllers/collection.controller';
 import * as auth from './controllers/auth.controller';
 import * as item from './controllers/item.controller';
 import * as inbox from './controllers/inbox.controller';
+import * as search from './controllers/search.controller';
 
 const router = new Router();
 
@@ -40,5 +41,22 @@ router.get('/inbox/:chatid', authenticate, inbox.getChatById);
 router.post('/inbox/', authenticate, inbox.createChat);
 router.post('/inbox/:chatid', authenticate, inbox.postMessage);
 router.delete('/inbox/', authenticate, inbox.deleteChat);
+
+// search & discover routes
+router.get('/item/all/discover');
+/*
+FRONT END CODE
+ fetch(`/search?query=${encodeURIComponent(searchQuery)}`)
+      .then((response) => response.json())
+      .then((data) => {
+        // Process the search results
+        console.log(data);
+      })
+      .catch((error) => {
+        // Handle any errors
+        console.error(error);
+      });
+*/
+router.get('/search', authenticate, search.searchItem);
 
 export default router;

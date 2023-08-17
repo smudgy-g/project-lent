@@ -6,7 +6,6 @@ import { Types } from "mongoose";
 import { Collection } from "./schemas/collection.schema";
 import { createChat } from "../models/chat.model";
 
-// need to return all the item data
 export async function getAll (id: string): Promise<Partial<IItem>[] | null> {
   try {
     const userId = new Types.ObjectId(id);
@@ -167,6 +166,21 @@ export async function reserveItem (userId: string, itemId: string) {
       console.log(newChat)
       return newChat?._id;
     }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function searchByQuery (query: string): Promise<IItem[] | null> {
+  try {
+    const result = Item.find(
+      { $text: { $search: query } },
+      { score: { $meta: 'textScore' } }
+    ).sort(
+      { score: { $meta: 'textScore' } }
+    );
+    return result;
   } catch (error) {
     console.error(error);
     throw error;
