@@ -171,15 +171,22 @@ export async function reserveItem (userId: string, itemId: string) {
 
 export async function searchByQuery (query: string, userLocation: IGeoLocation, userId: string) {
   try {
-    const result = await Item.find(
-      { 
-        $text: { $search: query },
-        'user': { $ne: userId } 
-      },
-      { score: { $meta: 'textScore' } }
-    ).sort(
-      { score: { $meta: 'textScore' } }
-    );
+    const result = await Item.aggregate([
+      {
+        $search: {
+          
+        }
+      }
+    ])
+    // const result = await Item.find(
+    //   { 
+    //     $text: { $search: query },
+    //     'user': { $ne: userId } 
+    //   },
+    //   { score: { $meta: 'textScore' } }
+    // // ).sort(
+    // //   { score: { $meta: 'textScore' } }
+    // );
     const resultWithLocations: any = await getItemLocations(result);
     return sortByDistanceFromUser(userLocation, resultWithLocations);
   } catch (error) {

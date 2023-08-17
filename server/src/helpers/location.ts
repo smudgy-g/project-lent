@@ -13,7 +13,16 @@ export async function getItemLocations (items: IItem[]) {
 
 export async function sortByDistanceFromUser ({ latitude, longitude }: IGeoLocation, items: any[]) {
   const itemsWithDistance = items.map((item: any) => ({
-      item: item.item,
+      _id: item.item._id,
+      user: item.item.user,
+      name: item.item.name,
+      img_url: item.item.img_url,
+      value: item.item.value,
+      description: item.item.description,
+      lendable: item.item.lendable,
+      available: item.item.available,
+      collections: item.item.collections,
+      borrowed: item.item.borrowed, 
       distance: +(getDistance({ latitude, longitude }, { latitude: item.location.latitude, longitude: item.location.longitude }) / 1000).toFixed(1)
     })
   );

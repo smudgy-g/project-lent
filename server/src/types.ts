@@ -1,9 +1,9 @@
 import { Document, Schema, Types } from 'mongoose';
 
 export interface IItem extends Document {
-  user: Types.ObjectId; // user._id
+  user: Types.ObjectId; 
   name: string;
-  img_url?: string; // URL to cloudinary link
+  img_url?: string;
   value?: number;
   description: string;
   lendable: boolean;
