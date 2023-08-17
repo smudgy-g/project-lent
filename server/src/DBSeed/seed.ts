@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 dotenv.config();
 
 // Import models from the schema files
-import { User } from "../models/user.schema";
+import { User } from "../models/schemas/user.schema";
 import { Item } from "../models/schemas/item.schema";
 import { Collection } from "../models/schemas/collection.schema";
 import { Chat } from "../models/schemas/chat.schema";
@@ -41,8 +41,8 @@ async function seedDatabase() {
         city: 'Berlin',
       },
       geoLocation: {
-        lat: 52.5075201,
-        lng: 13.3778567,
+        latitude: 52.5075201,
+        longitude: 13.3778567,
       },
       credits: 500,
       reputation: 5,
@@ -59,8 +59,8 @@ async function seedDatabase() {
         city: 'Berlin',
       },
       geoLocation: {
-        lat: 52.539337,
-        lng: 13.425235,
+        latitude: 52.539337,
+        longitude: 13.425235,
       },
       credits: 600,
       reputation: 3,

@@ -35,7 +35,11 @@ export interface Collection {
 
 export interface Chat {
   _id: string;
-  item: string[];
+  item: {
+    name: string;
+    user: string;
+    _id: string;
+  };
   messages: Message[];
   users: string[];
   foreignUserName: User['id'];

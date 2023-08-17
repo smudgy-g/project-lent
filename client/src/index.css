@@ -147,6 +147,12 @@ input {
   padding: var(--p-xxs);
 }
 
+.button-group{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 /* MESSAGING */
 
 .chat-preview {

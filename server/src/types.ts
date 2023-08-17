@@ -48,8 +48,8 @@ export interface IUser extends Document {
 }
 
 export interface IGeoLocation {
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
 }
 
 export interface IAddress {
