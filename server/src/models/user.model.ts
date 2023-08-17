@@ -31,6 +31,7 @@ export async function createUser (
       await collection.createOne('All', id);
       await collection.createOne('Borrowed', id);
       await collection.createOne('Lent Out', id);
+      await collection.createOne('Reserved', id);
     })
     .then(() => newUser);
   } catch (error) {
