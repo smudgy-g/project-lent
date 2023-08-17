@@ -181,9 +181,9 @@ export async function searchByQuery (query: string, userLocation: IGeoLocation, 
     ).sort(
       { score: { $meta: 'textScore' } }
     );
-    const filteredResults = result.filter((item: IItem) => item.user.toString() !== userId)
-    // const resultWithDistance: any = await distanceBetweenPoints(userLocation, result);
-    return filteredResults;
+    const filteredResults: IItem[] = result.filter((item: IItem) => item.user.toString() !== userId)
+    const resultWithDistance: any = await distanceBetweenPoints(userLocation, filteredResults);
+    return resultWithDistance;
   } catch (error) {
     console.error(error);
     throw error;
