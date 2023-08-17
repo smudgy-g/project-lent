@@ -1,6 +1,7 @@
 import { getDistance } from 'geolib';
 import { IGeoLocation, IItem } from '../types';
 import { getUserGeoLocation } from '../models/user.model'
+import { Types } from 'mongoose';
 
 export async function getItemLocations (items: IItem[]) {
   if (!items) return null;
@@ -11,7 +12,7 @@ export async function getItemLocations (items: IItem[]) {
   })));
 }
 
-export async function sortByDistanceFromUser ({ latitude, longitude }: IGeoLocation, items: any[]) {
+export function sortByDistanceFromUser ({ latitude, longitude }: IGeoLocation, items: any[]) {
   const itemsWithDistance = items.map((item: any) => ({
       _id: item.item._id,
       user: item.item.user,
@@ -30,3 +31,10 @@ export async function sortByDistanceFromUser ({ latitude, longitude }: IGeoLocat
   return itemsWithDistance.sort((a: any, b: any) => a.distance - b.distance);
 }
 
+export async function itemDistanceFromUser (userLocation: IGeoLocation, itemUserId: Types.ObjectId) {
+  const itemLocation = await getUserGeoLocation(itemUserId);
+  if (itemLocation) return +(getDistance(
+    { latitude: userLocation.latitude, longitude: userLocation.longitude },
+    { latitude: itemLocation.latitude, longitude: itemLocation.longitude }
+    ) / 1000).toFixed(1)
+}

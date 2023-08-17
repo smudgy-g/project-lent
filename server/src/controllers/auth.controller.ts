@@ -1,7 +1,7 @@
 import { Context } from 'koa';
 import { findUserByUsername } from '../models/user.model';
 import bcrypt from 'bcrypt';
-import { generateJWT } from '../helpers/webToken';
+import { generateJWT } from '../utilities/webToken';
 import { ILogin } from '../types'
 
 

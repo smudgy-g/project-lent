@@ -26,6 +26,10 @@ export async function createItem (ctx:Context) {
     ctx.status = 400;
     ctx.body = { messsage: 'No data was supplied.' };
     return;
+  } else if (!itemData) {
+    ctx.status = 400;
+    ctx.body = { messsage: 'No user ID was supplied.' };
+    return;
   }
   try {
     const newItem = await itemModel.createOne(userId, itemData);
@@ -40,13 +44,26 @@ export async function createItem (ctx:Context) {
 
 export async function findItem (ctx:Context) {
   const itemId = ctx.params.itemid;
+  const userId = ctx.userId;
+  const userLocation = ctx.location;
   if (!itemId) {
     ctx.status = 400;
     ctx.body = { messsage: 'No item ID supplied.' };
     return;
+  } else if (!userLocation) {
+    ctx.status = 400;
+    ctx.body = { messsage: 'No user ID was supplied.' };
+    return;
+  } else if (!userId) {
+    ctx.status = 400;
+    ctx.body = { messsage: 'No user ID was supplied.' };
+    return;
   }
+  
+
+
   try {
-    const item = await itemModel.findItemById(itemId);
+    const item = await itemModel.findItemById(itemId, userId, userLocation);
     ctx.status = 201;
     ctx.body = item;
   } catch (error) {
