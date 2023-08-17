@@ -2,19 +2,22 @@ import { getDistance } from 'geolib';
 import { IGeoLocation, IItem } from '../types';
 import { getUserGeoLocation } from '../models/user.model'
 
-export async function distanceBetweenPoints ({ latitude, longitude }: IGeoLocation, items: IItem[]) {
+export async function getItemLocations (items: IItem[]) {
   if (!items) return null;
 
-  const itemsWithLocation: any = await Promise.all(items.map(async item => ({
+  return await Promise.all(items.map(async item => ({
     item,
     location: (await getUserGeoLocation(item.user))
   })));
-  
-  const itemsWithDistance = itemsWithLocation.map((item: any) => ({
-      item: item.item,
+}
+
+export async function sortByDistanceFromUser ({ latitude, longitude }: IGeoLocation, items: any[]) {
+  const itemsWithDistance = items.map((item: any) => ({
+      item,
       distance: +(getDistance({ latitude, longitude }, { latitude: item.location.latitude, longitude: item.location.longitude }) / 1000).toFixed(1)
     })
   );
 
-  return itemsWithDistance.sort((a: any, b: any) => b.distance - a.distance);
+  return itemsWithDistance.sort((a: any, b: any) => a.distance - b.distance);
 }
+
