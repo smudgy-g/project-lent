@@ -71,7 +71,7 @@ export default function ItemSingle () {
 
         <div className="metadata">
           {item.distance && <span className="distance">{item.distance.toFixed(2)} km</span>}
-          {item.value && <span className="value">{item.value} credits</span>}
+          {item.lendable && item.value && <span className="value">{item.value} credits</span>}
           {item.lendable && item.available && <span className="status">available</span>}
           {item.lendable && !item.available && !item.borrowed && <span className="status">reserved</span>}
           {item.lendable && !item.available && item.borrowed && <span className="status">borrowed</span>}
