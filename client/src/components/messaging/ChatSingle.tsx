@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { Chat, User, MessageToSend} from "../../types/types";
 import { useParams } from 'react-router-dom'
 import { getChatbyId, postMessage } from "../../service/apiService";
@@ -16,25 +16,17 @@ export default function ChatSingle() {
   /* Hooks */
   const {chatId} = useParams()
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
+  const messageEndRef = useRef<HTMLDivElement>(null);
 
   /* Handler Functions */
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setInputValue(event.target.value)
-    setCurrentMessageData(
-      {
-        body: inputValue,
-        from: userId,
-        to: currentChat?.foreignUserId,
-        seen: false,
-      })
-  };
+  };  
   
   async function handleClick() {
-    console.log('currentMessage', currentMessageData);
-    console.log('chatID', chatId);
-    setInputValue('');
     await postMessage(currentMessageData!, chatId!);
+    setInputValue('');
   };
        
   /* Helper Functions */
@@ -70,6 +62,10 @@ export default function ChatSingle() {
     setUserId(userId);
   };
 
+  // Helper function to scroll down to the lowest message
+   function scrollToBottom () {
+    messageEndRef.current?.scrollIntoView({behavior: undefined})
+   }
 
   /* Use Effect */
 
@@ -88,14 +84,29 @@ export default function ChatSingle() {
     getUserId()
   ));
 
+  useEffect(() => {
+    setCurrentMessageData({
+      body: inputValue,
+      from: userId,
+      to: currentChat?.foreignUserId,
+      seen: false,
+    });
+  }, [inputValue, userId, currentChat]);
+
+  useEffect(()=> (
+    scrollToBottom()
+  ), [currentChat?.messages])
   /* Render Component */
 
   return (<>
     <div className="chat">
 
       <div className="message-container">
-        {currentChat && currentChat.messages.map((message) => (
-          <div key={message.id}>
+        {currentChat && currentChat.messages
+        .slice()
+        .reverse()
+        .map((message, index) => (
+          <div key={index}>
             {message.from !== userId ? (
               <div className="message foreign-user">
                 <div className="time">
@@ -107,9 +118,8 @@ export default function ChatSingle() {
                 <div className="message-body">
                   {message.body}
                 </div>
+                <div ref={messageEndRef}></div>
               </div>
-
-              
             ) : (
               <div className="message user">
                 <div className="time">
@@ -121,6 +131,7 @@ export default function ChatSingle() {
                 <div className="message-body">
                   {message.body}
                 </div>
+                <div ref={messageEndRef}></div>
               </div>
             )
             }
@@ -141,28 +152,22 @@ export default function ChatSingle() {
       )
       } */}
 
-      <div className="chat-input-container">
-
-        <div className="chat-input input">
-          <input
-            type="text"
-            name="message"
-            value={inputValue}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="chat-button button">
-          <button
-            onClick={handleClick}
-            >Send
-          </button>
-        </div>
-
-      </div>
-
-
     </div>
-    
+
+    <div className="chat-input-container">
+
+      <input
+        type="text"
+        name="message"
+        value={inputValue}
+        onChange={handleChange}
+      />
+
+      <button className="button"
+        onClick={handleClick}
+        >Send
+      </button>
+
+    </div>    
   </>);
 };

@@ -141,22 +141,12 @@ body,
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
 }
 
 .chat-action-buttons{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
-}
-
-.chat-input{
-  display: flex;
-  flex-direction: row;
-  background-color: white;
-  width: 100%;
-
 }
 
 input[name="message"] {
