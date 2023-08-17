@@ -63,7 +63,7 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
 
     const chats = await Promise.all(
       data.map(async (chat) => {
-        const foreignUsers = await Promise.all(
+        const foreignUserName = await Promise.all(
         chat.chats.users
           .filter((user: any) => user._id.toString() !== userId)
           .map(async (user: any) => await getUsername(user.toString()))
@@ -73,7 +73,7 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
           id: chat.chats._id,
           itemId: chat.chats.item,
           itemName: chat.item[0].name,
-          foreignUser: foreignUsers[0],
+          foreignUser: foreignUserName[0],
           message: chat.messages[chat.messages.length - 1].body,
           updatedAt: chat.chats.updatedAt,
         };

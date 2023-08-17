@@ -26,9 +26,9 @@ router.post('/register', user.createOne);
 router.post('/login', auth.login);
 
 // item routes
-router.get('/item/all', authenticate, item.getAllItems); //
-router.get('/item/all/:collectionid', authenticate, item.findItemsByCollectionId); //
-// router.get('/item/all/discover', );
+router.get('/item/all', authenticate, item.getAllItems);
+router.get('/item/all/discover', authenticate, search.discover);
+router.get('/item/all/:collectionid', authenticate, item.findItemsByCollectionId);
 router.get('/item/:itemid', authenticate, item.findItem);
 router.post('/item', authenticate, item.createItem);
 router.put('/item/:itemid', authenticate, item.updateItemById);
@@ -42,21 +42,7 @@ router.post('/inbox/', authenticate, inbox.createChat);
 router.post('/inbox/:chatid', authenticate, inbox.postMessage);
 router.delete('/inbox/', authenticate, inbox.deleteChat);
 
-// search & discover routes
-router.get('/item/all/discover');
-/*
-FRONT END CODE
- fetch(`/search?query=${encodeURIComponent(searchQuery)}`)
-      .then((response) => response.json())
-      .then((data) => {
-        // Process the search results
-        console.log(data);
-      })
-      .catch((error) => {
-        // Handle any errors
-        console.error(error);
-      });
-*/
+// search routes
 router.get('/search', authenticate, search.searchItem);
 
 export default router;
