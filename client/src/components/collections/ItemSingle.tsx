@@ -31,7 +31,8 @@ export default function ItemSingle () {
       // If the user is the item’s owner
       const localActionButtonGroupDataOwner: ActionButtonGroupData = [
         {
-          title: 'Edit Item',
+          type: 'edit',
+          title: '',
           action: () => {
             if (itemId) {
               navigate(`/item/${itemId}/edit`);

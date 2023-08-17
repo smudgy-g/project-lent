@@ -47,7 +47,7 @@ export default function Header () {
             return <DropdownButton key={index} actionButtonDataArray={item} />;
           }
           // If the item is a action button object
-          return <button key={index} className="button action" onClick={item.action}>{item.title}</button>
+          return <button key={index} className={`button action ${item.type}`} onClick={item.action}>{item.title}</button>
         })}
       </div>
     </div>
