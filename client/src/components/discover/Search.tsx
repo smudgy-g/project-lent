@@ -24,6 +24,9 @@ export default function Search ({ setItems, setSearchActive }: SearchProps) {
   const fetchItems = useCallback(async () => {
     try {
       const items = await getItemsByQuery(debouncedQuery);
+      console.log('debouncedQuery:', debouncedQuery);
+      console.log('items:', items);
+
       setItems(items);
     } catch (error) {
       console.log(error);

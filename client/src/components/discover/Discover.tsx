@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Item } from "../../types/types";
 import ItemList from "../collections/ItemList";
-import { getAllItems } from "../../service/apiService";
+import { getItemsDiscover } from "../../service/apiService";
 import Search from "./Search";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 
@@ -13,7 +13,7 @@ export default function Discover () {
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
 
   useEffect(() => {
-    getAllItems()
+    getItemsDiscover()
       .then((items) => setItems(items))
       .catch((error) => console.log(error));
   }, []);
