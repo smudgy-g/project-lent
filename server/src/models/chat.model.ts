@@ -1,7 +1,7 @@
 import mongoose, { Schema, SchemaType, Types } from "mongoose";
 import { IChat, IMessage } from "../types";
 import { Chat } from "./schemas/chat.schema";
-import { User } from "./user.schema";
+import { User } from "./schemas/user.schema";
 import { getUsername } from "./user.model";
 import { postMessage } from '../models/message.model';
 

@@ -28,7 +28,7 @@ export async function login (ctx: Context): Promise<any | null> {
       ctx.body = { message: 'Invalid credentials.'};
       return;
     } 
-  
+    
     const token = generateJWT(user._id, user.geoLocation);
 
     ctx.status = 200;

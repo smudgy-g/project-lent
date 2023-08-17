@@ -1,12 +1,12 @@
-import { IItem } from "../types";
+import { IGeoLocation, IItem } from "../types";
 import { Item } from "./schemas/item.schema";
 import { addItemToCollection, findCollectionByName } from "./collection.model";
-import { User } from "./user.schema";
+import { User } from "./schemas/user.schema";
 import { Types } from "mongoose";
 import { Collection } from "./schemas/collection.schema";
 import { createChat } from "../models/chat.model";
+import { distanceBetweenPoints } from '../helpers/distance';
 
-// need to return all the item data
 export async function getAll (id: string): Promise<Partial<IItem>[] | null> {
   try {
     const userId = new Types.ObjectId(id);
@@ -167,6 +167,23 @@ export async function reserveItem (userId: string, itemId: string) {
       console.log(newChat)
       return newChat?._id;
     }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function searchByQuery (query: string, userLocation: IGeoLocation, userId: string) {
+  try {
+    const result = await Item.find(
+      { $text: { $search: query } },
+      { score: { $meta: 'textScore' } }
+    ).sort(
+      { score: { $meta: 'textScore' } }
+    );
+    const filteredResults = result.filter((item: IItem) => item.user.toString() !== userId)
+    // const resultWithDistance: any = await distanceBetweenPoints(userLocation, result);
+    return filteredResults;
   } catch (error) {
     console.error(error);
     throw error;
