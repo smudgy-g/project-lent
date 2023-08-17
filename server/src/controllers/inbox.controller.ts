@@ -33,7 +33,7 @@ export async function getChatById (ctx: Context) {
 }
 
 export async function deleteChat (ctx:Context) {
-  const { chatId }: any = ctx.request.body;
+  const chatId = ctx.params.chatid;
 
   if (!chatId) {
     ctx.status = 400;
