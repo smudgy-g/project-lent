@@ -282,6 +282,75 @@ export async function putItemById (id: string, item: Item): Promise<Item> {
   }
 }
 
+export async function reserveItemById (id: string) {
+  try {
+    const response = await fetch(`${baseUrl}/item/${id}/reserve`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
+export async function receiveItemById (id: string) {
+  try {
+    const response = await fetch(`${baseUrl}/item/${id}/receive`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
+export async function returnItemById (id: string) {
+  try {
+    const response = await fetch(`${baseUrl}/item/${id}/return`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
 export async function deleteItem (id: string): Promise<Item> {
   try {
     const response = await fetch(`${baseUrl}/item/${id}`, {
