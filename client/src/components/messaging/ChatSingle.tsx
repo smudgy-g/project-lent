@@ -27,6 +27,9 @@ export default function ChatSingle() {
   async function handleClick() {
     await postMessage(currentMessageData!, chatId!);
     setInputValue('');
+    getChatbyId(chatId!)
+    .then((chat) => setCurrentChat(chat))
+    .catch((error) => console.log(error));
   };
        
   /* Helper Functions */
@@ -77,7 +80,7 @@ export default function ChatSingle() {
     getChatbyId(chatId)
       .then((chat) => setCurrentChat(chat))
       .catch((error) => console.log(error));
-  }, [handleClick]);
+  }, []);
 
 
   useEffect(() => (
