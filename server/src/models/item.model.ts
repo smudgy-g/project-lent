@@ -174,19 +174,19 @@ export async function searchByQuery (query: string, userLocation: IGeoLocation, 
     const result = await Item.aggregate([
       {
         $search: {
-          
+          index: "search",
+          autocomplete: {
+            query: query,
+            path: "name"
+          }
+        },
+      },
+      {
+        $match: {
+          'user': { $ne : userId }
         }
       }
-    ])
-    // const result = await Item.find(
-    //   { 
-    //     $text: { $search: query },
-    //     'user': { $ne: userId } 
-    //   },
-    //   { score: { $meta: 'textScore' } }
-    // // ).sort(
-    // //   { score: { $meta: 'textScore' } }
-    // );
+    ]);
     const resultWithLocations: any = await getItemLocations(result);
     return sortByDistanceFromUser(userLocation, resultWithLocations);
   } catch (error) {
