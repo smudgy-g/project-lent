@@ -40,7 +40,7 @@ router.get('/inbox', authenticate, inbox.getAllChats);
 router.get('/inbox/:chatid', authenticate, inbox.getChatById);
 router.post('/inbox/', authenticate, inbox.createChat);
 router.post('/inbox/:chatid', authenticate, inbox.postMessage);
-router.delete('/inbox/', authenticate, inbox.deleteChat);
+router.delete('/inbox/:chatid', authenticate, inbox.deleteChat);
 
 // search routes
 router.get('/search', authenticate, search.searchItem);
