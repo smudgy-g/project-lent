@@ -176,7 +176,7 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
   }
 }
 
-export async function createChat (itemId: string, ownerId: string, userId: string, message?: string): Promise<IChat | null> {
+export async function createChat (itemId: string, ownerId: any, userId: string, message?: string): Promise<IChat | null> {
   try {
     const ownerIdObject = new Types.ObjectId(ownerId);
     const userIdObject = new Types.ObjectId(userId);

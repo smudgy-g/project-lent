@@ -1,6 +1,6 @@
 import { IGeoLocation, IItem } from "../types";
 import { Item } from "./schemas/item.schema";
-import { addItemToCollection, findCollectionByName } from "./collection.model";
+import { addItemToCollection, findCollectionByName, getCollectionIdByName } from "./collection.model";
 import { User } from "./schemas/user.schema";
 import { Types } from "mongoose";
 import { Collection } from "./schemas/collection.schema";
@@ -78,7 +78,7 @@ export async function createOne (userId: string, itemData: Partial<IItem>): Prom
     const newItem = new Item({
       user: userIdObject,
       collections: [...(itemData.collections || []), allCollectionId],
-      available: true,
+      available: itemData.lendable,
       ...itemData,
     });
 
@@ -170,19 +170,23 @@ export async function deleteOne (itemId:string): Promise<IItem | null> {
 
 export async function reserveItem (userId: string, itemId: string) {
   try {
+    const userIdObject = new Types.ObjectId(userId);
     const itemIdObject = new Types.ObjectId(itemId);
     const ownerId = await Item.findById(itemIdObject).select({ 'user': 1, '_id': 0 });
     const itemName = await Item.findById(itemIdObject).select({ 'name': 1, '_id': 0 });
 
     if (ownerId && itemName ) {
       await Item.findByIdAndUpdate(itemIdObject, {
-        $set: { available: false }
+        $set: { available: false, borrowed: false }
       });
-
+      
+      const reservedCollectionId = await getCollectionIdByName(userIdObject, 'Reserved');
+      if (reservedCollectionId) {
+        await addItemToCollection(reservedCollectionId, itemId);
+      }
+      
       const message = `There is interest in the ${itemName}!`
-      const newChat = await createChat(itemId, ownerId.toString(), userId, message);
-     
-      return newChat?._id;
+      return await createChat(itemId, ownerId, userId, message);
     }
   } catch (error) {
     console.error(error);

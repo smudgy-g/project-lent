@@ -3,6 +3,7 @@ import { ICollection } from '../types';
 import { Collection } from './schemas/collection.schema';
 import * as user from './user.model';
 import { User } from './schemas/user.schema';
+import { findItemById } from './item.model';
 
 export async function createOne (name: string, userId: string): Promise<ICollection | null> {
   try {
@@ -101,6 +102,8 @@ export async function addItemToCollection (collectionId: string, itemId: string)
   }
 }
 
+export async function removeItemFromCollection (collectionId: any, itemId: any) {}
+
 export async function updateName (id: string, newName: string) {
   try {
     return await Collection.findByIdAndUpdate(id, 
@@ -118,4 +121,29 @@ export async function deleteOne (id:string): Promise<ICollection | null> {
     console.error(error);
     throw error
   }
+}
+
+export async function getCollectionIdByName (userId: Types.ObjectId, collectionName: string) {
+  try {
+    const result = await User.aggregate([
+      { $match: { _id: userId } },
+      {
+        $lookup: {
+          from: 'collections',
+          localField: 'collections',
+          foreignField: '_id',
+          as: 'collections'
+        }
+      },
+      { $unwind: '$collections' },
+      { $match: { 'collections.name': { $eq: collectionName } } },
+      { $project: { id: '$collections._id' } }
+    ]);
+    
+    if (result.length) return result[0].id.toString();
+    else return null;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  } 
 }
