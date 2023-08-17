@@ -120,6 +120,16 @@ body,
   background-size: cover;
 }
 
+/* ItemEdit */
+
+.image-thumbnail {
+  width: 80px;
+  aspect-ratio: 1;
+
+  background-position: center;
+  background-size: cover;
+}
+
 /* REGISTER */
 
 /* BASIC CLASSES */
@@ -159,9 +169,9 @@ input[name="message"] {
 }
 
 .foreign-user {
-text-align: left;  
+text-align: left;
 }
 
 .user {
-text-align: right;  
+text-align: right;
 }

@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 import { ICollection } from '../types';
 import { Collection } from './schemas/collection.schema';
 import * as user from './user.model';
-import { User } from './user.schema';
+import { User } from './schemas/user.schema';
 
 export async function createOne (name: string, userId: string): Promise<ICollection | null> {
   try {

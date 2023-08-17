@@ -16,8 +16,8 @@ export interface User {
 export interface Item {
   _id?: string;
   user?: User;
-  name?: string;
-  img_url?: string;
+  name: string;
+  img_url?: string | undefined;
   value?: number;
   description?: string;
   collections?: Collection[];

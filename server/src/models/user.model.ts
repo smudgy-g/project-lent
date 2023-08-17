@@ -1,8 +1,8 @@
 import { Types } from 'mongoose';
-import { IAddress, IUser } from '../types';
+import { IAddress, IGeoLocation, IUser } from '../types';
 import convertAddressToGeoCode from '../helpers/geocoding';
 import * as collection from './collection.model';
-import { User } from './user.schema';
+import { User } from './schemas/user.schema';
 import bcrypt from 'bcrypt';
 
 export async function createUser (
@@ -88,6 +88,11 @@ export async function deleteUserById (userId: string): Promise<IUser | null> {
     console.error(error);
     throw error;
   }
+}
+
+export async function getUserGeoLocation(userId: Types.ObjectId) {
+  const user = await User.findById(userId);
+  return user!.geoLocation;
 }
 
 export async function findUserByUsername(username:string) {

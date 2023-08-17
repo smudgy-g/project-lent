@@ -1,7 +1,7 @@
 import { LoginFormData } from "../components/auth/Login";
 import { RegisterFormData } from "../components/auth/Register"
 import { ProfileEditData } from "../components/profile/ProfileEdit";
-import { Chat, ChatPreview, Collection, Item, Message, MessageToSend, User } from "../types/types";
+import { Chat, ChatPreview, Collection, Item, MessageToSend, User } from "../types/types";
 
 const baseUrl = "http://localhost:5001"
 

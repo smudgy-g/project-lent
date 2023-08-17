@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { IAddress, IGeoLocation, IUser } from '../types';
+import { IAddress, IGeoLocation, IUser } from '../../types';
 
 const addressSchema = new Schema<IAddress>(
   {
@@ -13,8 +13,8 @@ const addressSchema = new Schema<IAddress>(
 
 const geoLocationSchema = new Schema<IGeoLocation>(
   {
-    lat: { type: Number, required: true },
-    lng: { type: Number, required: true },
+    latitude: { type: Number, required: true },
+    longitude: { type: Number, required: true },
   },
   { _id: false }
 );

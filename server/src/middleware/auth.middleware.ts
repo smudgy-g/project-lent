@@ -19,7 +19,7 @@ export async function authenticate (ctx: Context, next: Next): Promise<void> {
       if (userExists) {
         // Extract the user ID and the geolocation
         ctx.userId = decodedToken.userId;
-        ctx.location = decodedToken.location;
+        ctx.location = decodedToken.geoLocation;
         await next()
       }
 
