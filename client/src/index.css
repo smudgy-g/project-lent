@@ -137,10 +137,20 @@ body,
   justify-content: space-between;
 }
 
-.chat-input{
-  position: absolute;
-  bottom: 40px;
-  right: 0px; 
+.chat-input-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.chat-action-buttons{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+input[name="message"] {
+  width: 100%;
 }
 
 .message-container {
