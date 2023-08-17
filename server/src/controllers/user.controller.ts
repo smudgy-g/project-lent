@@ -5,7 +5,6 @@ import * as userModel from '../models/user.model';
 
 export async function createOne (ctx: Context) {
   const user = ctx.request.body as Partial<IUser>;
-  // check all details are there
   if (!user.username || !user.email || !user.password || !user.address) {
     ctx.status = 400;
     ctx.body = {message: 'One or more fields are empty.'};
@@ -41,14 +40,14 @@ export async function createOne (ctx: Context) {
 }
 
 export async function getUserById (ctx: Context) {
-  const id = ctx.params.id;
-  if (!id) {
+  const userId = ctx.params.id;
+  if (!userId) {
     ctx.status = 400;
     ctx.body = { message: 'User ID was not supplied.' };
     return;
   }
   try {
-    const user = await userModel.findUserById(id);
+    const user = await userModel.findUserById(userId);
 
     ctx.status = 200;
     ctx.body = user;
@@ -59,7 +58,7 @@ export async function getUserById (ctx: Context) {
 }
 
 export async function updateUser (ctx: Context) {
-  const id = ctx.userId;
+  const userId = ctx.userId;
   const { username, email, address } = ctx.request.body as Partial<IUser>;
   if (!username || !email || !address) {
     ctx.status = 400;
@@ -67,7 +66,13 @@ export async function updateUser (ctx: Context) {
     return;
   }
 
-  const user = await userModel.findUserById(id);
+  if (!userId) {
+    ctx.status = 400;
+    ctx.body = { message: 'User ID was not supplied.' };
+    return;
+  }
+
+  const user = await userModel.findUserById(userId);
 
   if (user?.username !== username) {
     const checkUsername = await userModel.findUserByUsername(username);
@@ -88,7 +93,7 @@ export async function updateUser (ctx: Context) {
   const userData = { username, email, address }
 
   try {
-    const updatedUser = await userModel.updateUserDetails(id, userData);
+    const updatedUser = await userModel.updateUserDetails(userId, userData);
     ctx.status = 200;
     ctx.body = updatedUser;
   } catch (error) {
