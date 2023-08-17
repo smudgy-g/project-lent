@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext, useRef } from "react";
 import { Chat, User, MessageToSend, Item} from "../../types/types";
 import { useParams, useNavigate } from 'react-router-dom'
-import { deleteChat, getChatbyId, getItemById, postMessage, putItemById } from "../../service/apiService";
+import { deleteChat, getChatbyId, getItemById, postMessage, receiveItemById } from "../../service/apiService";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 
 export default function ChatSingle() {
@@ -47,17 +47,17 @@ export default function ChatSingle() {
   };
 
   async function handleItemReturnClick(itemId : string) {
-    await putItemById(itemId, itemReturnedData!);
+    await receiveItemById(itemId);
     console.log(itemReturnedData);
   };
 
   async function handleItemReceiveClick(itemId: string) {
-    await putItemById(itemId, itemReceivedData!);
+    await receiveItemById(itemId);
     console.log(itemReceivedData);
   };
  
   async function handleCancelClick() {
-    await deleteChat(currentChat?._id!)
+    // cancelTransactionRoute
     navigate(-1)
   };
        
@@ -138,19 +138,19 @@ export default function ChatSingle() {
     });
   }, [inputValue]);
 
-  useEffect(() => {
-    setItemReturnedData({
-      _id: currentChat?.item._id!,
-      borrowed: false,
-    });
-  }, [currentChat]);
+  // useEffect(() => {
+  //   setItemReturnedData({
+  //     _id: currentChat?.item._id!,
+  //     borrowed: false,
+  //   });
+  // }, [currentChat]);
 
-  useEffect(() => {
-    setItemReceivedData({
-      _id: currentChat?.item._id!,
-      borrowed: true,
-    });
-  }, [currentChat]);
+  // useEffect(() => {
+  //   setItemReceivedData({
+  //     _id: currentChat?.item._id!,
+  //     borrowed: true,
+  //   });
+  // }, [currentChat]);
 
   useEffect(()=> (
     scrollToBottom()
