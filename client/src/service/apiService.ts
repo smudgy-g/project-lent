@@ -156,7 +156,7 @@ export async function getAllItems (): Promise<Item[]> {
   }
 }
 
-export async function getItemsByUser (id: string): Promise<Item[]> {
+export async function getItemsByCollection (id: string): Promise<Item[]> {
   try {
     const response = await fetch(`${baseUrl}/item/all/${id}`, {
       credentials: 'include'
