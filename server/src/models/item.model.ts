@@ -236,16 +236,20 @@ export async function recieveItem (userId: string, itemId: string) {
       await collectionModel.addItemToCollection(lentOutCollectionId, itemId);
       await collectionModel.addItemToCollection(borrowedCollectionId, itemId);
       
-      await transferValue(item.user, userIdObject, item.value);
-      
-      await Item.findByIdAndUpdate(itemIdObject, {
-        $set: { borrowed: true },
-        $pull: { collections: reservedCollectionId },
-      }, { new: true } );
-      return await Item.findByIdAndUpdate(itemIdObject, {
-        $push: { collections: { $each: [borrowedCollectionId, lentOutCollectionId] } }
-      }, { new: true } );
+      const transferSuccess = await transferValue(item.user, userIdObject, item.value);
+      console.log(transferSuccess)
+      if (transferSuccess) {
 
+        await Item.findByIdAndUpdate(itemIdObject, {
+          $set: { borrowed: true },
+          $pull: { collections: reservedCollectionId },
+        }, { new: true } );
+        return await Item.findByIdAndUpdate(itemIdObject, {
+          $push: { collections: { borrowedCollectionId, lentOutCollectionId } }
+        }, { new: true } );
+      } else {
+        return null;
+      }
       // const message = `${borrower!.username} sent ${item.value} credits to ${owner!.username}`
       // createChat(itemId, item.user.toString(), userId, message);
     }
@@ -259,20 +263,22 @@ export async function returnItem (userId: string, itemId: string) {
   try {
     const userIdObject = new Types.ObjectId(userId); // owner
     const itemIdObject = new Types.ObjectId(itemId);
-    const borrower = await User.findById(userIdObject).select({ 'username': 1 });
+    // const borrower = await User.findById(userIdObject).select({ 'username': 1 });
     const item = await Item.findById(itemIdObject).select({ 'user': 1, 'name': 1, 'value': 1, '_id': 0 });
     const lentOutCollectionId = await collectionModel.getCollectionIdByName(userIdObject, 'Lent Out');
-    const owner = await User.findById(item!.user).select({ 'username': 1 })
+    // const owner = await User.findById(item!.user).select({ 'username': 1 })
     
-    if (item && item.value) {
+    if (item) {
       const borrowedCollectionId = await collectionModel.getCollectionIdByName(item.user, 'Borrowed');
       
-      await collectionModel.removeItemFromCollection(lentOutCollectionId, itemId);
-      await collectionModel.removeItemFromCollection(borrowedCollectionId, itemId);
+      const removeLent = await collectionModel.removeItemFromCollection(lentOutCollectionId, itemId);
+      const removeBorrow = await collectionModel.removeItemFromCollection(borrowedCollectionId, itemId);
+      console.log('Lent: ', removeLent)
+      console.log('Borrow: ', removeBorrow)
       
       const updatedItem = await Item.findByIdAndUpdate(itemIdObject, {
         $set: { borrowed: false, available: true },
-        $pull: { collections: { $each: [borrowedCollectionId, lentOutCollectionId] } }
+        $pull: { collections: { borrowedCollectionId, lentOutCollectionId } }
       }, { new: true } );
       
       return updatedItem;

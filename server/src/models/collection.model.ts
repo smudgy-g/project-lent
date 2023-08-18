@@ -110,7 +110,7 @@ export async function addItemToCollection (collectionId: string, itemId: string)
 export async function removeItemFromCollection (collectionId: any, itemId: any) {
   try {
     const itemIdObject = new Types.ObjectId(itemId);
-    const collection = await Collection.findById(collectionId);
+    // const collection = await Collection.findById(collectionId);
 
     return await Collection.findByIdAndUpdate(collectionId, 
       { $pull: { items: itemIdObject } },

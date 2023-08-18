@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext, useRef } from "react";
 import { Chat, User, MessageToSend, Item} from "../../types/types";
 import { useParams, useNavigate } from 'react-router-dom'
-import { deleteChat, getChatbyId, getItemById, postMessage, receiveItemById } from "../../service/apiService";
+import { deleteChat, getChatbyId, getItemById, postMessage, receiveItemById, returnItemById } from "../../service/apiService";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 
 export default function ChatSingle() {
@@ -47,7 +47,7 @@ export default function ChatSingle() {
   };
 
   async function handleItemReturnClick(itemId : string) {
-    await receiveItemById(itemId);
+    await returnItemById(itemId);
     console.log(itemReturnedData);
   };
 
