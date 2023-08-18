@@ -48,7 +48,7 @@ router.get('/search', authenticate, search.searchItem);
 router.put('/item/:itemid/reserve', authenticate, item.reserveItem);
 router.put('/item/:itemid/receive', authenticate, item.receiveItem);
 router.put('/item/:itemid/return', authenticate, item.returnItem);
-// router.put('/item/:itemid/cancel', authenticate, item.updateItemById);
+router.put('/item/:itemid/cancel', authenticate, item.cancelItem);
 
 
 export default router;

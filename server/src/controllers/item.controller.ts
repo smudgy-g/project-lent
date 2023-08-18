@@ -171,6 +171,25 @@ export async function returnItem (ctx: Context) {
     ctx.body = { message: error };
   }
 }
+export async function cancelItem (ctx: Context) {
+  const userId = ctx.userId;
+  const itemId = ctx.params.itemid;
+
+  if (!itemId) {
+    ctx.status = 400;
+    ctx.body = { message: 'No item ID was supplied.' };
+    return;
+  }
+
+  try {
+    const result = await itemModel.cancelReserveItem(userId, itemId);
+    ctx.status = 201;
+    ctx.body = result;
+  } catch (error) {
+    ctx.status = 500;
+    ctx.body = { message: error };
+  }
+}
 
 export async function deleteItem (ctx:Context) {
   const itemId = ctx.params.itemid;
