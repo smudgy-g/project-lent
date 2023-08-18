@@ -11,8 +11,7 @@ export async function getAllChats (ctx: Context) {
     ctx.status = 200;
     ctx.body = chats;
   } catch (error) {
-    ctx.status = 500;
-    ctx.body = { message: error };
+    ctx.throw(500, { message: error });
   }
   
 }
@@ -21,13 +20,14 @@ export async function getChatById (ctx: Context) {
   const chatId = ctx.params.chatid;
   const userId = ctx.userId;
 
+  if (!chatId) ctx.throw(400, { message: 'No chat ID supplied.' });
+
   try {
     const chat = await chatModel.getChatById(chatId, userId);
     ctx.status = 200;
     ctx.body = chat;
   } catch (error) {
-    ctx.status = 500;
-    ctx.body = { message: error };
+    ctx.throw(500, { message: error });
   }
   
 }
@@ -35,44 +35,45 @@ export async function getChatById (ctx: Context) {
 export async function deleteChat (ctx:Context) {
   const chatId = ctx.params.chatid;
 
-  if (!chatId) {
-    ctx.status = 400;
-    ctx.body = { message: 'No chat ID was supplied.' };
-    return;
-  }
+  if (!chatId) ctx.throw(400, { message: 'No chat ID supplied.' });
 
   try {
     await chatModel.deleteOne(chatId);
     ctx.status = 200;
     ctx.body = { success: true };
   } catch (error) {
-    ctx.status = 500;
-    ctx.body = { message: error };
+    ctx.throw(500, { message: error });
   }
 }
 
 export async function postMessage (ctx: Context) {
-  const message = ctx.request.body as IMessage;
   const chatId = ctx.params.chatid;
+  const message = ctx.request.body as IMessage;
+
+  if (!chatId) ctx.throw(400, { message: 'No chat ID supplied.' });
+  if (!message) ctx.throw(400, { message: 'No message supplied.' });
+
   try {
     const result = await messageModel.postMessage(message, chatId);
     ctx.status = 201;
     ctx.body = result;
   } catch (error) {
-    ctx.status = 500;
-    ctx.body = { messsage: error };
+    ctx.throw(500, { message: error });
   }
 }
 
 export async function createChat (ctx: Context) {
-  const { itemId, ownerId } = ctx.request.body as any;
   const userId = ctx.userId;
+  const { itemId, ownerId } = ctx.request.body as any;
+  
+  if (!itemId || !ownerId) ctx.throw(400, { message: 'Request body missing required data.' });
+  
   try {
     const result = await chatModel.createChat(itemId, ownerId, userId);
+
     ctx.status = 201;
     ctx.body = result;
   } catch (error) {
-    ctx.status = 500;
-    ctx.body = { message: error };
+    ctx.throw(500, { message: error });
   }
 }

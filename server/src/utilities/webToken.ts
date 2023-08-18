@@ -2,9 +2,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { IGeoLocation } from '../types';
 
-
 dotenv.config();
-
 const secretKey = process.env.JWT_SECRET;
 
 export function generateJWT (userId: string, geoLocation: IGeoLocation) {
@@ -12,8 +10,5 @@ export function generateJWT (userId: string, geoLocation: IGeoLocation) {
     userId: userId,
     geoLocation: geoLocation
   };
-  const token = jwt.sign(payload, secretKey!, {
-    expiresIn: '1d'
-  });
-  return token
+  return jwt.sign(payload, secretKey!, { expiresIn: '1d' });
 }

@@ -31,16 +31,6 @@ export async function findCollectionById (id: string): Promise<ICollection | nul
   }
 }
 
-// export async function findCollectionByName (userId: Types.ObjectId, name: string): Promise<ICollection | null> {
-//   try {
-//     return await Collection.findById(userId).select( {'collections': 1} );
-//   } catch (error) {
-//     console.error(error);
-//     throw error;
-//   }
-// }
-
-
 export async function getAll (userId: string): Promise<any | null> {
   try {
     const data = await User.aggregate([
@@ -110,11 +100,10 @@ export async function addItemToCollection (collectionId: string, itemId: string)
 export async function removeItemFromCollection (collectionId: any, itemId: any) {
   try {
     const itemIdObject = new Types.ObjectId(itemId);
-    // const collection = await Collection.findById(collectionId);
 
     return await Collection.findByIdAndUpdate(collectionId, 
       { $pull: { items: itemIdObject } },
-      { new: true } )
+      { new: true });
   } catch (error) {
     console.error(error);
     throw error;
@@ -160,7 +149,7 @@ export async function getCollectionIdByName (userId: Types.ObjectId, collectionN
     if (result.length) return result[0].id;
     else return null;
   } catch (error) {
-    console.error('Error:', error);
+    console.error(error);
     throw error;
   } 
 }

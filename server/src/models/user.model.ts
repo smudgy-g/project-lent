@@ -5,12 +5,7 @@ import * as collection from './collection.model';
 import { User } from './schemas/user.schema';
 import bcrypt from 'bcrypt';
 
-export async function createUser (
-  username: string,
-  email: string,
-  password: string,
-  address: IAddress
-): Promise<IUser> {
+export async function createUser (username: string, email: string, password: string, address: IAddress): Promise<IUser> {
   try {
     const geoLocation = await convertAddressToGeoCode(address);
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -26,6 +21,7 @@ export async function createUser (
       collections: [],
       inbox: [],
     });
+    
     return newUser.save().then(async (user) => {
       const id = user._id;
       await collection.createOne('All', id);
@@ -93,7 +89,7 @@ export async function deleteUserById (userId: string): Promise<IUser | null> {
 
 export async function getUserGeoLocation(userId: Types.ObjectId) {
   const user = await User.findById(userId);
-  if (user) return user!.geoLocation;
+  if (user) return user.geoLocation;
   return null;
 }
 
@@ -112,7 +108,6 @@ export async function getUsername (userId: string) {
 }
 
 export async function addChatToInbox (userId: Types.ObjectId, chatId: Types.ObjectId) {
-  if (!userId || !chatId) return null;
   try {
     const userIdObject = new Types.ObjectId(userId);
     const chatIdObject = new Types.ObjectId(chatId);
@@ -123,7 +118,8 @@ export async function addChatToInbox (userId: Types.ObjectId, chatId: Types.Obje
       }
     }, { new: true } )
   } catch (error) {
-    
+    console.error(error);
+    throw error;
   }
 }
 

@@ -7,28 +7,20 @@ dotenv.config();
 const secretKey = process.env.JWT_SECRET as string;
 
 export async function authenticate (ctx: Context, next: Next): Promise<void> {
-  // extract token from authorisation header
   const token = ctx.headers.cookie?.split(';')[0].split('=')[1];
 
-  if (token) {
-    try {
-      // Verify and decode the token
-      const decodedToken = jwt.verify(token, secretKey) as JwtPayload;
+  if (!token) ctx.throw(401, { message: 'No token provided.' });
+  
+  try {
+    const decodedToken = jwt.verify(token, secretKey) as JwtPayload;
+    const userExists = await findUserById(decodedToken.userId);
 
-     const userExists = await findUserById(decodedToken.userId)
-      if (userExists) {
-        // Extract the user ID and the geolocation
-        ctx.userId = decodedToken.userId;
-        ctx.location = decodedToken.geoLocation;
-        await next()
-      }
-
-    } catch (error) {
-      ctx.status = 401;
-      ctx.body = { message: 'Invalid token.' };
+    if (userExists) {
+      ctx.userId = decodedToken.userId;
+      ctx.location = decodedToken.geoLocation;
+      await next()
     }
-  } else {
-    ctx.status = 401;
-    ctx.body = { message: 'No token provided.' };
+  } catch (error) {
+    ctx.throw(401, { message: 'Invalid token.' });
   }
 }

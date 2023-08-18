@@ -18,11 +18,7 @@ export async function deleteOne (id:string): Promise<IChat | null> {
 export async function getAllChats (userId:string): Promise<any[] | null> {
   try {
     const data = await User.aggregate([
-      {
-        $match: {
-          _id: new Types.ObjectId(userId)
-        }
-      },
+      { $match: {  _id: new Types.ObjectId(userId) } },
       {
         $lookup: {
           from: 'chats',
@@ -82,7 +78,6 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
     return chats;
   } catch (error) {
     console.error(error);
-    console.error(error);
     throw error
   }
 }
@@ -92,9 +87,7 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
     const chatIdObject = new Types.ObjectId(chatId);
     
     const data = await Chat.aggregate([
-      // Use the objectId to find the chat
       { $match: { _id: chatIdObject } },
-      // Get the messages in the chat using the message._id and return as 'messages'
       {
         $lookup: {
           from: 'messages',
@@ -103,7 +96,6 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
           as: 'messages'
         }
       },
-      // Get the item related to the chat using the item._id and return it as 'item'
       {
         $lookup: {
           from: 'items',
@@ -112,7 +104,6 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
           as: 'item',
         },
       },
-      // Sculpt the data to return to the front-end
       {
         $project: {
           _id: 1,
@@ -121,7 +112,6 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
           'item.name': 1,
           'item.user': 1,
           messages: {
-            // For each message map each message to the output we need. $$message references the "as: 'message'".
             $map: {
               input: '$messages',
               as: 'message', 
@@ -183,6 +173,7 @@ export async function createChat (itemId: string, ownerId: any, userId: string, 
     });
 
     const newChat = await Chat.create(newChatData);
+    
     if (message) {
       const newMessage = {
         body: message,
@@ -197,6 +188,6 @@ export async function createChat (itemId: string, ownerId: any, userId: string, 
     return newChat;
   } catch (error) {
     console.error(error);
-    throw error
+    throw error;
   }
 }

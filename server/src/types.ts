@@ -1,4 +1,4 @@
-import { Document, Schema, Types } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export interface IItem extends Document {
   user: Types.ObjectId; 
@@ -18,33 +18,33 @@ export interface ILogin {
 }
 
 export interface IChat extends Document {
-  item: Types.ObjectId; // item._id
+  item: Types.ObjectId;
   messages: Types.ObjectId[];
   users: Types.ObjectId[];
 }
 
 export interface IMessage extends Document {
   body: string;
-  from: Types.ObjectId; // A user._id
-  to: Types.ObjectId; // B user._id
+  from: Types.ObjectId;
+  to: Types.ObjectId;
   seen: boolean;
 }
 
 export interface ICollection extends Document {
   name: string;
-  items: Types.ObjectId[]; // item._id
+  items: Types.ObjectId[];
 }
 
 export interface IUser extends Document {
   username: string;
   email: string;
-  password: string; // hashed
+  password: string;
   address: IAddress;
-  geoLocation: IGeoLocation; // or stored geo-location
+  geoLocation: IGeoLocation;
   credits: number;
   reputation: number;
-  collections: Types.ObjectId[]; // collection._id
-  inbox: Types.ObjectId[]; // chat._id
+  collections: Types.ObjectId[];
+  inbox: Types.ObjectId[];
 }
 
 export interface IGeoLocation {
