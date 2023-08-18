@@ -32,13 +32,20 @@ export default function CollectionOverview () {
           navigate('/collection/add');
         }
       },
+      // {
+      //   type: 'add item',
+      //   title: '',
+      //   action: () => {
+      //     navigate('/item/add');
+      //   }
+      // },
       {
-        type: 'add item',
+        type: 'profile',
         title: '',
         action: () => {
-          navigate('/item/add');
+          navigate('/profile');
         }
-      }
+      },
     ]
     setActionButtonGroupData(localActionButtonGroupData);
   }, []);

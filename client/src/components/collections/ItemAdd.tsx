@@ -114,14 +114,19 @@ export default function ItemAdd() {
           />
         </label>
 
-        <label>
+        <div className="input-wrapper">
           Lend out?
-          <input
-            type="checkbox"
-            name="lendable"
-            onChange={handleChange}
-          />
-        </label>
+          <label className="toggle-switch">
+            <input
+              type="checkbox"
+              name="lendable"
+              id="lendable"
+              checked={formData.lendable}
+              onChange={handleChange}
+            />
+            <span className="slider"></span>
+          </label>
+        </div>
 
         {formData.lendable && (
           <label>

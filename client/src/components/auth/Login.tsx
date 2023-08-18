@@ -92,7 +92,7 @@ function Login() {
             <label>
               Password:
               <input
-                type="text"
+                type="password"
                 name="password"
                 value={loginFormData.password}
                 onChange={handleChange}
