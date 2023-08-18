@@ -157,7 +157,7 @@ export async function getCollectionIdByName (userId: Types.ObjectId, collectionN
       { $project: { id: '$collections._id' } }
     ]);
     
-    if (result.length) return result[0].id.toString();
+    if (result.length) return result[0].id;
     else return null;
   } catch (error) {
     console.error('Error:', error);
