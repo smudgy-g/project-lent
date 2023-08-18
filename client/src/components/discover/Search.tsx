@@ -51,7 +51,7 @@ export default function Search ({ setItems, setSearchActive }: SearchProps) {
 
   return (<>
     <div className="search">
-      <input type="search" value={query} onChange={handleChange} />
+      <input type="search" placeholder="Search" value={query} onChange={handleChange} />
     </div>
   </>)
 }

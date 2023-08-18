@@ -78,92 +78,80 @@ function ProfileEdit() {
 
   return (<>
     <div className="profile-edit">
-    <form onSubmit={handleSubmit}>
-            <div className="form-element">
-              <label>
-                Username:
-                <input
-                  type="text"
-                  name="username"
-                  value={profileEditData.username}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+      <form onSubmit={handleSubmit}>
+        <label>
+          <h4>Username:</h4>
+          <input
+            type="text"
+            name="username"
+            value={profileEditData.username}
+            onChange={handleChange}
+          />
+        </label>
 
-            <div className="form-element">
-              <label>
-                Email:
-                <input
-                  type="text"
-                  name="email"
-                  value={profileEditData.email}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+        <label>
+          <h4>Email:</h4>
+          <input
+            type="text"
+            name="email"
+            value={profileEditData.email}
+            onChange={handleChange}
+          />
+        </label>
 
-            <div className="form-element">
-              <label>
-                Street:
-                <input
-                  type="text"
-                  name="streetName"
-                  value={profileEditData.address.streetName}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+        <label>
+          <h4>Street:</h4>
+          <input
+            type="text"
+            name="streetName"
+            value={profileEditData.address.streetName}
+            onChange={handleChange}
+          />
+        </label>
 
-            <div className="form-element">
-              <label>
-                Number:
-                <input
-                  type="text"
-                  name="streetNumber"
-                  value={profileEditData.address.streetNumber}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+        <label>
+          <h4>Number:</h4>
+          <input
+            type="text"
+            name="streetNumber"
+            value={profileEditData.address.streetNumber}
+            onChange={handleChange}
+          />
+        </label>
 
-            <div className="form-element">
-              <label>
-                Postal Code:
-                <input
-                  type="text"
-                  name="postalCode"
-                  value={profileEditData.address.postalCode}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+        <label>
+          <h4>Postal Code:</h4>
+          <input
+            type="text"
+            name="postalCode"
+            value={profileEditData.address.postalCode}
+            onChange={handleChange}
+          />
+        </label>
 
-            <div className="form-element">
-              <label>
-                City:
-                <input
-                  type="text"
-                  name="city"
-                  value={profileEditData.address.city}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+        <label>
+          <h4>City:</h4>
+          <input
+            type="text"
+            name="city"
+            value={profileEditData.address.city}
+            onChange={handleChange}
+          />
+        </label>
 
-            <div className="form-element">
-              <button type="submit"
-              disabled={
-                profileEditData.username === '' ||
-                profileEditData.email === '' ||
-                profileEditData.address.streetName === '' ||
-                profileEditData.address.streetNumber === '' ||
-                profileEditData.address.postalCode === '' ||
-                profileEditData.address.city === ''
-              }
-              >Save Changes</button>
-            </div>
-          </form>
+        <button
+          type="submit"
+          className="button styled full large"
+          disabled={
+            profileEditData.username === '' ||
+            profileEditData.email === '' ||
+            profileEditData.address.streetName === '' ||
+            profileEditData.address.streetNumber === '' ||
+            profileEditData.address.postalCode === '' ||
+            profileEditData.address.city === ''
+          }
+        >Save Changes</button>
+      </form>
     </div>
 
   </>);

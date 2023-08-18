@@ -60,7 +60,7 @@ function Register() {
           [name]: value
         }
       }))
-    } 
+    }
     // Access the non-nested properties of the registerFormData object
     else {
       setRegisterFormData((prevRegisterFormData) => ({
@@ -93,107 +93,92 @@ function Register() {
   return (
     <>
       <div className="register">
-        <div className="form register">
-          <form onSubmit={handleSubmit}>
-            <div className="form-element">
-              <label>
-                Username:
-                <input
-                  type="text"
-                  name="username"
-                  value={registerFormData.username}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+        <h1>Register</h1>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Username:
+            <input
+              type="text"
+              name="username"
+              value={registerFormData.username}
+              onChange={handleChange}
+            />
+          </label>
 
-            <div className="form-element">
-              <label>
-                Password:
-                <input
-                  type="text"
-                  name="password"
-                  value={registerFormData.password}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+          <label>
+            Password:
+            <input
+              type="text"
+              name="password"
+              value={registerFormData.password}
+              onChange={handleChange}
+            />
+          </label>
 
-            <div className="form-element">
-              <label>
-                Email:
-                <input
-                  type="text"
-                  name="email"
-                  value={registerFormData.email}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+          <label>
+            Email:
+            <input
+              type="text"
+              name="email"
+              value={registerFormData.email}
+              onChange={handleChange}
+            />
+          </label>
 
-            <div className="form-element">
-              <label>
-                Street:
-                <input
-                  type="text"
-                  name="streetName"
-                  value={registerFormData.address.streetName}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+          <label>
+            Street:
+            <input
+              type="text"
+              name="streetName"
+              value={registerFormData.address.streetName}
+              onChange={handleChange}
+            />
+          </label>
 
-            <div className="form-element">
-              <label>
-                Number:
-                <input
-                  type="text"
-                  name="streetNumber"
-                  value={registerFormData.address.streetNumber}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+          <label>
+            Number:
+            <input
+              type="text"
+              name="streetNumber"
+              value={registerFormData.address.streetNumber}
+              onChange={handleChange}
+            />
+          </label>
 
-            <div className="form-element">
-              <label>
-                Postal Code:
-                <input
-                  type="text"
-                  name="postalCode"
-                  value={registerFormData.address.postalCode}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+          <label>
+            Postal Code:
+            <input
+              type="text"
+              name="postalCode"
+              value={registerFormData.address.postalCode}
+              onChange={handleChange}
+            />
+          </label>
 
-            <div className="form-element">
-              <label>
-                City:
-                <input
-                  type="text"
-                  name="city"
-                  value={registerFormData.address.city}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
+          <label>
+            City:
+            <input
+              type="text"
+              name="city"
+              value={registerFormData.address.city}
+              onChange={handleChange}
+            />
+          </label>
 
-            <div className="form-element">
-              <button type="submit"
-              disabled={
-                registerFormData.username === '' ||
-                registerFormData.password === '' ||
-                registerFormData.email === '' ||
-                registerFormData.address.streetName === '' ||
-                registerFormData.address.streetNumber === '' ||
-                registerFormData.address.postalCode === '' ||
-                registerFormData.address.city === ''
-              }
-              >Register</button>
-            </div>
-          </form>
-        </div>
+          <button
+            className="button styled full large"
+            type="submit"
+            disabled={
+              registerFormData.username === '' ||
+              registerFormData.password === '' ||
+              registerFormData.email === '' ||
+              registerFormData.address.streetName === '' ||
+              registerFormData.address.streetNumber === '' ||
+              registerFormData.address.postalCode === '' ||
+              registerFormData.address.city === ''
+            }
+          >Register</button>
+        </form>
       </div>
     </>
   );

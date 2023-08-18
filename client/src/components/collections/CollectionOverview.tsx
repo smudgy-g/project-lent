@@ -26,13 +26,15 @@ export default function CollectionOverview () {
   useEffect(() => {
     const localActionButtonGroupData: ActionButtonGroupData = [
       {
+        type: 'add collection',
         title: 'Add Collection',
         action: () => {
           navigate('/collection/add');
         }
       },
       {
-        title: 'Add Item',
+        type: 'add item',
+        title: '',
         action: () => {
           navigate('/item/add');
         }

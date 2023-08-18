@@ -31,7 +31,8 @@ export default function ItemSingle () {
       // If the user is the item’s owner
       const localActionButtonGroupDataOwner: ActionButtonGroupData = [
         {
-          title: 'Edit Item',
+          type: 'edit',
+          title: '',
           action: () => {
             if (itemId) {
               navigate(`/item/${itemId}/edit`);
@@ -79,23 +80,26 @@ export default function ItemSingle () {
       <div className="item-single">
         <div className="image" style={{backgroundImage: `url(${item?.img_url})`}}></div>
 
-        <div className="metadata">
-          {item.distance && <span className="distance">{item.distance.toFixed(2)} km</span>}
-          {item.lendable && item.value && <span className="value">{item.value} credits</span>}
-          {item.lendable && item.available && <span className="status">available</span>}
-          {item.lendable && !item.available && !item.borrowed && <span className="status">reserved</span>}
-          {item.lendable && !item.available && item.borrowed && <span className="status">borrowed</span>}
+        <div className="information">
+          <div className="metadata">
+            <div className="metadata-group">
+              {item.distance && <span className="distance">{item.distance.toFixed(1)} km</span>}
+              {item.distance && item.lendable && item.value && <span className="divider">•</span>}
+              {item.lendable && item.value && <span className="value">{item.value} credits</span>}
+            </div>
+            {item.lendable && item.available && <span className="status available">• available</span>}
+            {item.lendable && !item.available && !item.borrowed && <span className="status reserved">• reserved</span>}
+            {item.lendable && !item.available && item.borrowed && <span className="status borrowed">• borrowed</span>}
+          </div>
+
+          <h1 className="title">{item.name}</h1>
+          <p className="description">{item.description}</p>
         </div>
 
-        <h1 className="title">{item.name}</h1>
-        <p className="description">{item.description}</p>
-
-        {item.distance && (
-          <div className="button-group">
-            {item.lendable && item.available && <button className="button" onClick={handleClickReserve}>{`Reserve (${item.value} ¢)`}</button>}
-            {item.lendable && !item.available && <button className="button" disabled>Unavailable</button>}
-          </div>
-        )}
+        {item.distance && (<>
+          {item.lendable && item.available && <button className="button styled full large end" onClick={handleClickReserve}>{`Reserve (${item.value} ¢)`}</button>}
+          {item.lendable && !item.available && <button className="button styled full large end" disabled>Unavailable</button>}
+        </>)}
       </div>
     )}
   </>);

@@ -5,7 +5,8 @@ import { ReactNode, createContext, useState } from "react";
 // Type definitions
 
 export type ActionButtonData = {
-  title: string,
+  type?: string;
+  title: string;
   action: () => void;
 };
 

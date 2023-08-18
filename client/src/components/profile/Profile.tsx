@@ -18,7 +18,7 @@ function Profile() {
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
   const navigate = useNavigate();
   const signOut = useSignOut()
-  
+
 
   /* Use Effect */
 
@@ -32,11 +32,12 @@ function Profile() {
   useEffect(() => {
     const localActionButtonGroupData: ActionButtonGroupData = [
       {
-        title: 'Edit',
+        type: 'edit',
+        title: '',
         action: () => {
           navigate('/profile/edit');
         }
-      }, 
+      },
       [
       {
         title: 'Delete Profile',
@@ -60,17 +61,15 @@ function Profile() {
   /* Render Component */
 
   return (<>
- 
+
     <div className="profile">
-      <div>Name:</div>
-      <div>{userData?.username}</div>
-      <div>Email:</div>
-      <div>{userData?.email}</div>
-      <div>Address:</div>
-      <div>{userData?.address?.streetName} {userData?.address?.streetNumber}</div>
-      <div>{userData?.address?.postalCode} {userData?.address?.city}</div>
-      <div>Credits:</div>
-      <div>{userData?.credits}</div>
+      <h1>{userData?.username}</h1>
+      <div>Email: {userData?.email}</div>
+      <div>Address:
+        <div>{userData?.address?.streetName} {userData?.address?.streetNumber}</div>
+        <div>{userData?.address?.postalCode} {userData?.address?.city}</div>
+      </div>
+      <div>Credits: {userData?.credits} ¢</div>
     </div>
   </>);
 }

@@ -74,45 +74,44 @@ function Login() {
   return (
     <>
       <div className="login">
-        <div className="form login">
-          <form onSubmit={handleSubmit}>
-            <div className="form-element">
-              <label>
-                Username:
-                <input
-                  type="text"
-                  name="username"
-                  value={loginFormData.username}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
-
-            <div className="form-element">
-              <label>
-                Password:
-                <input
-                  type="text"
-                  name="password"
-                  value={loginFormData.password}
-                  onChange={handleChange}
-                />
-              </label>
-            </div>
-
-            <div className="form-element">
-              <button className="button" type="submit"
-              disabled={
-                loginFormData.username === '' ||
-                loginFormData.password === ''
-              }
-              >Log In</button>
-            </div>
-          </form>
-          <div>
-            <p>Don’t have an account yet?</p>
-            <Link to={'/register'}><button className="button">Register</button></Link>
+        <h1>Log in</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="form-element">
+            <label>
+              Username:
+              <input
+                type="text"
+                name="username"
+                value={loginFormData.username}
+                onChange={handleChange}
+              />
+            </label>
           </div>
+
+          <div className="form-element">
+            <label>
+              Password:
+              <input
+                type="text"
+                name="password"
+                value={loginFormData.password}
+                onChange={handleChange}
+              />
+            </label>
+          </div>
+
+          <div className="form-element">
+            <button className="button styled full large" type="submit"
+            disabled={
+              loginFormData.username === '' ||
+              loginFormData.password === ''
+            }
+            >Log In</button>
+          </div>
+        </form>
+        <div className="button-group">
+          <p>Don’t have an account yet?</p>
+          <Link to={'/register'}><button className="button colored">Register</button></Link>
         </div>
       </div>
     </>

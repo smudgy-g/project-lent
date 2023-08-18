@@ -30,14 +30,14 @@ export default function ChatSingle() {
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setInputValue(event.target.value);
-  };  
+  };
 
   function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
     if(event.key === 'Enter') {
       handleSendClick();
     }
   };
-  
+
   async function handleSendClick() {
     await postMessage(currentMessageData!, chatId!);
     setInputValue('');
@@ -55,12 +55,12 @@ export default function ChatSingle() {
     await receiveItemById(itemId);
     console.log(itemReceivedData);
   };
- 
+
   async function handleCancelClick() {
     // cancelTransactionRoute
     navigate(-1)
   };
-       
+
   /* Helper Functions */
 
   // Helper Functions to retrieve the userId by the cookie
@@ -127,7 +127,7 @@ export default function ChatSingle() {
       setCancelButton(true);
     };
   }, [currentChat]);
- 
+
 
   useEffect(() => {
     setCurrentMessageData({
@@ -166,55 +166,49 @@ export default function ChatSingle() {
         .slice()
         .reverse()
         .map((message, index) => (
-          <div key={index}>
+          <>
             {message.from !== userId ? (
-              <div className="message foreign-user">
-                <div className="time">
-                  {message.createdAt}
-                </div>
-                <div className="username">
-                  {currentChat.foreignUserName}
+              <div key={index} className="message foreign-user">
+                <div className="datetime">
+                  {message.createdAt.toString().substring(11, 16)}
                 </div>
                 <div className="message-body">
                   {message.body}
                 </div>
-                <div ref={messageEndRef}></div>
+                <div className="scroll-reference" ref={messageEndRef}></div>
               </div>
             ) : (
-              <div className="message user">
-                <div className="time">
-                  {message.createdAt}
-                </div>
-                <div className="username">
-                  You:
+              <div key={index} className="message user">
+                <div className="datetime">
+                  {message.createdAt.toString().substring(11, 16)}
                 </div>
                 <div className="message-body">
                   {message.body}
                 </div>
-                <div ref={messageEndRef}></div>
+                <div className="scroll-reference" ref={messageEndRef}></div>
               </div>
             )
             }
-          </div>
+          </>
         ))}
       </div>
 
     </div>
-    
-    <div>
-      {currentChat && currentChat.item.user === userId ? (
-        <div className="button-group">
-          <button className="button" onClick={() => handleCancelClick()} disabled={cancelButton}>Cancel</button>
-          <button className="button" onClick={() => handleItemReturnClick(currentChat?.item!._id)} disabled={returnedButton}>Returned Item</button>
-        </div>
-        ) : (
-          <div className="button-group">
-          <button className="button" disabled={cancelButton} onClick={() => handleCancelClick()}>Cancel</button>
-          <button className="button" onClick={() => handleItemReceiveClick(currentChat!.item!._id)} disabled={receivedButton}>Received Item</button>
-        </div>
-        )
-      }
-    </div>
+
+    <>
+    {currentChat && currentChat.item.user === userId ? (
+      <div className="button-group chat-button-group">
+        <button className="button styled large" onClick={() => handleCancelClick()} disabled={cancelButton}>Cancel</button>
+        <button className="button styled large" onClick={() => handleItemReturnClick(currentChat?.item!._id)} disabled={returnedButton}>Returned Item</button>
+      </div>
+      ) : (
+        <div className="button-group chat-button-group">
+        <button className="button styled large" disabled={cancelButton} onClick={() => handleCancelClick()}>Cancel</button>
+        <button className="button styled large" onClick={() => handleItemReceiveClick(currentChat!.item!._id)} disabled={receivedButton}>Received Item</button>
+      </div>
+      )
+    }
+    </>
 
     <div className="chat-input-container">
 
@@ -226,11 +220,11 @@ export default function ChatSingle() {
         onKeyPress={handleKeyPress}
       />
 
-      <button className="button"
+      <button className="button send styled large"
         onClick={handleSendClick}
         >Send
       </button>
 
-    </div>    
+    </div>
   </>);
 };

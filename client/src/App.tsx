@@ -116,7 +116,7 @@ const router = createBrowserRouter([
   {
     path: '/discover',
     element: (<>
-      <Header />
+      <div></div>
       <RequireAuth loginPath="/login">
         <Discover />
       </RequireAuth>
