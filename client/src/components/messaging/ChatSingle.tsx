@@ -46,8 +46,8 @@ export default function ChatSingle() {
       .catch((error) => console.log(error));
   };
 
-  async function handleItemReturnClick(itemId : string) {
-    await returnItemById(itemId, itemReturnedData!);
+  function handleItemReturnClick(itemId : string) {
+    returnItemById(itemId, itemReturnedData!);
     console.log(itemReturnedData);
   };
 

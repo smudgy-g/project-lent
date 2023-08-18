@@ -65,8 +65,6 @@ export async function createOne (userId: string, itemData: Partial<IItem>): Prom
   try {
     const userIdObject = new Types.ObjectId(userId);
     const user = await User.findById(userIdObject);
-    console.log(userIdObject);
-    console.log(user);
 
     if (!user) {
       throw new Error('User not found.');
@@ -221,22 +219,16 @@ export async function recieveItem (userId: string, itemId: string) {
   try {
     const userIdObject = new Types.ObjectId(userId);
     const itemIdObject = new Types.ObjectId(itemId);
-    // const borrower = await User.findById(userIdObject).select({ 'username': 1 });
     const item = await Item.findById(itemIdObject).select({ 'user': 1, 'name': 1, 'value': 1, '_id': 0 });
     const borrowedCollectionId = await collectionModel.getCollectionIdByName(userIdObject, 'Borrowed');
     const reservedCollectionId = await collectionModel.getCollectionIdByName(userIdObject, 'Reserved');
-    // const owner = await User.findById(item!.user).select({ 'username': 1 })
     
     if (item && item.value && reservedCollectionId && borrowedCollectionId) {
       
       const transferSuccess = await transferValue(item.user, userIdObject, item.value);
-      console.log(transferSuccess)
       if (transferSuccess) {
         const lentOutCollectionId = await collectionModel.getCollectionIdByName(item.user, 'Lent Out');
-        console.log(reservedCollectionId);
-        console.log('item id:', itemId)
         const removed = await collectionModel.removeItemFromCollection(reservedCollectionId, itemId);
-        console.log('removedfromreserved', removed)
         await collectionModel.addItemToCollection(lentOutCollectionId, itemId);
         await collectionModel.addItemToCollection(borrowedCollectionId, itemId);
         const borrowedObjectId = new Types.ObjectId(borrowedCollectionId);
@@ -262,32 +254,24 @@ export async function recieveItem (userId: string, itemId: string) {
   }
 }
 
-export async function returnItem (userId: string, itemId: string, borrowerId: string) {
+export async function returnItem (userId: string, itemId: string, borrowerId: any) {
   try {
     const userIdObject = new Types.ObjectId(userId); // owner
     const borrowerIdObject = new Types.ObjectId(borrowerId);
     const itemIdObject = new Types.ObjectId(itemId);
-    // const borrower = await User.findById(userIdObject).select({ 'username': 1 });
     const item = await Item.findById(itemIdObject).select({ 'user': 1, 'name': 1, 'value': 1, '_id': 0 });
     const lentOutCollectionId = await collectionModel.getCollectionIdByName(userIdObject, 'Lent Out');
-    // const owner = await User.findById(item!.user).select({ 'username': 1 })
     
     if (item) {
-      // oyher user instead
       const borrowedCollectionId = await collectionModel.getCollectionIdByName(borrowerIdObject, 'Borrowed');
-      
       const removeLent = await collectionModel.removeItemFromCollection(lentOutCollectionId, itemId);
       const removeBorrow = await collectionModel.removeItemFromCollection(borrowedCollectionId, itemId);
       const borrowedObjectId = new Types.ObjectId(borrowedCollectionId);
       const lentOutObjectId = new Types.ObjectId(lentOutCollectionId);
-      const collectionIds = [borrowedObjectId, lentOutObjectId];
-      console.log()
-      console.log('Lent: ', removeLent)
-      console.log('Borrow: ', removeBorrow)
       
       const updatedItem = await Item.findByIdAndUpdate(itemIdObject, {
         $set: { borrowed: false, available: true },
-        $pull: { collections: { $each: collectionIds } }
+        $pull: { collections: { borrowedObjectId, lentOutObjectId } }
       }, { new: true } );
       
       return updatedItem;
@@ -332,9 +316,3 @@ export async function discoverItems (userLocation: IGeoLocation, userId: string)
     throw error;
   }
 } 
-
-/* item marked as returned */
-// _id: 289347732 (itemid), borrowed: false
-
-/* item marked as returned */
-// _id: 289347732 (itemid), borrowed: false

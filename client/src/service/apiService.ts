@@ -339,7 +339,7 @@ export async function returnItemById (id: string, itemReturnedData: Item) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({itemReturnedData}),
+      body: JSON.stringify(itemReturnedData),
       credentials: 'include'
     });
 
