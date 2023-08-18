@@ -125,6 +125,8 @@ export async function reserveItem (ctx: Context) {
 
   try {
     const result = await itemModel.reserveItem(userId, itemId);
+    ctx.status = 201;
+    ctx.body = result;
   } catch (error) {
     ctx.status = 500;
     ctx.body = { message: error };

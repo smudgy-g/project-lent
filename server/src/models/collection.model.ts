@@ -92,6 +92,11 @@ export async function getAll (userId: string): Promise<any | null> {
 export async function addItemToCollection (collectionId: string, itemId: string) {
   try {
     const itemIdObject = new Types.ObjectId(itemId);
+    const collection = await Collection.findById(collectionId);
+    
+    if (collection && collection.items.includes(itemIdObject)) {
+      return collection; 
+    }
 
     return await Collection.findByIdAndUpdate(collectionId, 
       { $push: { items: itemIdObject }},

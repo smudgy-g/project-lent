@@ -100,9 +100,7 @@ export async function findItemsByCollection(collectionId: string): Promise<Parti
    // Use the aggregation pipeline with $lookup to retrieve items for the collection
       const data = await Collection.aggregate([
       {
-        $match: {
-          _id: collectionIdObject
-        }
+        $match: { _id: collectionIdObject }
       },
       {
         $lookup: {
@@ -172,10 +170,9 @@ export async function reserveItem (userId: string, itemId: string) {
   try {
     const userIdObject = new Types.ObjectId(userId);
     const itemIdObject = new Types.ObjectId(itemId);
-    const ownerId = await Item.findById(itemIdObject).select({ 'user': 1, '_id': 0 });
-    const itemName = await Item.findById(itemIdObject).select({ 'name': 1, '_id': 0 });
+    const item = await Item.findById(itemIdObject).select({ 'user': 1, 'name': 1, '_id': 0 });
 
-    if (ownerId && itemName ) {
+    if (item) {
       await Item.findByIdAndUpdate(itemIdObject, {
         $set: { available: false, borrowed: false }
       });
@@ -184,9 +181,10 @@ export async function reserveItem (userId: string, itemId: string) {
       if (reservedCollectionId) {
         await addItemToCollection(reservedCollectionId, itemId);
       }
-      
-      const message = `There is interest in the ${itemName}!`
-      return await createChat(itemId, ownerId, userId, message);
+
+      const message = `There is interest in the ${item.name}!`
+      const result = await createChat(itemId, item.user.toString(), userId, message);
+      return result;
     }
   } catch (error) {
     console.error(error);
@@ -207,9 +205,7 @@ export async function searchByQuery (query: string, userLocation: IGeoLocation, 
         },
       },
       {
-        $match: {
-          'user': { $ne : userId }
-        }
+        $match: { 'user': { $ne : userId } }
       }
     ]);
     const resultWithLocations: any = await getItemLocations(result);

@@ -110,3 +110,19 @@ export async function getUsername (userId: string) {
   if (user) return user.username;
   else return null;
 }
+
+export async function addChatToInbox (userId: Types.ObjectId, chatId: Types.ObjectId) {
+  if (!userId || !chatId) return null;
+  try {
+    const userIdObject = new Types.ObjectId(userId);
+    const chatIdObject = new Types.ObjectId(chatId);
+
+    return await User.findByIdAndUpdate(userIdObject, {
+      $push: {
+        inbox: chatIdObject
+      }
+    }, { new: true } )
+  } catch (error) {
+    
+  }
+}
