@@ -47,7 +47,7 @@ export default function ChatSingle() {
   };
 
   async function handleItemReturnClick(itemId : string) {
-    await returnItemById(itemId);
+    await returnItemById(itemId, itemReturnedData!);
     console.log(itemReturnedData);
   };
 
@@ -138,12 +138,11 @@ export default function ChatSingle() {
     });
   }, [inputValue]);
 
-  // useEffect(() => {
-  //   setItemReturnedData({
-  //     _id: currentChat?.item._id!,
-  //     borrowed: false,
-  //   });
-  // }, [currentChat]);
+  useEffect(() => {
+    setItemReturnedData({
+      foreignUserId: currentChat?.foreignUserId!
+    });
+  }, [currentChat]);
 
   // useEffect(() => {
   //   setItemReceivedData({
