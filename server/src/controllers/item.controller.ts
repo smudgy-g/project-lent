@@ -155,6 +155,7 @@ export async function receiveItem (ctx: Context) {
     ctx.body = { message: error };
   }
 }
+
 export async function returnItem (ctx: Context) {
   const userId = ctx.userId;
   const itemId = ctx.params.itemid;
@@ -174,6 +175,7 @@ export async function returnItem (ctx: Context) {
     ctx.body = { message: error };
   }
 }
+
 export async function cancelItem (ctx: Context) {
   const userId = ctx.userId;
   const itemId = ctx.params.itemid;
