@@ -25,6 +25,7 @@ export interface Item {
   available?: boolean;
   borrowed?: boolean;
   distance?: number;
+  foreignUserId?: string;
 }
 
 export interface Collection {

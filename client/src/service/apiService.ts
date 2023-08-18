@@ -332,14 +332,14 @@ export async function receiveItemById (id: string) {
   }
 }
 
-export async function returnItemById (id: string) {
+export async function returnItemById (id: string, itemReturnedData: Item) {
   try {
     const response = await fetch(`${baseUrl}/item/${id}/return`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({}),
+      body: JSON.stringify({itemReturnedData}),
       credentials: 'include'
     });
 
