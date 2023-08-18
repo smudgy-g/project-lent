@@ -41,6 +41,7 @@ export default function CollectionSingle () {
       //   }
       // },
       {
+        type: 'add item',
         title: 'Add Item',
         action: () => {
           navigate('/item/add');

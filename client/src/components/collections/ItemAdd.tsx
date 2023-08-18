@@ -84,76 +84,65 @@ export default function ItemAdd() {
   return (<>
     <div className="profile-edit">
       <form onSubmit={handleSubmit}>
-        <div className="form-element">
-          <label>
-            Name:
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-            />
-          </label>
-        </div>
+        <label>
+          Name:
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+          />
+        </label>
 
-        <div className="form-element">
-          <label>
-            Description:
-            <input
-              type="text"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-            />
-          </label>
-        </div>
+        <label>
+          Description:
+          <input
+            type="text"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+          />
+        </label>
 
-        <div className="form-element">
-          <label>
-            Photo:
-            <input
-              type="file"
-              name="img_url"
-              accept="image/*"
-              onChange={handleChange}
-            />
-          </label>
-        </div>
+        <label>
+          Photo:
+          <input
+            type="file"
+            name="img_url"
+            accept="image/*"
+            onChange={handleChange}
+          />
+        </label>
 
-        <div className="form-element">
-          <label>
-            Lend out?
-            <input
-              type="checkbox"
-              name="lendable"
-              onChange={handleChange}
-            />
-          </label>
-        </div>
+        <label>
+          Lend out?
+          <input
+            type="checkbox"
+            name="lendable"
+            onChange={handleChange}
+          />
+        </label>
 
         {formData.lendable && (
-          <div className="form-element">
-            <label>
-              Value:
-              <input
-                type="number"
-                name="value"
-                value={formData.value}
-                onChange={handleChange}
-              />
-            </label>
-          </div>
+          <label>
+            Value:
+            <input
+              type="number"
+              name="value"
+              value={formData.value}
+              onChange={handleChange}
+            />
+          </label>
         )}
 
-        <div className="form-element">
-          <button type="submit"
-            disabled={
-              formData.name === '' ||
-              formData.description === '' ||
-              formData.img_url === ''
-            }
-          >Create Item</button>
-        </div>
+        <button type="submit"
+          className="button styled full large"
+          disabled={
+            formData.name === '' ||
+            formData.description === '' ||
+            formData.img_url === ''
+          }
+        >Create Item</button>
       </form>
     </div>
 

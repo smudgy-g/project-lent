@@ -43,31 +43,29 @@ function Inbox() {
   return (<>
     <div className="inbox">
 
-      <div>Chats</div>
-
+      <h1>Chats</h1>
+      <div className="chat-preview-container">
       {chats && chats.map((chat) => (
         <div className="chat-preview" key={chat.id}>
           <Link key={chat.id} to={`/chat/${chat.id}`}>
               <div className="chat-preview-text">
-                <div>{new Date(chat.updatedAt).toLocaleString("en-US", {
+                <div className="datetime">{new Date(chat.updatedAt).toLocaleString("en-US", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
                   hour: "numeric",
                   timeZone: "UTC"
                 })}</div>
-                <div>{chat.foreignUser}</div>
-                <div>{chat.itemName}</div>
-                <div>{chat.message}...</div>
+                <div className="itemname">{chat.itemName}</div>
+                <div className="message">{`${chat.foreignUser}: ${chat.message}`}</div>
               </div>
           </Link>
-          <div>
-            <button onClick={() => handleDeleteChat(chat.id)}>Delete</button>
-          </div>
+          <button className="button delete" onClick={() => handleDeleteChat(chat.id)}>Delete</button>
         </div>
       ))}
+      </div>
     </div>
-    
+
   </>);
 }
 
