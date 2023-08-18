@@ -31,28 +31,27 @@ function Profile() {
   // Populate the Header component’s action button group
   useEffect(() => {
     const localActionButtonGroupData: ActionButtonGroupData = [
-      {
-        type: 'edit',
-        title: '',
-        action: () => {
-          navigate('/profile/edit');
-        }
-      },
       [
-      {
-        title: 'Delete Profile',
-        action: () => {
-          deleteUser();
-          navigate('/register');
+        {
+          title: 'Edit Profile',
+          action: () => {
+            navigate('/profile/edit');
+          }
+        },
+        {
+          title: 'Delete Profile',
+          action: () => {
+            deleteUser();
+            navigate('/register');
+          }
+        },
+        {
+          title: 'Logout',
+          action: () => {
+            signOut()
+            navigate('/login');
+          }
         }
-      },
-      {
-        title: 'Logout',
-        action: () => {
-          signOut()
-          navigate('/login');
-        }
-      }
       ]
     ]
     setActionButtonGroupData(localActionButtonGroupData);

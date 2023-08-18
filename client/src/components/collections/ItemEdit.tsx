@@ -128,15 +128,19 @@ export default function ItemEdit() {
           />
         </label>
 
-        <label>
+        <div className="input-wrapper">
           Lend out?
-          <input
-            type="checkbox"
-            name="lendable"
-            onChange={handleChange}
-            checked={formData.lendable}
-          />
-        </label>
+          <label className="toggle-switch">
+            <input
+              type="checkbox"
+              name="lendable"
+              id="lendable"
+              checked={formData.lendable}
+              onChange={handleChange}
+            />
+            <span className="slider"></span>
+          </label>
+        </div>
 
         {formData.lendable && (
           <label>

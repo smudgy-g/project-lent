@@ -108,7 +108,7 @@ function Register() {
           <label>
             Password:
             <input
-              type="text"
+              type="password"
               name="password"
               value={registerFormData.password}
               onChange={handleChange}
