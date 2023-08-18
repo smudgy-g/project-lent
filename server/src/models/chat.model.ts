@@ -2,7 +2,7 @@ import mongoose, { Schema, SchemaType, Types } from "mongoose";
 import { IChat, IMessage } from "../types";
 import { Chat } from "./schemas/chat.schema";
 import { User } from "./schemas/user.schema";
-import { getUsername } from "./user.model";
+import { addChatToInbox, getUsername } from "./user.model";
 import { postMessage } from '../models/message.model';
 
 export async function deleteOne (id:string): Promise<IChat | null> {
@@ -50,7 +50,7 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
       },
       {
         $project: {
-          _id: 0,
+          _id: 1,
           'chats._id': 1,
           'chats.item': 1,
           'chats.users': 1,
@@ -93,11 +93,7 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
     
     const data = await Chat.aggregate([
       // Use the objectId to find the chat
-      {
-        $match: {
-          _id: chatIdObject
-        }
-      },
+      { $match: { _id: chatIdObject } },
       // Get the messages in the chat using the message._id and return as 'messages'
       {
         $lookup: {
@@ -168,7 +164,6 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
           .sort((a: any, b: any) => b.createdAt - a.createdAt)
       };
     })();
-    console.log(result);
     return result;
   } catch (error) {
     console.error(error);
@@ -176,7 +171,7 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
   }
 }
 
-export async function createChat (itemId: string, ownerId: string, userId: string, message?: string): Promise<IChat | null> {
+export async function createChat (itemId: string, ownerId: any, userId: string, message?: string): Promise<IChat | null> {
   try {
     const ownerIdObject = new Types.ObjectId(ownerId);
     const userIdObject = new Types.ObjectId(userId);
@@ -188,7 +183,6 @@ export async function createChat (itemId: string, ownerId: string, userId: strin
     });
 
     const newChat = await Chat.create(newChatData);
-
     if (message) {
       const newMessage = {
         body: message,
@@ -196,8 +190,9 @@ export async function createChat (itemId: string, ownerId: string, userId: strin
         to: ownerIdObject,
         seen: false
       }
-      await postMessage(newMessage as IMessage, newChat._id);
-      return Chat.findById(newChat._id)
+      await addChatToInbox(ownerIdObject, newChat._id);
+      await addChatToInbox(userIdObject, newChat._id);
+      return await postMessage(newMessage as IMessage, newChat._id);
     }
     return newChat;
   } catch (error) {

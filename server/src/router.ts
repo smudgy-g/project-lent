@@ -32,7 +32,6 @@ router.get('/item/all/:collectionid', authenticate, item.findItemsByCollectionId
 router.get('/item/:itemid', authenticate, item.findItem);
 router.post('/item', authenticate, item.createItem);
 router.put('/item/:itemid', authenticate, item.updateItemById);
-router.put('/item/:itemid/reserve', authenticate, item.reserveItem);
 router.delete('/item/:itemid', authenticate, item.deleteItem);
 
 // messaging routes
@@ -46,10 +45,10 @@ router.delete('/inbox/:chatid', authenticate, inbox.deleteChat);
 router.get('/search', authenticate, search.searchItem);
 
 // Lending lifecycle routes
-// router.put('/item/:itemid/reserve', authenticate, item.updateItemById);
-// router.put('/item/:itemid/receive', authenticate, item.updateItemById);
-// router.put('/item/:itemid/return', authenticate, item.updateItemById);
-// router.put('/item/:itemid/cancel', authenticate, item.updateItemById);
+router.put('/item/:itemid/reserve', authenticate, item.reserveItem);
+router.put('/item/:itemid/receive', authenticate, item.receiveItem);
+router.put('/item/:itemid/return', authenticate, item.returnItem);
+router.put('/item/:itemid/cancel', authenticate, item.cancelItem);
 
 
 export default router;

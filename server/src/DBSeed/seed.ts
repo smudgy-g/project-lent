@@ -68,59 +68,71 @@ async function seedDatabase() {
 
     // Create collections
     const collection1 = await Collection.create({
-      name: 'House',
+      name: 'All',
       items: [],
     });
 
     const collection2 = await Collection.create({
-      name: 'Tools',
+      name: 'Borrowed',
       items: [],
     });
     
     const collection3 = await Collection.create({
-      name: 'Power Tools',
+      name: 'Lent Out',
       items: [],
     });
 
     const collection4 = await Collection.create({
-      name: 'All',
+      name: 'Reserved',
       items: [],
     });
     const collection5 = await Collection.create({
-      name: 'All',
+      name: 'Tools', //
       items: [],
     });
     const collection6 = await Collection.create({
-      name: 'Borrowed',
+      name: 'All',
       items: [],
     });
     
     const collection7 = await Collection.create({
-      name: 'Lent Out',
+      name: 'Borrowed',
       items: [],
     });
     const collection8 = await Collection.create({
-      name: 'Borrowed',
+      name: 'Lent Out',
       items: [],
     });
 
     const collection9 = await Collection.create({
-      name: 'Lent Out',
+      name: 'Reserved',
       items: [],
     });
+    const collection10 = await Collection.create({
+      name: 'Power Tools',
+      items: [],
+    });
+
+    const collection11 = await Collection.create({
+      name: 'House',
+      items: [],
+    });
+
+
+  
 
 
 
     // Create items
     const item1 = await Item.create({
-      user: user1._id,
+      user: user2._id,
       name: 'Power Drill',
       img_url: 'http://5.imimg.com/data5/VW/FM/MY-38627328/cordless-hand-driller-500x500.jpg',
       value: 300,
       description: 'Electric drill, good working condition.',
       lendable: true,
       available: true,
-      collections: [collection2._id, collection4._id],
+      collections: [collection6._id, collection10._id],
       borrowed: false,
     });
 
@@ -132,19 +144,19 @@ async function seedDatabase() {
       description: 'It is no Dyson but it will do.',
       lendable: false,
       available: true,
-      collections: [collection1._id, collection5._id],
+      collections: [collection6._id, collection11._id],
       borrowed: false,
     });
 
     const item3 = await Item.create({
-      user: user2._id,
+      user: user1._id,
       name: 'Drill',
       img_url: 'https://d1b5h9psu9yexj.cloudfront.net/13147/Bosch-PS31-2A-12-Volt-Max-Drill-Driver-Kit_20181127-194416_full.jpg',
       value: 200,
       description: 'Very nice Bosch drill',
       lendable: false,
       available: true,
-      collections: [collection3._id, collection5._id],
+      collections: [collection1._id, collection5._id],
       borrowed: false,
     });
 
@@ -171,45 +183,45 @@ async function seedDatabase() {
 
     // Update references
     await User.findByIdAndUpdate(user1._id, {
-      collections: [collection1._id, collection4._id, collection6._id, collection7._id],
+      collections: [collection1._id, collection2._id, collection3._id, collection4._id, collection5._id],
       inbox: [chat._id],
     });
 
     await User.findByIdAndUpdate(user2._id, {
-      collections: [collection2._id, collection5._id, collection8._id, collection9._id],
+      collections: [collection6._id, collection7._id, collection8._id, collection9._id, collection10._id, collection11._id],
       inbox: [chat._id],
     });
 
     await Item.findByIdAndUpdate(item1._id, {
-      collections: [collection2._id, collection4._id],
+      collections: [collection6._id, collection10._id],
     });
 
     await Item.findByIdAndUpdate(item2._id, {
-      collections: [collection2._id, collection5._id],
+      collections: [collection6._id, collection11._id],
     });
 
     await Item.findByIdAndUpdate(item3._id, {
-      collections: [collection3._id, collection5._id],
+      collections: [collection1._id, collection5._id],
     });
 
-    await Collection.findByIdAndUpdate(collection1._id, {
-      items: [item2._id],
-    });
-
-    await Collection.findByIdAndUpdate(collection2._id, {
-      items: [item1._id],
-    });
-
-    await Collection.findByIdAndUpdate(collection3._id, {
+    await Collection.findByIdAndUpdate(collection1._id, {//
       items: [item3._id],
     });
 
-    await Collection.findByIdAndUpdate(collection4._id, {
+    await Collection.findByIdAndUpdate(collection11._id, {//
+      items: [item2._id],
+    });
+
+    await Collection.findByIdAndUpdate(collection5._id, {//
+      items: [item3._id],
+    });
+
+    await Collection.findByIdAndUpdate(collection10._id, {//
       items: [item1._id],
     });
 
-    await Collection.findByIdAndUpdate(collection5._id, {
-      items: [item2._id, item3._id],
+    await Collection.findByIdAndUpdate(collection6._id, {//
+      items: [item1._id, item2._id],
     });
 
     await Chat.findByIdAndUpdate(chat._id, {

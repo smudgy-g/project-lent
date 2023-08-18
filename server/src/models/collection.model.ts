@@ -3,6 +3,7 @@ import { ICollection } from '../types';
 import { Collection } from './schemas/collection.schema';
 import * as user from './user.model';
 import { User } from './schemas/user.schema';
+import { findItemById } from './item.model';
 
 export async function createOne (name: string, userId: string): Promise<ICollection | null> {
   try {
@@ -91,9 +92,32 @@ export async function getAll (userId: string): Promise<any | null> {
 export async function addItemToCollection (collectionId: string, itemId: string) {
   try {
     const itemIdObject = new Types.ObjectId(itemId);
+    const collection = await Collection.findById(collectionId);
+    
+    if (collection && collection.items.includes(itemIdObject)) {
+      return collection; 
+    }
 
     return await Collection.findByIdAndUpdate(collectionId, 
       { $push: { items: itemIdObject }},
+      { new: true } )
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function removeItemFromCollection (collectionId: any, itemId: any) {
+  try {
+    const itemIdObject = new Types.ObjectId(itemId);
+    const collection = await Collection.findById(collectionId);
+    
+    if (collection && collection.items.includes(itemIdObject)) {
+      return collection; 
+    }
+
+    return await Collection.findByIdAndUpdate(collectionId, 
+      { $pull: { items: itemIdObject } },
       { new: true } )
   } catch (error) {
     console.error(error);
@@ -118,4 +142,29 @@ export async function deleteOne (id:string): Promise<ICollection | null> {
     console.error(error);
     throw error
   }
+}
+
+export async function getCollectionIdByName (userId: Types.ObjectId, collectionName: string) {
+  try {
+    const result = await User.aggregate([
+      { $match: { _id: userId } },
+      {
+        $lookup: {
+          from: 'collections',
+          localField: 'collections',
+          foreignField: '_id',
+          as: 'collections'
+        }
+      },
+      { $unwind: '$collections' },
+      { $match: { 'collections.name': { $eq: collectionName } } },
+      { $project: { id: '$collections._id' } }
+    ]);
+    
+    if (result.length) return result[0].id.toString();
+    else return null;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  } 
 }

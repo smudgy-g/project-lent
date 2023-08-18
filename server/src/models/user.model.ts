@@ -31,6 +31,7 @@ export async function createUser (
       await collection.createOne('All', id);
       await collection.createOne('Borrowed', id);
       await collection.createOne('Lent Out', id);
+      await collection.createOne('Reserved', id);
     })
     .then(() => newUser);
   } catch (error) {
@@ -108,4 +109,37 @@ export async function getUsername (userId: string) {
   const user = await User.findById(userId);
   if (user) return user.username;
   else return null;
+}
+
+export async function addChatToInbox (userId: Types.ObjectId, chatId: Types.ObjectId) {
+  if (!userId || !chatId) return null;
+  try {
+    const userIdObject = new Types.ObjectId(userId);
+    const chatIdObject = new Types.ObjectId(chatId);
+
+    return await User.findByIdAndUpdate(userIdObject, {
+      $push: {
+        inbox: chatIdObject
+      }
+    }, { new: true } )
+  } catch (error) {
+    
+  }
+}
+
+export async function transferValue (to: Types.ObjectId, from: Types.ObjectId, value: number) {
+  try {
+    const fromUser = await User.findById(from).select({ 'credits': 1 });
+
+    if (fromUser && fromUser.credits >= value) {
+      await User.findByIdAndUpdate(from, { $inc: {credits: -value }});
+      await User.findByIdAndUpdate(to, { $inc: {credits: +value }});
+      
+      return value;
+    } 
+    return null;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }

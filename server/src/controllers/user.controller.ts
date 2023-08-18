@@ -103,6 +103,7 @@ export async function updateUser (ctx: Context) {
   }
 }
 
+
 export async function deleteUser (ctx:Context) {
   const userId = ctx.userId;
   if (!userId) {
