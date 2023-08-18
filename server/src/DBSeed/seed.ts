@@ -67,6 +67,7 @@ async function seedDatabase() {
     });
 
     // Create collections
+    // KLAUS
     const collection1 = await Collection.create({
       name: 'All',
       items: [],
@@ -90,6 +91,8 @@ async function seedDatabase() {
       name: 'Tools', //
       items: [],
     });
+
+    // HERBERT
     const collection6 = await Collection.create({
       name: 'All',
       items: [],

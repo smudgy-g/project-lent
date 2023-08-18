@@ -31,14 +31,14 @@ export async function findCollectionById (id: string): Promise<ICollection | nul
   }
 }
 
-export async function findCollectionByName (name: string): Promise<ICollection | null> {
-  try {
-    return await Collection.findOne({ name });
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
+// export async function findCollectionByName (userId: Types.ObjectId, name: string): Promise<ICollection | null> {
+//   try {
+//     return await Collection.findById(userId).select( {'collections': 1} );
+//   } catch (error) {
+//     console.error(error);
+//     throw error;
+//   }
+// }
 
 
 export async function getAll (userId: string): Promise<any | null> {
@@ -111,10 +111,6 @@ export async function removeItemFromCollection (collectionId: any, itemId: any) 
   try {
     const itemIdObject = new Types.ObjectId(itemId);
     const collection = await Collection.findById(collectionId);
-    
-    if (collection && collection.items.includes(itemIdObject)) {
-      return collection; 
-    }
 
     return await Collection.findByIdAndUpdate(collectionId, 
       { $pull: { items: itemIdObject } },

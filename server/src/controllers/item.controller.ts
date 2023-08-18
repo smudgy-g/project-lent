@@ -22,7 +22,10 @@ export async function getAllItems (ctx: Context) {
 
 export async function createItem (ctx:Context) {
   const userId = ctx.userId;
+  
   const itemData = ctx.request.body as Partial<IItem>;
+  console.log('user id:', userId);
+  console.log('item:', itemData);
 
   if (!itemData) {
     ctx.status = 400;

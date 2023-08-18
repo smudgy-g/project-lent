@@ -65,17 +65,19 @@ export async function createOne (userId: string, itemData: Partial<IItem>): Prom
   try {
     const userIdObject = new Types.ObjectId(userId);
     const user = await User.findById(userIdObject);
+    console.log(userIdObject);
+    console.log(user);
+
     if (!user) {
       throw new Error('User not found.');
     }
 
-    const allCollection = await collectionModel.findCollectionByName('All');
+    const allCollectionId = await collectionModel.getCollectionIdByName(userIdObject, 'All');
     
-    if (!allCollection) {
+    if (!allCollectionId) {
       throw new Error('Could not find the "All" collection.');
     }
-    const allCollectionId = new Types.ObjectId(allCollection._id);
-
+    
     const newItem = new Item({
       user: userIdObject,
       collections: [...(itemData.collections || []), allCollectionId],
@@ -225,31 +227,34 @@ export async function recieveItem (userId: string, itemId: string) {
     const reservedCollectionId = await collectionModel.getCollectionIdByName(userIdObject, 'Reserved');
     const owner = await User.findById(item!.user).select({ 'username': 1 })
     
-    if (item && item.value) {
+    if (item && item.value && reservedCollectionId && borrowedCollectionId) {
       const lentOutCollectionId = await collectionModel.getCollectionIdByName(item.user, 'Lent Out');
-
-      await collectionModel.removeItemFromCollection(reservedCollectionId, itemId);
+      console.log(reservedCollectionId);
+      console.log('item id:', itemId)
+      const removed = await collectionModel.removeItemFromCollection(reservedCollectionId, itemId);
+      console.log('removedfromreserved', removed)
       await collectionModel.addItemToCollection(lentOutCollectionId, itemId);
       await collectionModel.addItemToCollection(borrowedCollectionId, itemId);
       
       await transferValue(item.user, userIdObject, item.value);
       
-      const updatedItem = await Item.findByIdAndUpdate(itemIdObject, {
+      await Item.findByIdAndUpdate(itemIdObject, {
         $set: { borrowed: true },
         $pull: { collections: reservedCollectionId },
+      }, { new: true } );
+      return await Item.findByIdAndUpdate(itemIdObject, {
         $push: { collections: { $each: [borrowedCollectionId, lentOutCollectionId] } }
       }, { new: true } );
 
       // const message = `${borrower!.username} sent ${item.value} credits to ${owner!.username}`
       // createChat(itemId, item.user.toString(), userId, message);
-
-      return updatedItem;
     }
   } catch (error) {
     console.error(error);
     throw error;
   }
 }
+
 export async function returnItem (userId: string, itemId: string) {
   try {
     const userIdObject = new Types.ObjectId(userId); // owner
