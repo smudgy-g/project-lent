@@ -107,7 +107,23 @@ export async function addItemToCollection (collectionId: string, itemId: string)
   }
 }
 
-export async function removeItemFromCollection (collectionId: any, itemId: any) {}
+export async function removeItemFromCollection (collectionId: any, itemId: any) {
+  try {
+    const itemIdObject = new Types.ObjectId(itemId);
+    const collection = await Collection.findById(collectionId);
+    
+    if (collection && collection.items.includes(itemIdObject)) {
+      return collection; 
+    }
+
+    return await Collection.findByIdAndUpdate(collectionId, 
+      { $pull: { items: itemIdObject } },
+      { new: true } )
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
 
 export async function updateName (id: string, newName: string) {
   try {
