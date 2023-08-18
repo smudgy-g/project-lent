@@ -159,7 +159,7 @@ export async function receiveItem (ctx: Context) {
 export async function returnItem (ctx: Context) {
   const userId = ctx.userId;
   const itemId = ctx.params.itemid;
-  const { foreignUserId } = ctx.request.body;
+  const { foreignUserId } = ctx.request.body as any;
 
   if (!itemId) {
     ctx.status = 400;
