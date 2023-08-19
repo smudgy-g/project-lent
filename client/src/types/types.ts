@@ -51,6 +51,7 @@ export interface ChatPreview {
   id: string;
   itemId: Item['_id'];
   itemName: string;
+  img_url: string;
   message: string;
   updatedAt: number;
   foreignUser: string;
