@@ -51,6 +51,7 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
           'chats.item': 1,
           'chats.users': 1,
           'item.name': 1,
+          'item.img_url': 1,
           'messages.body': 1,
           'chats.updatedAt': 1
         }
@@ -69,6 +70,7 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
           id: chat.chats._id,
           itemId: chat.chats.item,
           itemName: chat.item[0].name,
+          img_url: chat.item[0].img_url,
           foreignUser: foreignUserName[0],
           message: chat.messages[chat.messages.length - 1].body,
           updatedAt: chat.chats.updatedAt,
@@ -85,7 +87,7 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
 export async function getChatById (chatId: string, userId: string): Promise<any | null> {
   try {
     const chatIdObject = new Types.ObjectId(chatId);
-    
+
     const data = await Chat.aggregate([
       { $match: { _id: chatIdObject } },
       {
@@ -114,7 +116,7 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
           messages: {
             $map: {
               input: '$messages',
-              as: 'message', 
+              as: 'message',
               in: {
                 body: '$$message.body',
                 from: '$$message.from',
@@ -173,7 +175,7 @@ export async function createChat (itemId: string, ownerId: any, userId: string, 
     });
 
     const newChat = await Chat.create(newChatData);
-    
+
     if (message) {
       const newMessage = {
         body: message,

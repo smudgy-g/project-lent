@@ -23,6 +23,7 @@ import ModalProvider from "./contexts/ModalContext";
 import CollectionAdd from "./components/collections/CollectionAdd";
 import CollectionEdit from "./components/collections/CollectionEdit";
 import CollectionItemAdd from './components/collections/CollectionItemAdd'
+import InboxCombined from "./components/messaging/Inbox";
 
 const router = createBrowserRouter([
   {
@@ -130,7 +131,7 @@ const router = createBrowserRouter([
   {
     path: '/inbox',
     element: (<>
-      <Header />
+      <div></div>
       <RequireAuth loginPath='/login'>
         <Inbox />
       </RequireAuth>

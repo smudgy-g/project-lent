@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Item } from "../../types/types";
 import { ActionButtonGroupData, HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteItem, getItemById, putItemById, putItemReserve } from "../../service/apiService";
+import { deleteItem, getItemById, putItemReserve } from "../../service/apiService";
 
 export default function ItemSingle () {
 
@@ -85,7 +85,7 @@ export default function ItemSingle () {
             <div className="metadata-group">
               {item.distance && <span className="distance">{item.distance.toFixed(1)} km</span>}
               {item.distance && item.lendable && item.value && <span className="divider">•</span>}
-              {item.lendable && item.value && <span className="value">{item.value} credits</span>}
+              {item.lendable && item.value && <span className="value">{item.value} ¢</span>}
             </div>
             {item.lendable && item.available && <span className="status available">• available</span>}
             {item.lendable && !item.available && !item.borrowed && <span className="status reserved">• reserved</span>}
