@@ -187,8 +187,6 @@ export async function getItemsDiscover (): Promise<Item[]> {
       throw new Error(data.message);
     }
 
-    console.log(data);
-
     return data;
   }
   catch (err) {
@@ -384,7 +382,6 @@ export async function getAllChats (): Promise<ChatPreview[]> {
     });
 
     const data = await response.json();
-    console.log(data);
 
     if (!response.ok) {
       throw new Error(data.message);

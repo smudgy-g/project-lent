@@ -19,6 +19,7 @@ import ItemSingle from "./components/collections/ItemSingle";
 import ItemEdit from "./components/collections/ItemEdit";
 import ItemAdd from "./components/collections/ItemAdd";
 import Discover from "./components/discover/Discover";
+import InboxCombined from "./components/messaging/Inbox";
 
 const router = createBrowserRouter([
   {
@@ -129,16 +130,6 @@ const router = createBrowserRouter([
       <Header />
       <RequireAuth loginPath='/login'>
         <Inbox />
-      </RequireAuth>
-      <TabNavigation />
-    </>)
-  },
-  {
-    path: '/chat/:chatId',
-    element: (<>
-      <Header />
-      <RequireAuth loginPath='/login'>
-        <ChatSingle />
       </RequireAuth>
       <TabNavigation />
     </>)
