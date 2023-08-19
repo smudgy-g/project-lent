@@ -3,12 +3,12 @@ import { Chat, User, MessageToSend} from "../../types/types";
 import { getChatbyId, postMessage } from "../../service/apiService";
 import { Link } from "react-router-dom";
 
-interface ChatSingleDependentProps {
+interface ChatSingleProps {
   currentChatId: string | null;
   currentItemId: string | null;
 }
 
-export default function ChatSingleDependent({ currentChatId, currentItemId }: ChatSingleDependentProps) {
+export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingleProps) {
 
   /* State Variables */
 
@@ -121,9 +121,8 @@ export default function ChatSingleDependent({ currentChatId, currentItemId }: Ch
         {currentChat && currentChat.messages
           .slice()
           .reverse()
-          .map((message, index) => (<>
-            {message.from !== userId ? (
-              <div key={index} className="message foreign-user">
+          .map((message, index) => (
+              <div key={index} className={`message ${message.from !== userId ? 'foreign-user' : 'user'}`}>
                 <div className="datetime">
                   {message.createdAt.toString().substring(11, 16)}
                 </div>
@@ -132,18 +131,7 @@ export default function ChatSingleDependent({ currentChatId, currentItemId }: Ch
                 </div>
                 <div className="scroll-reference" ref={messageEndRef}></div>
               </div>
-            ) : (
-              <div key={index} className="message user">
-                <div className="datetime">
-                  {message.createdAt.toString().substring(11, 16)}
-                </div>
-                <div className="message-body">
-                  {message.body}
-                </div>
-                <div className="scroll-reference" ref={messageEndRef}></div>
-              </div>
-            )}
-          </>))
+          ))
         }
       </div>
     </div>
@@ -155,6 +143,8 @@ export default function ChatSingleDependent({ currentChatId, currentItemId }: Ch
         value={inputValue}
         onChange={handleChange}
         onKeyPress={handleKeyPress}
+        autoComplete='false'
+        autoFocus={true}
       />
 
       <button className="button send styled large"

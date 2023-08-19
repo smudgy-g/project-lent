@@ -127,7 +127,7 @@ const router = createBrowserRouter([
   {
     path: '/inbox',
     element: (<>
-      <Header />
+      <div></div>
       <RequireAuth loginPath='/login'>
         <Inbox />
       </RequireAuth>
