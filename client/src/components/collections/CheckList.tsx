@@ -1,16 +1,15 @@
-import { Link } from "react-router-dom";
 import { Item } from "../../types/types"
 import { useEffect, useState } from "react";
 /* Type Definition */
 
 interface CheckListProps {
   items: Item[];
-  setNewCollectionItems: React.Dispatch<React.SetStateAction<string[] | null>>
+  setSelectedItems: React.Dispatch<React.SetStateAction<string[] | null>>
 }
 
 /* Component Definition */
 
-export default function CheckList({ items, setNewCollectionItems }: CheckListProps) {
+export default function CheckList({ items, setSelectedItems }: CheckListProps) {
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
 
   function handleCheckboxChange(itemId: string) {
@@ -25,7 +24,7 @@ export default function CheckList({ items, setNewCollectionItems }: CheckListPro
   }
 
   useEffect(() => {
-    setNewCollectionItems(checkedItems);
+    setSelectedItems(checkedItems);
     console.log(checkedItems) // Log the array of items
   }, [checkedItems])
 
@@ -40,7 +39,6 @@ export default function CheckList({ items, setNewCollectionItems }: CheckListPro
                 <input
                   type="checkbox"
                   value={item._id}
-                  // checked={checkedItems.includes(item._id!)}
                   onChange={() => handleCheckboxChange(item._id!)}
                 />
                 <div>{item.name}</div>
@@ -52,9 +50,3 @@ export default function CheckList({ items, setNewCollectionItems }: CheckListPro
     </>
   );
 }
-
-    // {/* {items && items.map((item, index) => (
-    //     <Link key={index} to={`/item/${item._id}`}>
-    //       <ItemListItem item={item} />
-    //     </Link>
-    //   ))} */}

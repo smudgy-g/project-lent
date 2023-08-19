@@ -157,6 +157,50 @@ export async function postNewCollection (itemName: string, itemIds: string[]): P
   catch (err) {
     throw new Error('An error occured');
   }
+};
+
+export async function deleteCollection (collectionId: string): Promise<Item> {
+  try {
+    const response = await fetch(`${baseUrl}/collection/${collectionId}/deleteCollection`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
+export async function deleteItemFromCollection (itemIds: string[], collectionId: string): Promise<Item> {
+  try {
+    const response = await fetch(`${baseUrl}/collection/${collectionId}/deleteItems`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify(itemIds),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
 }
 
 /* Item */

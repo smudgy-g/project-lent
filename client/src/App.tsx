@@ -21,6 +21,8 @@ import ItemAdd from "./components/collections/ItemAdd";
 import Discover from "./components/discover/Discover";
 import ModalProvider from "./contexts/ModalContext";
 import CollectionAdd from "./components/collections/CollectionAdd";
+import CollectionEdit from "./components/collections/CollectionEdit";
+import CollectionItemAdd from './components/collections/CollectionItemAdd'
 
 const router = createBrowserRouter([
   {
@@ -151,6 +153,26 @@ const router = createBrowserRouter([
       <Header />
       <RequireAuth loginPath='/login'>
         <CollectionAdd />
+      </RequireAuth>
+      <TabNavigation />
+    </>)
+  },
+  {
+    path: '/collection/edit/:collectionId',
+    element: (<>
+      <Header />
+      <RequireAuth loginPath='/login'>
+        <CollectionEdit />
+      </RequireAuth>
+      <TabNavigation />
+    </>)
+  },
+  {
+    path: '/item/add/:collectionId',
+    element: (<>
+      <Header />
+      <RequireAuth loginPath='/login'>
+        <CollectionItemAdd/>
       </RequireAuth>
       <TabNavigation />
     </>)

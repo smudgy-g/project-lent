@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Item } from "../../types/types";
 import { ActionButtonGroupData, HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { getAllItems, getItemsByCollection } from "../../service/apiService";
+import { deleteCollection, getAllItems, getItemsByCollection } from "../../service/apiService";
 import ItemList from "./ItemList";
 
 export default function CollectionSingle () {
@@ -34,19 +34,28 @@ export default function CollectionSingle () {
   // Populate the Header component’s action button group
   useEffect(() => {
     const localActionButtonGroupData: ActionButtonGroupData = [
-      // {
-      //   title: 'Edit Collection',
-      //   action: () => {
-      //     navigate('/collection/edit');
-      //   }
-      // },
+      [
+      {
+        title: 'Edit',
+        action: () => {
+          navigate(`/collection/edit/${collectionId}`);
+        }
+      },
       {
         type: 'add item',
         title: 'Add Item',
         action: () => {
-          navigate('/item/add');
+          navigate(`/item/add/${collectionId}`);
+        }
+      },
+      {
+        title: 'Delete',
+        action: () => {
+          //deleteCollection(collectionId!)
+          navigate('/collections');
         }
       }
+    ]
     ]
     setActionButtonGroupData(localActionButtonGroupData);
   }, []);

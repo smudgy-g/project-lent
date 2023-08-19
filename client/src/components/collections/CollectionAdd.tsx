@@ -11,7 +11,7 @@ export default function CollectionAdd () {
 
   const [inputValue, setInputValue] = useState('')
   const [items, setItems] = useState<Item[] | null>(null)
-  const [newCollectionItems, setNewCollectionItems] = useState<string[] | null>(null)
+  const [selectedItems, setSelectedItems] = useState<string[] | null>(null)
  
 
   /* Hooks */
@@ -24,12 +24,14 @@ export default function CollectionAdd () {
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setInputValue(event.target.value);
-    console.log(inputValue, newCollectionItems)
+    console.log(inputValue, selectedItems)
   };  
 
   function handleSubmit() {
-    // postNewCollection(inputValue, newCollectionItems!)
-    console.log(inputValue, newCollectionItems)
+    // const newCollection = await postNewCollection(inputValue, newCollectionItems!)
+
+    console.log({inputValue, newCollectionItems: selectedItems})
+    //navigate(`/collections/${newCollection._id}`)
   }
 
   /* Use Effect */
@@ -61,10 +63,10 @@ export default function CollectionAdd () {
       </label>
     </div>
     <div>
-      <CheckList items={items!} setNewCollectionItems={setNewCollectionItems}/>
+      <CheckList items={items!} setSelectedItems={setSelectedItems}/>
     </div>
     <div>
-      <button type="submit" className="button styled full large">Select Items</button>
+      <button type="submit" className="button styled full large">Create Collection</button>
     </div>
   </form>
   </>)

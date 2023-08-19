@@ -20,7 +20,7 @@ export interface Item {
   img_url?: string | undefined;
   value?: number;
   description?: string;
-  collections?: Collection[];
+  collections?: string[];
   lendable?: boolean;
   available?: boolean;
   borrowed?: boolean;
@@ -30,8 +30,8 @@ export interface Item {
 
 export interface Collection {
   _id?: string;
-  name: string;
-  items: Item[]
+  name?: string;
+  items?: Item[];
 }
 
 export interface Chat {
