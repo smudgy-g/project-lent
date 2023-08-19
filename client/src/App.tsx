@@ -19,6 +19,8 @@ import ItemSingle from "./components/collections/ItemSingle";
 import ItemEdit from "./components/collections/ItemEdit";
 import ItemAdd from "./components/collections/ItemAdd";
 import Discover from "./components/discover/Discover";
+import ModalProvider from "./contexts/ModalContext";
+import CollectionAdd from "./components/collections/CollectionAdd";
 
 const router = createBrowserRouter([
   {
@@ -143,6 +145,16 @@ const router = createBrowserRouter([
       <TabNavigation />
     </>)
   },
+  {
+    path: '/collection/add',
+    element: (<>
+      <Header />
+      <RequireAuth loginPath='/login'>
+        <CollectionAdd />
+      </RequireAuth>
+      <TabNavigation />
+    </>)
+  },
 ])
 
 function App() {
@@ -153,7 +165,9 @@ function App() {
                     cookieDomain={window.location.hostname}
                     cookieSecure={window.location.protocol === 'https:'}>
         <HeaderProvider>
-          <RouterProvider router={router} />
+          <ModalProvider>
+            <RouterProvider router={router} />
+          </ModalProvider>
         </HeaderProvider>
       </AuthProvider>
     </div>

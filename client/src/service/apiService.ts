@@ -135,6 +135,30 @@ export async function getAllCollections (): Promise<Collection[]> {
   }
 }
 
+export async function postNewCollection (itemName: string, itemIds: string[]): Promise<Item> {
+  try {
+    const response = await fetch(`${baseUrl}/collection`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({itemName, itemIds}),
+      credentials: 'include'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
 /* Item */
 
 export async function getAllItems (): Promise<Item[]> {
