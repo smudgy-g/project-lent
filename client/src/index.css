@@ -609,11 +609,17 @@ svg path {
 
 .chat-preview {
   position: relative;
+  width: var(--p-3xl);
+  aspect-ratio: 1;
+
   padding: var(--p-sm);
 
   background: var(--c-ternary-2);
   border: 0.5px solid var(--c-secondary-2);
-  border-radius: var(--radius-lg);
+  border-radius: 50%;
+
+  background-position: center;
+  background-size: cover;
 
   cursor: pointer;
   scroll-snap-align: start;
