@@ -33,7 +33,7 @@ export async function createOne (ctx: Context) {
 
 export async function getUserById (ctx: Context) {
   const userId = ctx.params.id;
-
+  if (!userId) ctx.throw(404, { message: 'No user Id provided.'})
   try {
     const user = await userModel.findUserById(userId);
     ctx.status = 200;
