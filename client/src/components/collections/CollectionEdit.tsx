@@ -116,7 +116,13 @@ export default function CollectionEdit () {
       <div className="dropdown-group button styled full large">
         <button className="button styled full large" onClick={handleToggle}>Add to...</button>
           {isOpen && <div className="button-list-top">
-          {collections.map((collection) => <button key={collection._id} className="button" onClick={() => handleClickAddToCollection(collection._id!)}>{collection.name!}</button>)}
+
+          <select id="collection" name="collection" multiple>
+            {collections && collections.map((collection : Collection) => {
+              return (<option key={collection._id} value={collection._id}>{collection.name}</option>)
+            })}
+          </select>
+          
           </div>}
     </div>
 
@@ -124,3 +130,5 @@ export default function CollectionEdit () {
     </div>
   </>)
 }
+
+          {/* {collections.map((collection) => <button key={collection._id} className="button" onClick={() => handleClickAddToCollection(collection._id!)}>{collection.name!}</button>)} */}
