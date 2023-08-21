@@ -139,3 +139,12 @@ export async function transferValue (to: Types.ObjectId, from: Types.ObjectId, v
     throw error;
   }
 }
+
+export async function changeCredits (userId: Types.ObjectId, value: number) {
+  try {
+    await User.findByIdAndUpdate(userId, { $inc: {credits: value }});
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
