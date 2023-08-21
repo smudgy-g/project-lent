@@ -139,16 +139,6 @@ const router = createBrowserRouter([
     </>)
   },
   {
-    path: '/chat/:chatId',
-    element: (<>
-      <Header />
-      <RequireAuth loginPath='/login'>
-        <ChatSingle />
-      </RequireAuth>
-      <TabNavigation />
-    </>)
-  },
-  {
     path: '/collection/add',
     element: (<>
       <Header />
