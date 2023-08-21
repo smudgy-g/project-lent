@@ -621,10 +621,23 @@ svg path {
   overflow-x: scroll;
 
   scroll-snap-type: x mandatory;
+  border-bottom: 0.5px solid var(--c-secondary-2);
+}
+
+.chat-preview-wrapper {
+  position: relative;
+  width: var(--p-3xl);
+
+  cursor: pointer;
+  scroll-snap-align: start;
+
+  padding-bottom: var(--p-md);
+}
+.chat-preview-wrapper.active {
+  border-bottom: 2px solid var(--c-primary-2);
 }
 
 .chat-preview {
-  position: relative;
   width: var(--p-3xl);
   aspect-ratio: 1;
 
@@ -634,24 +647,10 @@ svg path {
   border: 0.5px solid var(--c-secondary-2);
   border-radius: 50%;
 
-  outline: none;
-
   background-position: center;
   background-size: cover;
 
-  cursor: pointer;
-  scroll-snap-align: start;
-
   transition: .2s;
-}
-.chat-preview.active {
-  /* width: calc(var(--p-3xl) - 10px); */
-  width: calc(var(--p-3xl) - 12px);
-  margin: 6px;
-  outline: 4px solid var(--c-text-secondary);
-  outline-offset: 2px;
-  border-color: transparent;
-  box-shadow: var(--box-shadow);
 }
 
 /* Chat */
