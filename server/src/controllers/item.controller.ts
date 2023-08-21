@@ -115,13 +115,11 @@ export async function receiveItem (ctx: Context) {
 export async function returnItem (ctx: Context) {
   const userId = ctx.userId;
   const itemId = ctx.params.itemid;
-  const { foreignUserId } = ctx.request.body as any;
 
   if (!itemId) ctx.throw(400, { message: 'No item ID  provided.' });
-  if (!foreignUserId) ctx.throw(400, { message: 'No foreign user ID provided.' });
 
   try {
-    const result = await itemModel.returnItem(userId, itemId, foreignUserId);
+    const result = await itemModel.returnItem(userId, itemId);
     ctx.status = 201;
     ctx.body = result;
   } catch (error) {

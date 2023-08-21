@@ -147,15 +147,21 @@ export async function updateOne (itemId: string, itemData: Partial<IItem>) {
     if (item && collections) {
       /* Compare the two arrays */
       // Check for removed items
+      console.log(item.collections);
+      console.log('updated datat:', collections);
+      // Check for removed items
       for (let i = 0; i < item.collections.length; i++) {
-        if (!collections.includes(item.collections[i])) {
-          collectionModel.removeItemFromCollection(item.collections[i], itemId);
+        const originalItem = item.collections[i].toString();
+        if (!collections.includes(originalItem)) {
+          collectionModel.removeItemFromCollection(originalItem, itemId);
         }
       }
+
       // Check for added items
       for (let i = 0; i < collections.length; i++) {
-        if (!item.collections.includes(collections[i])) {
-          collectionModel.addItemToCollection(collections[i], itemId)
+        const updatedItem = collections[i];
+        if (!item.collections.map(item => item.toString()).includes(updatedItem)) {
+          collectionModel.addItemToCollection(updatedItem, itemId);
         }
       }
       
@@ -264,16 +270,44 @@ export async function recieveItem (userId: string, itemId: string) {
   }
 }
 
-export async function returnItem (userId: string, itemId: string, borrowerId: any) {
+export async function returnItem (userId: string, itemId: string) {
   try {
     const userIdObject = new Types.ObjectId(userId);
-    const borrowerIdObject = new Types.ObjectId(borrowerId);
+    // const borrowerIdObject = new Types.ObjectId(borrowerId);
     const itemIdObject = new Types.ObjectId(itemId);
+    const borrower = await User.aggregate([
+      { $match: { _id: userIdObject } },
+      {
+        $lookup: {
+          from: 'chats',
+          localField: 'inbox',
+          foreignField: '_id',
+          as: 'chats'
+        }
+      },
+      { $unwind: '$chats'},
+      { $match: { 'chats.item': itemIdObject } },
+      {
+        $project: {
+          borrowerId: {
+            $arrayElemAt: [
+              {
+                $filter: {
+                  input: '$chats.users',
+                  cond: { $ne: ['$$this', userIdObject] }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ])
+    console.log(borrower[0]);
     const item = await Item.findById(itemIdObject).select({ 'user': 1, 'name': 1, 'value': 1, '_id': 0 });
     const lentOutCollectionId = await collectionModel.getCollectionIdByName(userIdObject, 'Lent Out');
     
-    if (item) {
-      const borrowedCollectionId = await collectionModel.getCollectionIdByName(borrowerIdObject, 'Borrowed');
+    if (item && borrower) {
+      const borrowedCollectionId = await collectionModel.getCollectionIdByName(borrower[0]._id, 'Borrowed');
       const borrowedObjectId = new Types.ObjectId(borrowedCollectionId);
       const lentOutObjectId = new Types.ObjectId(lentOutCollectionId);
       
