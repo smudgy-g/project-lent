@@ -18,7 +18,7 @@ export async function createItem (ctx:Context) {
   const userId = ctx.userId;
   const itemData = ctx.request.body as Partial<IItem>;
 
-  if (!itemData) ctx.throw(400, { message: 'No item data supplied.' });
+  if (!itemData) ctx.throw(400, { message: 'No item data provided.' });
 
   try {
     const newItem = await itemModel.createOne(userId, itemData);
@@ -38,7 +38,7 @@ export async function findItem (ctx:Context) {
   if (!itemId || !userLocation) {
     ctx.status = 400;
     ctx.body = { 
-      messsage: !itemId ? 'No item ID supplied.' : 'No user ID was supplied.'
+      messsage: !itemId ? 'No item ID provided.' : 'No user ID was provided.'
     };
     return;
   }
@@ -55,7 +55,7 @@ export async function findItem (ctx:Context) {
 export async function findItemsByCollectionId (ctx:Context) {
   const collectionId = ctx.params.collectionid;
 
-  if (!collectionId) ctx.throw(400, { messsage: 'No collection ID supplied.' });
+  if (!collectionId) ctx.throw(400, { messsage: 'No collection ID provided.' });
 
   try {
     const items = await itemModel.findItemsByCollection(collectionId);
@@ -71,7 +71,7 @@ export async function updateItemById (ctx: Context) {
   const { name, img_url, value, description, lendable, collections } = ctx.request.body as Partial<IItem>;
   const itemData = { name, img_url, value, description, lendable, collections };
 
-  if (!itemId) ctx.throw(400, { message: 'No item ID supplied.' });
+  if (!itemId) ctx.throw(400, { message: 'No item ID provided.' });
 
   try {
     const items = await itemModel.updateOne(itemId, itemData);
@@ -86,7 +86,7 @@ export async function reserveItem (ctx: Context) {
   const userId = ctx.userId;
   const itemId = ctx.params.itemid;
 
-  if (!itemId) ctx.throw(400, { message: 'No item ID supplied.' });
+  if (!itemId) ctx.throw(400, { message: 'No item ID provided.' });
     
   try {
     const result = await itemModel.reserveItem(userId, itemId);
@@ -101,7 +101,7 @@ export async function receiveItem (ctx: Context) {
   const userId = ctx.userId;
   const itemId = ctx.params.itemid;
 
-  if (!itemId) ctx.throw(400, { message: 'No item ID supplied.' });
+  if (!itemId) ctx.throw(400, { message: 'No item ID provided.' });
 
   try {
     const result = await itemModel.recieveItem(userId, itemId);
@@ -115,13 +115,11 @@ export async function receiveItem (ctx: Context) {
 export async function returnItem (ctx: Context) {
   const userId = ctx.userId;
   const itemId = ctx.params.itemid;
-  const { foreignUserId } = ctx.request.body as any;
 
-  if (!itemId) ctx.throw(400, { message: 'No item ID  supplied.' });
-  if (!foreignUserId) ctx.throw(400, { message: 'No foreign user ID supplied.' });
+  if (!itemId) ctx.throw(400, { message: 'No item ID  provided.' });
 
   try {
-    const result = await itemModel.returnItem(userId, itemId, foreignUserId);
+    const result = await itemModel.returnItem(userId, itemId);
     ctx.status = 201;
     ctx.body = result;
   } catch (error) {
@@ -133,7 +131,7 @@ export async function cancelItem (ctx: Context) {
   const userId = ctx.userId;
   const itemId = ctx.params.itemid;
 
-  if (!itemId) ctx.throw(400, { message: 'No item ID supplied.' });
+  if (!itemId) ctx.throw(400, { message: 'No item ID provided.' });
 
   try {
     const result = await itemModel.cancelReserveItem(userId, itemId);
@@ -147,7 +145,7 @@ export async function cancelItem (ctx: Context) {
 export async function deleteItem (ctx:Context) {
   const itemId = ctx.params.itemid;
 
-  if (!itemId) ctx.throw(400, { message: 'No item ID supplied.' });
+  if (!itemId) ctx.throw(400, { message: 'No item ID provided.' });
     
   try {
     await itemModel.deleteOne(itemId);

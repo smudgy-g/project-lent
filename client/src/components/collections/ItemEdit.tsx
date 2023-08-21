@@ -109,7 +109,7 @@ export default function ItemEdit() {
 
 
   // When the user clicks the "Save Changes button,
-  // POST the item using the API service
+  // PUT the item using the API service
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
@@ -119,10 +119,11 @@ export default function ItemEdit() {
       ...formData,
       collections: selectedCollections.filter((result) => result !== 'all'),
     };
-
-    console.log(itemId, updatedFormData)
-    //const response = await putItemById(itemId, updatedFormData);
-    // navigate(`/item/${itemId}`);
+    if (itemId) {
+      console.log(itemId, updatedFormData)
+      const response = await putItemById(itemId, updatedFormData);
+      navigate(`/item/${itemId}`);
+    }
   };
 
   /* Render Component */

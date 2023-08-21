@@ -20,7 +20,7 @@ export async function getChatById (ctx: Context) {
   const chatId = ctx.params.chatid;
   const userId = ctx.userId;
 
-  if (!chatId) ctx.throw(400, { message: 'No chat ID supplied.' });
+  if (!chatId) ctx.throw(400, { message: 'No chat ID provided.' });
 
   try {
     const chat = await chatModel.getChatById(chatId, userId);
@@ -35,7 +35,7 @@ export async function getChatById (ctx: Context) {
 export async function deleteChat (ctx:Context) {
   const chatId = ctx.params.chatid;
 
-  if (!chatId) ctx.throw(400, { message: 'No chat ID supplied.' });
+  if (!chatId) ctx.throw(400, { message: 'No chat ID provided.' });
 
   try {
     await chatModel.deleteOne(chatId);
@@ -50,8 +50,8 @@ export async function postMessage (ctx: Context) {
   const chatId = ctx.params.chatid;
   const message = ctx.request.body as IMessage;
 
-  if (!chatId) ctx.throw(400, { message: 'No chat ID supplied.' });
-  if (!message) ctx.throw(400, { message: 'No message supplied.' });
+  if (!chatId) ctx.throw(400, { message: 'No chat ID provided.' });
+  if (!message) ctx.throw(400, { message: 'No message provided.' });
 
   try {
     const result = await messageModel.postMessage(message, chatId);

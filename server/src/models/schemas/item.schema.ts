@@ -19,5 +19,4 @@ itemSchema.index({ user: 1 }, { unique: false });
 // Create a text index on the name field for searching
 itemSchema.index({name: 'text'});
 
-// Create model from schema
 export const Item = model<IItem>('Item', itemSchema);
