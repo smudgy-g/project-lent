@@ -34,9 +34,9 @@ export default function ItemAdd() {
       .then((result) => {
         const filteredResult = result.filter(
           (collection) =>
-            collection._id !== "64e0cee12796345e05ff87fc" &&
-            collection._id !== "64e0cee12796345e05ff87fe" &&
-            collection._id !== "64e0cee12796345e05ff8800"
+            collection.name !== "Lent Out" &&
+            collection.name !== "Borrowed" &&
+            collection.name !== "Reserved"
         );
         setCollections(filteredResult);
       })
