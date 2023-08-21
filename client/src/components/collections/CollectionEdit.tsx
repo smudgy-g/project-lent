@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteItemFromCollection, getAllCollections, getAllItems, getItemsByCollection, postNewCollection } from "../../service/apiService";
+import { addItemsToCollections, changeCollectionName, deleteItemsFromCollection, getAllCollections, getAllItems, getItemsByCollection, postNewCollection } from "../../service/apiService";
 import { Item, Collection} from "../../types/types";
 import CheckList from "./CheckList";
 import { ChangeEvent } from "react";
@@ -11,13 +11,13 @@ export default function CollectionEdit () {
   /* State Variables */
 
   const [items, setItems] = useState<Item[] | null>(null)
-  const [selectedItems, setSelectedItems] = useState<string[] | null>(null)
   const [collections, setCollections] = useState<Collection[]>([])
+  const [selectedItems, setSelectedItems] = useState<string[] | null>(null)
+  const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
   const [currentCollection, setCurrentCollection] = useState<Collection[]>([])
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const [collectionName, setCollectionName] = useState<string>('');
-  const [selectedCollections, setSelectedCollections] = useState<string[]>([]);
+  const [collectionName, setCollectionName] = useState<Collection["name"]>('');
+  const [newCollectionName, setNewCollectionName] = useState<Collection["name"]>('');
 
 
   const [addToData, setAddToData] = useState<Collection>({
@@ -40,22 +40,23 @@ export default function CollectionEdit () {
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     event.preventDefault();
     setCollectionName(event.target.value);
-    console.log(collectionName)
   };  
+
   function handleClickSave() {
-    // change CollectionName
+    console.log(newCollectionName, collectionId)
+    //changeCollectionName(newCollectionName!, collectionId!)
     // navigate(`/collection/${collectionId}`)
   }
 
   // Remove Items
-  function handleClickRemove() {
-    // console.log(selectedItems)
-    // await deleteItemFromCollection(selectedItems, collectionId)
-    // navigate(`/collection/${collectionId}`)
+  async function handleClickRemove() {
+    console.log(selectedItems, collectionId)
+    //await deleteItemsFromCollection(selectedItems!, collectionId!)
+    //navigate(`/collection/${collectionId}`)
   }
 
   // Add Items to another collection
-  
+
   function handleSelectChange (event: ChangeEvent<HTMLSelectElement>) {
     const { options } = event.target;
     const selectedValues = [];
@@ -70,7 +71,7 @@ export default function CollectionEdit () {
   function handleToggle () {
     if( isOpen) {
       console.log('selected Collections:', selectedCollections, 'selected Items:', selectedItems)
-      // add selected Items to selected collections (selectedItems, selectedCollections)
+      //addItemsToCollections(selectedItems!, selectedCollections!)
       // navigate(`/collection/${collectionId}`)
     } else {
       setIsOpen(!isOpen);
@@ -112,7 +113,13 @@ export default function CollectionEdit () {
     if (currentCollection[0]) {
       setCollectionName(currentCollection[0].name!)
     }
-  }, [currentCollection])
+  }, [currentCollection]);
+
+
+  useEffect(() => {
+    setNewCollectionName(collectionName)
+    console.log(newCollectionName)
+  });
 
   /* Render Component */
 
