@@ -1,14 +1,25 @@
 import { useContext, useEffect, useState } from "react";
-import { Item } from "../../types/types";
+import { Collection, Item } from "../../types/types";
 import { ActionButtonGroupData, HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteItem, getItemById, putItemReserve } from "../../service/apiService";
+import { cancelItemById, deleteItem, getAllCollections, getItemById, getItemsByCollection, putItemReserve, receiveItemById, returnItemById } from "../../service/apiService";
+
+interface IUserRole {
+  isOwner: boolean;
+  isReserver: boolean;
+  isBorrower: boolean;
+}
 
 export default function ItemSingle () {
 
   /* State Variable */
 
   const [item, setItem] = useState<Item | null>(null);
+  const [userRole, setUserRole] = useState<IUserRole>({
+    isOwner: false,
+    isReserver: false,
+    isBorrower: false,
+  });
 
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
   const navigate = useNavigate();
@@ -16,7 +27,7 @@ export default function ItemSingle () {
 
   /* Use Effect */
 
-  // There is some more commenting going on
+  // Get the item data through the API service
   useEffect(() => {
     if (itemId) {
       getItemById(itemId)
@@ -24,6 +35,16 @@ export default function ItemSingle () {
         .catch((error) => console.log(error));
     }
   }, [itemId]);
+
+  // Get the user’s collections data, and
+  // set the user role according to the item’s ID
+  useEffect(() => {
+    if (itemId) {
+      getUserRoleByItem(itemId)
+        .then((userRole) => setUserRole(userRole))
+        .catch((error) => console.log(error));
+    }
+  }, [itemId])
 
   // Populate the Header component’s action button group
   useEffect(() => {
@@ -63,6 +84,39 @@ export default function ItemSingle () {
     }
   }, [item]);
 
+  /* Helper functions */
+
+  // Get the user role for a specified item by its ID
+  async function getUserRoleByItem (itemId: string) {
+    const collections = await getAllCollections();
+
+    const isOwner = await checkItemInCollection(collections, 'all', itemId);
+    const isReserver = await checkItemInCollection(collections, 'reserved', itemId);
+    const isBorrower = await checkItemInCollection(collections, 'borrowed', itemId);
+
+    return {
+      isOwner,
+      isReserver,
+      isBorrower,
+    }
+  }
+  // Check if an item is part of a specified collection
+  async function checkItemInCollection (collections: Collection[], collectionName: string, itemId: string) {
+    const collection = collections.find((collection) => collection.name?.toLowerCase() === collectionName);
+    const items = await getItemsByCollection(collection?._id!);
+    return items.some((item) => item._id === itemId);
+  }
+
+  function handleItemReturnClick(itemId : string) {
+    returnItemById(itemId);
+  };
+  async function handleItemReceiveClick(itemId: string) {
+    receiveItemById(itemId);
+  };
+  async function handleCancelClick(itemId: string) {
+    cancelItemById(itemId);
+  };
+
   /* Event Handlers */
 
   function handleClickReserve () {
@@ -84,7 +138,6 @@ export default function ItemSingle () {
           <div className="metadata">
             <div className="metadata-group">
               {item.distance && <span className="distance">{item.distance.toFixed(1)} km</span>}
-              {item.distance && item.lendable && item.value && <span className="divider">•</span>}
               {item.lendable && item.value && <span className="value">{item.value} ¢</span>}
             </div>
             {item.lendable && item.available && <span className="status available">• available</span>}
@@ -96,10 +149,22 @@ export default function ItemSingle () {
           <p className="description">{item.description}</p>
         </div>
 
-        {item.distance && (<>
-          {item.lendable && item.available && <button className="button styled full large end" onClick={handleClickReserve}>{`Reserve (${item.value} ¢)`}</button>}
-          {item.lendable && !item.available && <button className="button styled full large end" disabled>Unavailable</button>}
-        </>)}
+        <div className="button-group end">
+          {item.distance && item.lendable && item.available && (
+            <button className="button styled secondary full large end" onClick={handleClickReserve}>
+              {`Reserve (${item.value} ¢)`}
+            </button>
+          )}
+          {item.lendable && !item.available && userRole && (userRole.isReserver || userRole.isOwner) && (
+            <button className="button styled alert full large">Cancel Reservation</button>
+          )}
+          {userRole && userRole.isReserver && (
+            <button className="button styled secondary full large">Item Received</button>
+          )}
+          {item.borrowed && userRole && userRole.isOwner && (
+            <button className="button styled secondary full large end">Item Returned</button>
+          )}
+        </div>
       </div>
     )}
   </>);

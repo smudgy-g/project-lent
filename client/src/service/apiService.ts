@@ -398,14 +398,37 @@ export async function receiveItemById (id: string) {
   }
 }
 
-export async function returnItemById (id: string, itemReturnedData: Item) {
+export async function returnItemById (id: string) {
   try {
     const response = await fetch(`${baseUrl}/item/${id}/return`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(itemReturnedData),
+      body: JSON.stringify({}),
+      credentials: 'include'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+}
+
+export async function cancelItemById (id: string) {
+  try {
+    const response = await fetch(`${baseUrl}/item/${id}/cancel`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({}),
       credentials: 'include'
     });
 
