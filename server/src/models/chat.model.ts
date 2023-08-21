@@ -1,4 +1,4 @@
-import mongoose, { Schema, SchemaType, Types } from "mongoose";
+import { Types } from "mongoose";
 import { IChat, IMessage } from "../types";
 import { Chat } from "./schemas/chat.schema";
 import { User } from "./schemas/user.schema";

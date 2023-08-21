@@ -6,7 +6,7 @@ import { Types } from "mongoose";
 import { Collection } from "./schemas/collection.schema";
 import { createChat } from "../models/chat.model";
 import { getItemLocations, sortByDistanceFromUser, itemDistanceFromUser } from '../utilities/location';
-import { transferValue } from "./user.model";
+import { transferValue, changeCredits } from "./user.model";
 
 export async function getAll (id: string): Promise<Partial<IItem>[] | null> {
   try {
@@ -139,10 +139,17 @@ export async function findItemsByCollection(collectionId: string): Promise<Parti
   }
 }
 
-export async function updateOne (id: string, itemData: Partial<IItem>) {
+export async function updateOne (itemId: string, itemData: Partial<IItem>) {
   try {
+    const itemIdObj = new Types.ObjectId(itemId);
     const { user, ...updatedData } = itemData;
-    const updatedItem = await Item.findByIdAndUpdate(id, updatedData, { new: true });
+    const item = await Item.findById(itemIdObj).select({ 'lendable': 1, 'user': 1 });
+    
+    const updatedItem = await Item.findByIdAndUpdate(itemIdObj, updatedData, { new: true });
+    if (item && item.lendable !== itemData.lendable) {
+      if (itemData.lendable) await changeCredits(item.user, 50);
+      else if (!itemData.lendable) await changeCredits(item.user, -50)
+    }
     return updatedItem;
   } catch (error) {
     console.error(error);

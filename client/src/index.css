@@ -14,11 +14,12 @@
   --p-2xl: 48px;
   --p-3xl: 64px;
 
-  --c-text: rgb(27, 27, 27);
+  --c-text: rgb(104, 95, 126);
+  --c-text-large: rgb(121, 114, 140);
   --c-text-button: rgb(241, 241, 241);
   --c-text-contrast:rgb(227, 227, 227);
   --c-text-contrast-secondary:rgb(200, 200, 200);
-  --c-text-secondary: rgb(101, 101, 101);
+  --c-text-secondary: rgb(172, 164, 190);
   --c-shadow: rgba(137, 43, 226, 0.06);
 
   --c-available: rgb(70, 190, 70);
@@ -40,6 +41,8 @@
 
   --radius-md: 10px;
   --radius-lg: 15px;
+
+  --box-shadow: 0px 6px 5px 0px var(--c-shadow);
 }
 
 /* BASICS */
@@ -79,15 +82,28 @@ a:visited {
 }
 
 h1 {
-  font-size: 32px;
+  color: var(--c-text);
+
+  font-size: 24px;
   font-weight: 700;
 
   white-space: nowrap;
   overflow-x: clip;
   text-overflow: ellipsis;
 }
+h1.small {
+  font-size: 14px;
+
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
 
 h2 {
+  color: var(--c-text);
+
+  font-size: 16px;
+  font-weight: 600;
+
   /* white-space: nowrap; */
   /* overflow-x: clip; */
   text-overflow: ellipsis;
@@ -269,7 +285,7 @@ input:checked + .slider:before {
   background-color: white;
   border-radius: var(--radius-lg);
   border: 0.5px solid var(--c-secondary-2);
-  box-shadow: 0px 6px 5px 0px var(--c-shadow);
+  box-shadow: var(--box-shadow);
 }
 
 .button-list-top {
@@ -618,10 +634,23 @@ svg path {
   overflow-x: scroll;
 
   scroll-snap-type: x mandatory;
+  border-bottom: 0.5px solid var(--c-secondary-2);
+}
+
+.chat-preview-wrapper {
+  position: relative;
+  width: var(--p-3xl);
+
+  cursor: pointer;
+  scroll-snap-align: start;
+
+  padding-bottom: var(--p-md);
+}
+.chat-preview-wrapper.active {
+  border-bottom: 2px solid var(--c-primary-2);
 }
 
 .chat-preview {
-  position: relative;
   width: var(--p-3xl);
   aspect-ratio: 1;
 
@@ -634,8 +663,7 @@ svg path {
   background-position: center;
   background-size: cover;
 
-  cursor: pointer;
-  scroll-snap-align: start;
+  transition: .2s;
 }
 
 /* Chat */

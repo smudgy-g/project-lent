@@ -55,7 +55,9 @@ function InboxCombined() {
     <div className="inbox">
       <div className="chat-preview-container">
       {chats && chats.map((chat, index) => (
-        <div className="chat-preview" key={index} onClick={() => handleChatClick(chat.id)} style={{backgroundImage: `url(${chat.img_url})`}}></div>
+        <div className={`chat-preview-wrapper ${chat.id === currentChatId ? 'active' : ''}`}>
+          <div className="chat-preview" key={index} onClick={() => handleChatClick(chat.id)} style={{backgroundImage: `url(${chat.img_url})`}}></div>
+        </div>
       ))}
       </div>
 

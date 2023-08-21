@@ -68,7 +68,7 @@ export default function ItemSingle () {
   function handleClickReserve () {
     if (item && item._id) {
       putItemReserve(item._id)
-        .then((chat) => navigate(`/chat/${chat._id}`))
+        .then((chat) => navigate('/inbox'))
         .catch((error) => console.log(error));
     }
   }
