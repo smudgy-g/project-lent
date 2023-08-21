@@ -142,15 +142,30 @@ export async function findItemsByCollection(collectionId: string): Promise<Parti
 export async function updateOne (itemId: string, itemData: Partial<IItem>) {
   try {
     const itemIdObj = new Types.ObjectId(itemId);
-    const { user, ...updatedData } = itemData;
-    const item = await Item.findById(itemIdObj).select({ 'lendable': 1, 'user': 1 });
-    
-    const updatedItem = await Item.findByIdAndUpdate(itemIdObj, updatedData, { new: true });
-    if (item && item.lendable !== itemData.lendable) {
-      if (itemData.lendable) await changeCredits(item.user, 50);
-      else if (!itemData.lendable) await changeCredits(item.user, -50)
+    const { user, collections,...updatedData } = itemData;
+    const item = await Item.findById(itemIdObj).select({ 'lendable': 1, 'user': 1, 'collections': 1 });
+    if (item && collections) {
+      /* Compare the two arrays */
+      // Check for removed items
+      for (let i = 0; i < item.collections.length; i++) {
+        if (!collections.includes(item.collections[i])) {
+          collectionModel.removeItemFromCollection(item.collections[i], itemId);
+        }
+      }
+      // Check for added items
+      for (let i = 0; i < collections.length; i++) {
+        if (!item.collections.includes(collections[i])) {
+          collectionModel.addItemToCollection(collections[i], itemId)
+        }
+      }
+      
+      if (item.lendable !== itemData.lendable) {
+        if (itemData.lendable) await changeCredits(item.user, 50);
+        else if (!itemData.lendable) await changeCredits(item.user, -50)
+      }
+        const updatedItem = await Item.findByIdAndUpdate(itemIdObj, updatedData, { new: true });
+        return updatedItem;
     }
-    return updatedItem;
   } catch (error) {
     console.error(error);
     throw error;

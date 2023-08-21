@@ -109,7 +109,7 @@ export default function ItemEdit() {
 
 
   // When the user clicks the "Save Changes button,
-  // POST the item using the API service
+  // PUT the item using the API service
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 

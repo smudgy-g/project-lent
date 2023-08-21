@@ -98,11 +98,12 @@ export async function addItemToCollection (collectionId: string, itemId: string)
   }
 }
 
-export async function removeItemFromCollection (collectionId: any, itemId: any) {
+export async function removeItemFromCollection (collectionId: string, itemId: string) {
   try {
     const itemIdObject = new Types.ObjectId(itemId);
+    const collectionIdObject = new Types.ObjectId(collectionId);
 
-    return await Collection.findByIdAndUpdate(collectionId, 
+    return await Collection.findByIdAndUpdate(collectionIdObject, 
       { $pull: { items: itemIdObject } },
       { new: true });
   } catch (error) {
