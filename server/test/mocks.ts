@@ -41,3 +41,10 @@ export const mockItem2 = {
   collections: ['All'],
   borrowed: false
 }
+
+export const mockNewUser = {
+  username: 'Testing',
+  password: 'testing123',
+  address: mockUserAddress,
+  email: 'test@testing.com'
+}

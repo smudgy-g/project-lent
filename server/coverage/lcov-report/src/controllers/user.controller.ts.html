@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">9.25% </span>
+                <span class="strong">38.88% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/54</span>
+                <span class='fraction'>21/54</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">18.18% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>4/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">10.41% </span>
+                <span class="strong">43.75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/48</span>
+                <span class='fraction'>21/48</span>
             </div>
         
             
@@ -158,40 +158,40 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -246,41 +246,41 @@ import { IUser } from '../types';
 import * as userModel from '../models/user.model';
 &nbsp;
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >createOne </span>(ctx: Context) {
-  const user = <span class="cstat-no" title="statement not covered" >ctx.request.body as Partial&lt;IUser&gt;;</span>
+export async function createOne (ctx: Context) {
+  const user = ctx.request.body as Partial&lt;IUser&gt;;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (!user.username || !user.email || !user.password || !user.address) {</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!user.username || !user.email || !user.password || !user.address) {
 <span class="cstat-no" title="statement not covered" >    ctx.throw(400, {message: 'One or more fields are empty.'});</span>
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const emailExists = <span class="cstat-no" title="statement not covered" >await userModel.findUserByEmail(user.email);</span>
-    const usernameExists = <span class="cstat-no" title="statement not covered" >await userModel.findUserByUsername(user.username);</span>
+  try {
+    const emailExists = await userModel.findUserByEmail(user.email);
+    const usernameExists = await userModel.findUserByUsername(user.username);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (emailExists) <span class="cstat-no" title="statement not covered" >ctx.throw(400, { message: 'Email already exists.' });</span></span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (usernameExists) <span class="cstat-no" title="statement not covered" >ctx.throw(400, { message: 'Username already exists.' });</span></span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (emailExists) <span class="cstat-no" title="statement not covered" >ctx.throw(400, { message: 'Email already exists.' });</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (usernameExists) <span class="cstat-no" title="statement not covered" >ctx.throw(400, { message: 'Username already exists.' });</span>
 &nbsp;
-    const newUser = <span class="cstat-no" title="statement not covered" >await userModel.createUser(</span>
+    const newUser = await userModel.createUser(
       user.username,
       user.email,
       user.password,
       user.address
     );
     
-<span class="cstat-no" title="statement not covered" >    ctx.status = 201;</span>
-<span class="cstat-no" title="statement not covered" >    ctx.body = newUser;</span>
+    ctx.status = 201;
+    ctx.body = newUser;
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    ctx.throw(500, { message: error });</span>
   }
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >getUserById </span>(ctx: Context) {
-  const userId = <span class="cstat-no" title="statement not covered" >ctx.params.id;</span>
-<span class="cstat-no" title="statement not covered" >  <span class="missing-if-branch" title="if path not taken" >I</span>if (!userId) <span class="cstat-no" title="statement not covered" >ctx.throw(404, { message: 'No user Id provided.'})</span></span>
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const user = <span class="cstat-no" title="statement not covered" >await userModel.findUserById(userId);</span>
-<span class="cstat-no" title="statement not covered" >    ctx.status = 200;</span>
-<span class="cstat-no" title="statement not covered" >    ctx.body = user;</span>
+export async function getUserById (ctx: Context) {
+  const userId = ctx.params.id;
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!userId) <span class="cstat-no" title="statement not covered" >ctx.throw(404, { message: 'No user Id provided.'})</span>
+  try {
+    const user = await userModel.findUserById(userId);
+    ctx.status = 200;
+    ctx.body = user;
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    ctx.throw(500, { message: error });</span>
   }
@@ -337,7 +337,7 @@ export async function <span class="fstat-no" title="function not covered" >delet
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-19T17:38:56.559Z
+                at 2023-08-21T18:26:24.290Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
