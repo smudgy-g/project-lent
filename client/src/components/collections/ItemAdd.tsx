@@ -34,14 +34,16 @@ export default function ItemAdd() {
       .then((result) => {
         const filteredResult = result.filter(
           (collection) =>
-            collection._id !== "64e0cee12796345e05ff87fc" &&
-            collection._id !== "64e0cee12796345e05ff87fe" &&
-            collection._id !== "64e0cee12796345e05ff8800"
+            collection.name !== "Lent Out" &&
+            collection.name !== "Borrowed" &&
+            collection.name !== "All" &&
+            collection.name !== "Reserved"
         );
         setCollections(filteredResult);
       })
       .catch((error) => console.log(error));
   }, []);
+
   /* Handler Functions */
 
   // When the user changes one of the form inputs,
@@ -92,9 +94,10 @@ export default function ItemAdd() {
     event.preventDefault();
 
     const selectedCollections: string[] = Array.from((document.getElementById('collection') as HTMLSelectElement).selectedOptions, option => option.value);
+
     const updatedFormData = {
       ...formData,
-      collections: selectedCollections,
+      collections: selectedCollections.filter((result) => result !== 'all'),
     };
 
     console.log(updatedFormData)
@@ -127,14 +130,24 @@ export default function ItemAdd() {
           />
         </label>
        
+        {collections.length > 0 && (
         <label>
           Collection:
           <select id="collection" name="collection" multiple>
-            {collections && collections.map((collection : Collection) => {
-              return (<option key={collection._id} value={collection._id}>{collection.name}</option>)
+          <option value="all" disabled selected>
+            All
+          </option>
+            {collections.map((collection: Collection) => {
+              return (
+                <option key={collection._id} value={collection._id}>
+                  {collection.name}
+                </option>
+                
+              );
             })}
           </select>
         </label>
+        )}
 
         <label>
           Photo:
