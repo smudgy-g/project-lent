@@ -4,6 +4,7 @@ import { Collection } from './schemas/collection.schema';
 import * as user from './user.model';
 import { User } from './schemas/user.schema';
 import { findItemById } from './item.model';
+import { Item } from './schemas/item.schema';
 
 export async function createOne (name: string, userId: string): Promise<ICollection | null> {
   try {
@@ -122,6 +123,16 @@ export async function updateName (id: string, newName: string) {
 
 export async function deleteOne (id:string): Promise<ICollection | null> {
   try {
+    const collectionIdObj = new Types.ObjectId(id);
+    const collection = await Collection.findById(collectionIdObj).select({ 'items': 1 });
+    if (collection) {
+      collection.items.forEach(async (itemId) => {
+        await Item.findByIdAndUpdate(itemId, {
+          $pull: { collections: collectionIdObj }
+        })
+      })
+    };
+
     return Collection.findByIdAndDelete(id);
   } catch (error) {
     console.error(error);
@@ -152,4 +163,49 @@ export async function getCollectionIdByName (userId: Types.ObjectId, collectionN
     console.error(error);
     throw error;
   } 
+}
+
+export async function removeItemsFromCollection (collectionId: string, itemIds: string[]) {
+  try {
+    const collectionIdObj = new Types.ObjectId(collectionId);
+    const itemIdObjArray = itemIds.map((id) => new Types.ObjectId(id));
+
+    for (let item of itemIdObjArray) {
+      await Item.findByIdAndUpdate(item, {
+        $pull: { collections: collectionIdObj }
+      })
+    };
+
+    return await Collection.findByIdAndUpdate(collectionIdObj, {
+      $pull: { items: itemIdObjArray }
+    });
+
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function addItemsToCollections (collectionIds: string[], itemIds: string[]) {
+  try {
+    const collectionIdObjArray = collectionIds.map((id) => new Types.ObjectId(id));
+    const itemIdObjArray = itemIds.map((id) => new Types.ObjectId(id));
+
+    for (let item of itemIdObjArray) {
+      await Item.findByIdAndUpdate(item, {
+        $push: { collections: collectionIdObjArray }
+      })
+    };
+
+    for (let collection of collectionIdObjArray) {
+      await Item.findByIdAndUpdate(collection, {
+        $push: { items: itemIdObjArray }
+      })
+    };
+
+    return { collectionIdObjArray, itemIdObjArray };
+    } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
