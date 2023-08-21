@@ -57,23 +57,23 @@ export default function CollectionOverview () {
               || collection.name?.toLowerCase() === 'borrowed'
             ))
             .map((collection) => (<>
-                {collection.items && collection.items[0] && (
-                  <Link to={`/collection/${collection._id}`}>
-                    <div className="static-collection-preview">
-                      <div
-                        className="static-collection-image"
-                        style={{backgroundImage: `url(${collection.items[0].img_url})`}}>
-                      </div>
-                      <h2>{collection.name}</h2>
+              {collection.items && collection.items[0] && (
+                <Link to={`/collection/${collection._id}`}>
+                  <div className="static-collection-preview">
+                    <div
+                      className="static-collection-image"
+                      style={{backgroundImage: `url(${collection.items[0].img_url})`}}>
                     </div>
-                  </Link>
-                )}
-                {collection.items && !collection.items[0] && (
-                  <div className="static-collection-preview deactivated">
-                    <div className="static-collection-image deactivated"></div>
                     <h2>{collection.name}</h2>
                   </div>
-                )}
+                </Link>
+              )}
+              {collection.items && !collection.items[0] && (
+                <div className="static-collection-preview deactivated">
+                  <div className="static-collection-image deactivated"></div>
+                  <h2>{collection.name}</h2>
+                </div>
+              )}
             </>))
           }
         </div>
