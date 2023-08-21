@@ -89,6 +89,7 @@ export async function addItemToCollection (collectionId: string, itemId: string)
       return collection; 
     }
 
+    const collectionIdObject = new Types.ObjectId(collectionId);
     return await Collection.findByIdAndUpdate(collectionId, 
       { $push: { items: itemIdObject }},
       { new: true } )

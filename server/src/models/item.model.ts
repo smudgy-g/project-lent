@@ -145,23 +145,24 @@ export async function updateOne (itemId: string, itemData: Partial<IItem>) {
     const { user, collections,...updatedData } = itemData;
     const item = await Item.findById(itemIdObj).select({ 'lendable': 1, 'user': 1, 'collections': 1 });
     if (item && collections) {
-      /* Compare the two arrays */
-      // Check for removed items
-      console.log(item.collections);
-      console.log('updated datat:', collections);
+      const userIdObj = new Types.ObjectId(item.user)
+      const allCollectionId = await collectionModel.getCollectionIdByName(userIdObj, 'All');
+      collections.push(allCollectionId.toString());
+
       // Check for removed items
       for (let i = 0; i < item.collections.length; i++) {
-        const originalItem = item.collections[i].toString();
-        if (!collections.includes(originalItem)) {
-          collectionModel.removeItemFromCollection(originalItem, itemId);
+        const originalCollection = item.collections[i].toString();
+        if (!collections.includes(originalCollection)) {
+          const result = await collectionModel.removeItemFromCollection(originalCollection.toString(), itemId);
         }
       }
 
       // Check for added items
+      const originalCollection = item.collections.map(c => c.toString());
       for (let i = 0; i < collections.length; i++) {
-        const updatedItem = collections[i];
-        if (!item.collections.map(item => item.toString()).includes(updatedItem)) {
-          collectionModel.addItemToCollection(updatedItem, itemId);
+        const updatedCollection = collections[i];
+        if (!originalCollection.includes(updatedCollection)) {
+          const result = await collectionModel.addItemToCollection(updatedCollection.toString(), itemId);
         }
       }
       
@@ -169,8 +170,7 @@ export async function updateOne (itemId: string, itemData: Partial<IItem>) {
         if (itemData.lendable) await changeCredits(item.user, 50);
         else if (!itemData.lendable) await changeCredits(item.user, -50)
       }
-        const updatedItem = await Item.findByIdAndUpdate(itemIdObj, updatedData, { new: true });
-        return updatedItem;
+      return await Item.findByIdAndUpdate(itemIdObj, {updatedData, collections}, { new: true });
     }
   } catch (error) {
     console.error(error);
@@ -273,7 +273,6 @@ export async function recieveItem (userId: string, itemId: string) {
 export async function returnItem (userId: string, itemId: string) {
   try {
     const userIdObject = new Types.ObjectId(userId);
-    // const borrowerIdObject = new Types.ObjectId(borrowerId);
     const itemIdObject = new Types.ObjectId(itemId);
     const borrower = await User.aggregate([
       { $match: { _id: userIdObject } },
