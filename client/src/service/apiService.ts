@@ -1,3 +1,4 @@
+import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 import { LoginFormData } from "../components/auth/Login";
 import { RegisterFormData } from "../components/auth/Register"
 import { ProfileEditData } from "../components/profile/ProfileEdit";
@@ -159,6 +160,54 @@ export async function postNewCollection (itemName: string, itemIds: string[]): P
   }
 };
 
+export async function changeCollectionName (collectionName: string, collectionId: string): Promise<Item> {
+  try {
+    const response = await fetch(`${baseUrl}/collection/${collectionId}/changeName`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(collectionName),
+      credentials: 'include'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  }
+  catch (err) {
+    throw new Error('An error occured');
+  }
+};
+
+  export async function addItemsToCollections (itemIds: string[], collectionIds: string[]): Promise<Item> {
+    try {
+      const response = await fetch(`${baseUrl}/collection/addItems`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({itemIds, collectionIds}),
+        credentials: 'include'
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      return data;
+    }
+    catch (err) {
+      throw new Error('An error occured');
+    }
+  };
+
 export async function deleteCollection (collectionId: string): Promise<Item> {
   try {
     const response = await fetch(`${baseUrl}/collection/${collectionId}/deleteCollection`, {
@@ -179,7 +228,7 @@ export async function deleteCollection (collectionId: string): Promise<Item> {
   }
 }
 
-export async function deleteItemFromCollection (itemIds: string[], collectionId: string): Promise<Item> {
+export async function deleteItemsFromCollection (itemIds: string[], collectionId: string): Promise<Item> {
   try {
     const response = await fetch(`${baseUrl}/collection/${collectionId}/deleteItems`, {
       method: 'DELETE',
