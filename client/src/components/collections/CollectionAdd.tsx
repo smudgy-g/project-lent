@@ -23,15 +23,15 @@ export default function CollectionAdd () {
   /* Handler Functions */
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    event.preventDefault();
     setInputValue(event.target.value);
     console.log(inputValue, selectedItems)
   };  
 
-  function handleSubmit() {
-    // const newCollection = await postNewCollection(inputValue, newCollectionItems!)
-
-    console.log({inputValue, newCollectionItems: selectedItems})
-    //navigate(`/collections/${newCollection._id}`)
+  async function handleSubmit() {
+    const newCollection = await postNewCollection(inputValue, selectedItems!)
+    console.log(inputValue, selectedItems)
+    navigate(`/collections/${newCollection._id}`)
   }
 
   /* Use Effect */

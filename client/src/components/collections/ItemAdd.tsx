@@ -101,8 +101,8 @@ export default function ItemAdd() {
     };
 
     console.log(updatedFormData)
-    //const response = await postItem(updatedFormData);
-    // navigate(`/item/${response._id}`);
+    const response = await postItem(updatedFormData);
+    navigate(`/item/${response._id}`);
   };
 
   /* Render Component */
