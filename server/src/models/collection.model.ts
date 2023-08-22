@@ -5,16 +5,21 @@ import * as user from './user.model';
 import { User } from './schemas/user.schema';
 import { findItemById } from './item.model';
 import { Item } from './schemas/item.schema';
+import * as collectionModel from './collection.model';
 
-export async function createOne (name: string, userId: string): Promise<ICollection | null> {
+export async function createOne (name: string, userId: string, itemIds?: string[]): Promise<ICollection | null> {
   try {
     const newCollection = new Collection({
       name: name,
-      items: [],
+      items: itemIds || [],
     });
+
+    console.log(newCollection)
+
     return newCollection.save().then((savedCollection) => {
       const collectionId = savedCollection._id;
       user.addToUserCollection(userId, collectionId);
+      if (itemIds && itemIds.length) itemIds.map(item => collectionModel.addItemToCollection(collectionId.toString(), item))
     })
     .then(() => newCollection);
   } catch (error) {
@@ -90,7 +95,7 @@ export async function addItemToCollection (collectionId: string, itemId: string)
     }
 
     const collectionIdObject = new Types.ObjectId(collectionId);
-    return await Collection.findByIdAndUpdate(collectionId, 
+    return await Collection.findByIdAndUpdate(collectionIdObject, 
       { $push: { items: itemIdObject }},
       { new: true } )
   } catch (error) {

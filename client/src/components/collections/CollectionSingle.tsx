@@ -51,7 +51,7 @@ export default function CollectionSingle () {
       {
         title: 'Delete',
         action: () => {
-          //deleteCollection(collectionId!)
+          deleteCollection(collectionId!)
           navigate('/collections');
         }
       }

@@ -27,11 +27,11 @@ export default function CollectionAdd () {
     console.log(inputValue, selectedItems)
   };  
 
-  function handleSubmit() {
-    // const newCollection = await postNewCollection(inputValue, newCollectionItems!)
+  async function handleSubmit() {
+    const newCollection = await postNewCollection(inputValue, selectedItems!)
 
     console.log({inputValue, newCollectionItems: selectedItems})
-    //navigate(`/collections/${newCollection._id}`)
+    navigate(`/collections/${newCollection._id}`)
   }
 
   /* Use Effect */

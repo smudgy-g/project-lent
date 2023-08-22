@@ -38,8 +38,6 @@ app.use(router.allowedMethods());
 ioConnect(io);
 console.log('🎪 Socket connected 🎪');
 
-const PORT = process.env.PORT || 5001;
-
 // function to connect to the database and start the server
 const run = async () => {
   await connectDb();

@@ -210,7 +210,8 @@ export async function changeCollectionName (collectionName: string, collectionId
 
 export async function deleteCollection (collectionId: string): Promise<Item> {
   try {
-    const response = await fetch(`${baseUrl}/collection/${collectionId}/deleteCollection`, {
+    console.log(collectionId)
+    const response = await fetch(`${baseUrl}/collection/${collectionId}`, {
       method: 'DELETE',
       credentials: 'include',
     });
