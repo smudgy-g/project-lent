@@ -22,7 +22,7 @@ const geoLocationSchema = new Schema<IGeoLocation>(
 const userSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }, // hashed
+  password: { type: String, required: true },
   address: { type: addressSchema, required: true },
   geoLocation: { type: geoLocationSchema, required: true },
   credits: { type: Number },
