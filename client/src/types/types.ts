@@ -58,12 +58,12 @@ export interface ChatPreview {
 }
 
 export interface Message {
-  id: string;
+  id?: string;
   body: string;
   from: User['id'];
-  foreignUserName: string ;
+  foreignUserName?: string ;
   to: User['id'];
-  createdAt: number;
+  createdAt?: number;
   seen: boolean;
 }
 

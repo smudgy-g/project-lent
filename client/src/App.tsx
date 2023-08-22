@@ -14,7 +14,6 @@ import CollectionOverview from "./components/collections/CollectionOverview";
 import CollectionSingle from "./components/collections/CollectionSingle";
 import ProfileEdit from "./components/profile/ProfileEdit";
 import Inbox from "./components/messaging/Inbox";
-import ChatSingle from "./components/messaging/ChatSingle";
 import ItemSingle from "./components/collections/ItemSingle";
 import ItemEdit from "./components/collections/ItemEdit";
 import ItemAdd from "./components/collections/ItemAdd";
@@ -23,7 +22,9 @@ import ModalProvider from "./contexts/ModalContext";
 import CollectionAdd from "./components/collections/CollectionAdd";
 import CollectionEdit from "./components/collections/CollectionEdit";
 import CollectionItemAdd from './components/collections/CollectionItemAdd'
-import InboxCombined from "./components/messaging/Inbox";
+import SocketProvider from "./contexts/SocketContext";
+import { io, Socket } from "socket.io-client";
+import { useEffect } from "react";
 
 const router = createBrowserRouter([
   {
@@ -171,18 +172,54 @@ const router = createBrowserRouter([
 ])
 
 function App() {
+
+  // useEffect(() => {
+  //   const socket: Socket = io('http://localhost:5001');
+
+  //   socket.on('connect', () => {
+  //     console.log('Connected to server with id:', socket.id);
+  //   })
+
+  //   // if (currentChatId && userId) {
+  //   //   socket.emit('join_chat', currentChatId, userId);
+  //   // }
+
+  //   // socket.on('new_message_in_room', (message) => {
+  //   //   console.log('New message:', message);
+  //   //   setCurrentChat((prevChat) => {
+  //   //     return {
+  //   //       ...prevChat!,
+  //   //       messages: [
+  //   //         message,
+  //   //         ...prevChat!.messages, 
+  //   //       ],
+  //   //     }
+  //   //   })
+  //   // });
+
+  //   return () => {
+  //     console.log('unmounted!!!!!');
+  //     socket.close();
+  //     socket.off("connect");
+  //     // socket.off("join_chat");
+  //     // socket.off("new_message_in_room");
+  //   };
+  // }, [])
+
   return (<>
     <div className="app">
-      <AuthProvider authType={'cookie'}
+      <SocketProvider>
+        <AuthProvider authType={'cookie'}
                     authName={'_auth'}
                     cookieDomain={window.location.hostname}
                     cookieSecure={window.location.protocol === 'https:'}>
-        <HeaderProvider>
-          <ModalProvider>
-            <RouterProvider router={router} />
-          </ModalProvider>
-        </HeaderProvider>
-      </AuthProvider>
+          <HeaderProvider>
+            <ModalProvider>
+              <RouterProvider router={router} />
+            </ModalProvider>
+          </HeaderProvider>
+        </AuthProvider>
+      </SocketProvider>
     </div>
   </>);
 }
