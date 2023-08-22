@@ -9,7 +9,7 @@ import connectDb from './models/_index';
 import { ioConnect } from './controllers/socketHandler.controller';
 
 dotenv.config();
-
+const PORT = process.env.PORT || 5001;
 const app = new Koa();
 const server = http.createServer(app.callback());
 const serverOptions = {
@@ -36,8 +36,6 @@ app.use(router.allowedMethods());
 
 ioConnect(io);
 console.log('🎪 Socket connected 🎪');
-
-const PORT = process.env.PORT || 5001;
 
 // function to connect to the database and start the server
 const run = async () => {

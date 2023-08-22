@@ -17,12 +17,11 @@ export async function getAllCollections (ctx: Context) {
 
 export async function createCollection (ctx:Context) {
   const userId = ctx.userId;
-  const { name } = ctx.request.body as any;
-
-  if (!name) ctx.throw(400, { message: 'No name provided.' });
+  const { itemName, itemIds } = ctx.request.body as any;
+  if (!itemName) ctx.throw(400, { message: 'No name provided.' });
   
   try {
-    const newCollection = await collectionModel.createOne(name, userId);
+    const newCollection = await collectionModel.createOne(itemName, userId, itemIds);
     ctx.status = 201;
     ctx.body = newCollection;
   } catch (error) {
@@ -32,7 +31,7 @@ export async function createCollection (ctx:Context) {
 
 export async function deleteCollection (ctx:Context) {
   const collectionId = ctx.params.id;
-
+  console.log(collectionId)
   if (!collectionId) ctx.throw(400, { message: 'No collection ID provided.' });
 
   try {

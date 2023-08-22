@@ -326,6 +326,7 @@ export async function returnItem (userId: string, itemId: string) {
 }
 
 export async function searchByQuery (query: string, userLocation: IGeoLocation, userId: string) {
+  const userIdObj = new Types.ObjectId(userId);
   try {
     const result = await Item.aggregate([
       {
@@ -338,7 +339,7 @@ export async function searchByQuery (query: string, userLocation: IGeoLocation, 
         },
       },
       {
-        $match: { 'user': { $ne : userId } }
+        $match: { 'user': { $ne : userIdObj } }
       }
     ]);
     const resultWithLocations: any = await getItemLocations(result);
