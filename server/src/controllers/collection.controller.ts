@@ -61,8 +61,8 @@ export async function updateCollectionName (ctx: Context) {
 
 export async function removeItemsFromCollection (ctx: Context) {
   const collectionId = ctx.params.id;
-  const items = ctx.request.body as string[];
-  
+  const { items } = ctx.request.body as any;
+  console.log(items)
   if (!collectionId) ctx.throw(400, { message: 'No collection ID provided.' });
 
   try {

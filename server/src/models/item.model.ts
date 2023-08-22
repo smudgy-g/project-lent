@@ -153,13 +153,10 @@ export async function updateOne (itemId: string, itemData: Partial<IItem>) {
     const item = await Item.findById(itemIdObj).select({ 'lendable': 1, 'user': 1, 'collections': 1 });
     
     if (item && collections) {
-      console.log('item', item, )
-      console.log('collections', collections)
       const userIdObj = new Types.ObjectId(item.user)
       const allCollectionId = await collectionModel.getCollectionIdByName(userIdObj, 'All');
       collections.push(allCollectionId.toString());
       
-      console.log('here')
       // Check for removed items
       for (let i = 0; i < item.collections.length; i++) {
         const originalCollection = item.collections[i].toString();
@@ -167,8 +164,6 @@ export async function updateOne (itemId: string, itemData: Partial<IItem>) {
           await collectionModel.removeItemFromCollection(originalCollection, itemId);
         }
       }
-      
-      console.log('here too')
       // Check for added items
       const originalCollection = item.collections.map(c => c.toString());
       for (let i = 0; i < collections.length; i++) {
@@ -262,7 +257,7 @@ export async function recieveItem (userId: string, itemId: string) {
 
       if (transferSuccess) {
         const lentOutCollectionId = await collectionModel.getCollectionIdByName(item.user, 'Lent Out');
-        const removed = await collectionModel.removeItemFromCollection(reservedCollectionId, itemId);
+        await collectionModel.removeItemFromCollection(reservedCollectionId, itemId);
         await collectionModel.addItemToCollection(lentOutCollectionId, itemId);
         await collectionModel.addItemToCollection(borrowedCollectionId, itemId);
         const borrowedObjectId = new Types.ObjectId(borrowedCollectionId);
@@ -274,7 +269,7 @@ export async function recieveItem (userId: string, itemId: string) {
           $pull: { collections: reservedCollectionId },
         }, { new: true } );
         return await Item.findByIdAndUpdate(itemIdObject, {
-          $push: { collections: { $each: collectionIds } }
+          $addToSet: { collections: { $each: collectionIds } }
         }, { new: true } );
       } else {
         return null;
@@ -331,7 +326,7 @@ export async function returnItem (userId: string, itemId: string) {
       
       return await Item.findByIdAndUpdate(itemIdObject, {
         $set: { borrowed: false, available: true },
-        $pull: { collections: { borrowedObjectId, lentOutObjectId } }
+        $pullAll: { collections: [borrowedObjectId, lentOutObjectId] }
       }, { new: true } );
     }
   } catch (error) {
@@ -367,7 +362,8 @@ export async function searchByQuery (query: string, userLocation: IGeoLocation, 
 
 export async function discoverItems (userLocation: IGeoLocation, userId: string) {
   try {
-    const result = await Item.find({ 'user': { $ne: userId } });
+    const userIdObj = new Types.ObjectId(userId);
+    const result = await Item.find({ 'user': { $ne: userIdObj } });
     const resultWithLocations: any = await getItemLocations(result);
     return sortByDistanceFromUser(userLocation, resultWithLocations);
   } catch (error) {

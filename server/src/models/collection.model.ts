@@ -184,7 +184,7 @@ export async function removeItemsFromCollection (collectionId: string, itemIds: 
     };
 
     return await Collection.findByIdAndUpdate(collectionIdObj, {
-      $pull: { items: itemIdObjArray }
+      $pullAll: { items: itemIdObjArray }
     });
 
   } catch (error) {
@@ -203,18 +203,19 @@ export async function addItemsToCollections (collectionIds: string[], itemIds: s
     console.log('itemIdObjArray', itemIdObjArray)
 
     for (let item of itemIdObjArray) {
-      const res = await Item.findByIdAndUpdate(item, {
+      await Item.findByIdAndUpdate(item, {
         $addToSet: { collections: { $each: collectionIdObjArray } }
       }, { new: true });
     };
 
     for (let collection of collectionIdObjArray) {
-      const res = await Collection.findByIdAndUpdate(collection, {
+      await Collection.findByIdAndUpdate(collection, {
         $addToSet: { items: { $each: itemIdObjArray } }
       }, { new: true });
     };
 
     return { collectionIdObjArray, itemIdObjArray };
+    
     } catch (error) {
     console.error(error);
     throw error;
