@@ -7,8 +7,8 @@ import { postMessage } from '../models/message.model';
 
 export async function deleteOne (id:string): Promise<IChat | null> {
   try {
-    const chatIdObject = new Types.ObjectId(id);
-    return Chat.findByIdAndDelete(chatIdObject);
+    const chatIdObj = new Types.ObjectId(id);
+    return Chat.findByIdAndDelete(chatIdObj);
   } catch (error) {
     console.error(error);
     throw error
@@ -86,10 +86,10 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
 
 export async function getChatById (chatId: string, userId: string): Promise<any | null> {
   try {
-    const chatIdObject = new Types.ObjectId(chatId);
+    const chatIdObj = new Types.ObjectId(chatId);
 
     const data = await Chat.aggregate([
-      { $match: { _id: chatIdObject } },
+      { $match: { _id: chatIdObj } },
       {
         $lookup: {
           from: 'messages',
@@ -121,7 +121,6 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
                 body: '$$message.body',
                 from: '$$message.from',
                 to: '$$message.to',
-                seen: '$$message.seen',
                 createdAt: '$$message.createdAt',
               },
             },
@@ -150,7 +149,6 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
             from: message.from,
             to: message.to,
             body: message.body,
-            seen: message.seen,
             createdAt: message.createdAt
           }))
           .sort((a: any, b: any) => b.createdAt - a.createdAt)
@@ -165,13 +163,13 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
 
 export async function createChat (itemId: string, ownerId: any, userId: string, message?: string): Promise<IChat | null> {
   try {
-    const ownerIdObject = new Types.ObjectId(ownerId);
-    const userIdObject = new Types.ObjectId(userId);
-    const itemIdObject = new Types.ObjectId(itemId);
+    const ownerIdObj = new Types.ObjectId(ownerId);
+    const userIdObj = new Types.ObjectId(userId);
+    const itemIdObj = new Types.ObjectId(itemId);
 
     const newChatData: Partial<IChat> = new Chat({
-      item: itemIdObject,
-      users: [ownerIdObject, userIdObject]
+      item: itemIdObj,
+      users: [ownerIdObj, userIdObj]
     });
 
     const newChat = await Chat.create(newChatData);
@@ -179,12 +177,17 @@ export async function createChat (itemId: string, ownerId: any, userId: string, 
     if (message) {
       const newMessage = {
         body: message,
-        from: userIdObject,
-        to: ownerIdObject,
-        seen: false
+        from: {
+          user: userIdObj,
+          seen: false
+        },
+        to: {
+          user: userIdObj,
+          seen: false
+        },
       }
-      await addChatToInbox(ownerIdObject, newChat._id);
-      await addChatToInbox(userIdObject, newChat._id);
+      await addChatToInbox(ownerIdObj, newChat._id);
+      await addChatToInbox(userIdObj, newChat._id);
       return await postMessage(newMessage as IMessage, newChat._id);
     }
     return newChat;
