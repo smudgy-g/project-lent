@@ -96,20 +96,8 @@ export default function ItemEdit() {
     }
   };
 
-  // // When the user clicks the “Save Changes” button,
-  // // PUT the item using the API service
-  // async function handleSubmit(event: React.FormEvent) {
-  //   event.preventDefault();
-  //   if (itemId) {
-  //     // await putItemById(itemId, formData);
-  //     console.log(formData)
-  //     navigate(`/item/${itemId}`);
-  //   }
-  // };
-
-
   // When the user clicks the "Save Changes button,
-  // POST the item using the API service
+  // PUT the item using the API service
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
@@ -150,17 +138,7 @@ export default function ItemEdit() {
           />
         </label>
 
-        {/* <label>
-          Collection:
-          <select id="collection" name="collection" multiple>
-            {collections && collections.map((collection : Collection) => {
-              return (<option key={collection._id} value={collection._id}>{collection.name}</option>)
-            })}
-          </select>
-        </label> */}
-
-
-        {collections.length > 0 && (
+        {collections.length > 1 && (
         <label>
           Collection:
           <select id="collection" name="collection" multiple>

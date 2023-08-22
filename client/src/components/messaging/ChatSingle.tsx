@@ -1,7 +1,10 @@
-import { useEffect, useState, useRef } from "react";
-import { Chat, User, MessageToSend} from "../../types/types";
+import { useEffect, useState, useRef, useContext } from "react";
+import { Chat, User, MessageToSend, Message} from "../../types/types";
 import { getChatbyId, postMessage } from "../../service/apiService";
 import { Link } from "react-router-dom";
+import { SocketContext, SocketContextProps } from "../../contexts/SocketContext";
+
+
 
 interface ChatSingleProps {
   currentChatId: string | null;
@@ -13,19 +16,19 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
   /* State Variables */
 
   const [inputValue, setInputValue] = useState<string>('');
-  const [currentChat, setCurrentChat] = useState<Chat | null>(null);
-  const [userId, setUserId] = useState<User['id']>('');
-  const [currentMessageData, setCurrentMessageData] = useState<MessageToSend | null>();
+  const [currentMessageData, setCurrentMessageData] = useState<Message | null>();
 
   /* Hooks */
   const messageEndRef = useRef<HTMLDivElement>(null);
+  const { 
+    userId, 
+    sendMessage,
+    currentChat,
+    setCurrentChat,
+  } = useContext<SocketContextProps>(SocketContext);
+  
 
   /* Use Effect */
-
-  // Initialize component
-  useEffect(() => {
-    getAndSetUserId();
-  }, []);
 
   // Get current chat data
   useEffect(() => {
@@ -40,7 +43,7 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
     setCurrentMessageData({
       body: inputValue,
       from: userId,
-      to: currentChat?.foreignUserId,
+      to: currentChat?.foreignUserId!,
       seen: false,
     });
   }, [inputValue]);
@@ -57,49 +60,15 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
 
   function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
     if(event.key === 'Enter') {
-      handleSendClick();
+    handleClickSend();
     }
   };
 
-  async function handleSendClick() {
-    await postMessage(currentMessageData!, currentChatId!);
-    setInputValue('');
-    getChatbyId(currentChatId!)
-      .then((chat) => setCurrentChat(chat))
-      .catch((error) => console.log(error));
-  };
-
-  /* More Helper Functions, apparently */
-
-  // Helper Functions to retrieve the userId by the cookie
-  function getCookieValue(cookieName : string)  {
-    const cookies = document.cookie.split(';');
-
-    for (var i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-
-      // Check if the cookie starts with the provided name
-      if (cookie.indexOf(cookieName + '=') === 0) {
-        // Get the value of the cookie
-        const cookieValue = cookie.substring(cookieName.length + 1);
-
-        // Decode the cookie value
-        const decodedValue = decodeURIComponent(cookieValue);
-
-        // Return the decoded value
-        return decodedValue;
-      };
-    };
-    // Cookie not found
-    return '';
-  };
-
-  // Helper function to parse and set the userId
-  function getAndSetUserId () {
-    const userIdObject = getCookieValue('_auth_state');
-    const parsedUserIdObject = JSON.parse(userIdObject);
-    const userId = parsedUserIdObject._id;
-    setUserId(userId);
+  async function handleClickSend() {    
+    if (sendMessage && currentMessageData) {      
+      sendMessage(currentMessageData);
+      setInputValue('');
+    }
   };
 
   // Helper function to scroll down to the lowest message
@@ -124,7 +93,7 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
           .map((message, index) => (
               <div key={index} className={`message ${message.from !== userId ? 'foreign-user' : 'user'}`}>
                 <div className="datetime">
-                  {message.createdAt.toString().substring(11, 16)}
+                  {message.createdAt?.toString().substring(11, 16)}
                 </div>
                 <div className="message-body">
                   {message.body}
@@ -134,24 +103,24 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
           ))
         }
       </div>
+      <div className="chat-input-container">
+        <input
+          type="text"
+          name="message"
+          value={inputValue}
+          onChange={handleChange}
+          onKeyPress={handleKeyPress}
+          autoComplete='false'
+          autoFocus={true}
+        />
+
+        <button className="button send styled large"
+          onClick={handleClickSend}
+        >
+          Send
+        </button>
+      </div>
     </div>
 
-    <div className="chat-input-container">
-      <input
-        type="text"
-        name="message"
-        value={inputValue}
-        onChange={handleChange}
-        onKeyPress={handleKeyPress}
-        autoComplete='false'
-        autoFocus={true}
-      />
-
-      <button className="button send styled large"
-        onClick={handleSendClick}
-      >
-        Send
-      </button>
-    </div>
   </>);
 };

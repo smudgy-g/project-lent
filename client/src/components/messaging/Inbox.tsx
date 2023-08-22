@@ -3,6 +3,10 @@ import { getAllChats } from "../../service/apiService";
 import { ChatPreview } from "../../types/types";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import ChatSingle from "./ChatSingle";
+import { io, Socket } from 'socket.io-client';
+import { SocketContext, SocketContextProps } from "../../contexts/SocketContext";
+
+
 
 function InboxCombined() {
 
@@ -15,11 +19,13 @@ function InboxCombined() {
   /* Hooks */
 
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
+  const { setCurrentContextChatId } = useContext<SocketContextProps>(SocketContext);
 
   /* Handler Functions */
 
   function handleChatClick (chatId: string) {
     setCurrentChatId(chatId);
+    setCurrentContextChatId(chatId);
   }
 
   /* Use Effect */
@@ -38,6 +44,7 @@ function InboxCombined() {
   useEffect(() => {
     if (chats) {
       setCurrentChatId(chats[0].id);
+      setCurrentContextChatId(chats[0].id);
       setCurrentItemId(chats[0].itemId!);
     }
   }, [chats])
