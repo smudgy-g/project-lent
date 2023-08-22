@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef, useContext } from "react";
-import { Chat, User, MessageToSend, Message} from "../../types/types";
-import { getChatbyId, postMessage } from "../../service/apiService";
+import { useEffect, useState, useContext } from "react";
+import { Message } from "../../types/types";
+import { getChatbyId } from "../../service/apiService";
 import { Link } from "react-router-dom";
 import { SocketContext, SocketContextProps } from "../../contexts/SocketContext";
 
@@ -19,7 +19,6 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
   const [currentMessageData, setCurrentMessageData] = useState<Message | null>();
 
   /* Hooks */
-  const messageEndRef = useRef<HTMLDivElement>(null);
   const {
     userId,
     sendMessage,
@@ -42,17 +41,20 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
   useEffect(() => {
     setCurrentMessageData({
       body: inputValue,
-      from: userId,
-      to: currentChat?.foreignUserId!,
-      seen: false,
+      from: {
+        user: userId,
+        seen: false,
+      },
+      to: {
+        user: currentChat?.foreignUserId!,
+        seen: false,
+      },
       createdAt: (new Date()).toISOString(),
     });
   }, [inputValue]);
 
   useEffect(()=> {
     scrollToBottom();
-    console.log(currentChat);
-
   }, [currentChat?.messages]);
 
   /* Handler Functions */
@@ -80,9 +82,6 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
     if (messageContainer) {
       messageContainer.scrollTop = messageContainer.scrollHeight;
     }
-    // messageEndRef.current?.scrollIntoView({
-    //   behavior: 'smooth',
-    // });
   };
 
   /* Render Component */
@@ -100,15 +99,14 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
           .slice()
           .reverse()
           .map((message, index) => (
-              <div key={index} className={`message ${message.from !== userId ? 'foreign-user' : 'user'}`}>
-                <div className="datetime">
-                  {message.createdAt?.toString().substring(11, 16)}
-                </div>
-                <div className="message-body">
-                  {message.body}
-                </div>
-                {/* <div className="scroll-reference" ref={messageEndRef}></div> */}
+            <div key={index} className={`message ${message.from.user === userId ? 'user' : 'foreign-user'}`}>
+              <div className="datetime">
+                {message.createdAt?.toString().substring(11, 16)}
               </div>
+              <div className="message-body">
+                {message.body}
+              </div>
+            </div>
           ))
         }
       </div>

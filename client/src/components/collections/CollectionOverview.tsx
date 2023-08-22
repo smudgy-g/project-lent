@@ -32,6 +32,13 @@ export default function CollectionOverview () {
           navigate('/collection/add');
         }
       },
+      // {
+      //   type: 'notifications',
+      //   title: 'Notifications',
+      //   action: () => {
+      //     navigate('/collection/add');
+      //   }
+      // },
       {
         type: 'profile',
         title: '',

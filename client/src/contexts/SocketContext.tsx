@@ -1,4 +1,4 @@
-import { ReactNode, SetStateAction, createContext, useCallback, useEffect, useRef, useState } from "react";
+import { ReactNode, SetStateAction, createContext, useEffect, useRef, useState } from "react";
 import { Socket, io } from "socket.io-client";
 import { Chat, Message, User } from "../types/types";
 
