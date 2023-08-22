@@ -29,7 +29,7 @@ const userSchema = new Schema<IUser>({
   reputation: { type: Number, min: 0 },
   collections: [{ type: Schema.Types.ObjectId, ref: 'Collection' }],
   inbox: [{ type: Schema.Types.ObjectId, ref: 'Chat' }],
-  new: { type: Boolean }
+  newUser: { type: Boolean }
 }, { timestamps: true });
 
 export const User = model<IUser>('User', userSchema);
