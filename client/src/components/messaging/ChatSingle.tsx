@@ -20,13 +20,13 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
 
   /* Hooks */
   const messageEndRef = useRef<HTMLDivElement>(null);
-  const { 
-    userId, 
+  const {
+    userId,
     sendMessage,
     currentChat,
     setCurrentChat,
   } = useContext<SocketContextProps>(SocketContext);
-  
+
 
   /* Use Effect */
 
@@ -45,12 +45,15 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
       from: userId,
       to: currentChat?.foreignUserId!,
       seen: false,
+      createdAt: (new Date()).toISOString(),
     });
   }, [inputValue]);
 
-  useEffect(()=> (
-    scrollToBottom()
-  ), [currentChat?.messages]);
+  useEffect(()=> {
+    scrollToBottom();
+    console.log(currentChat);
+
+  }, [currentChat?.messages]);
 
   /* Handler Functions */
 
@@ -64,8 +67,8 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
     }
   };
 
-  async function handleClickSend() {    
-    if (sendMessage && currentMessageData) {      
+  async function handleClickSend() {
+    if (sendMessage && currentMessageData) {
       sendMessage(currentMessageData);
       setInputValue('');
     }
@@ -73,7 +76,13 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
 
   // Helper function to scroll down to the lowest message
   function scrollToBottom () {
-    messageEndRef.current?.scrollIntoView({behavior: undefined});
+    const messageContainer = document.querySelector('.message-container');
+    if (messageContainer) {
+      messageContainer.scrollTop = messageContainer.scrollHeight;
+    }
+    // messageEndRef.current?.scrollIntoView({
+    //   behavior: 'smooth',
+    // });
   };
 
   /* Render Component */
@@ -98,7 +107,7 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
                 <div className="message-body">
                   {message.body}
                 </div>
-                <div className="scroll-reference" ref={messageEndRef}></div>
+                {/* <div className="scroll-reference" ref={messageEndRef}></div> */}
               </div>
           ))
         }
