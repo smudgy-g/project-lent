@@ -146,24 +146,28 @@ export async function updateOne (itemId: string, itemData: Partial<IItem>) {
     const item = await Item.findById(itemIdObj).select({ 'lendable': 1, 'user': 1, 'collections': 1 });
     
     if (item && collections) {
+      console.log('item', item, )
+      console.log('collections', collections)
       const userIdObj = new Types.ObjectId(item.user)
       const allCollectionId = await collectionModel.getCollectionIdByName(userIdObj, 'All');
       collections.push(allCollectionId.toString());
-
+      
+      console.log('here')
       // Check for removed items
       for (let i = 0; i < item.collections.length; i++) {
         const originalCollection = item.collections[i].toString();
         if (!collections.includes(originalCollection)) {
-          const result = await collectionModel.removeItemFromCollection(originalCollection, itemId);
+          await collectionModel.removeItemFromCollection(originalCollection, itemId);
         }
       }
-
+      
+      console.log('here too')
       // Check for added items
       const originalCollection = item.collections.map(c => c.toString());
       for (let i = 0; i < collections.length; i++) {
         const updatedCollection = collections[i];
         if (!originalCollection.includes(updatedCollection)) {
-          const result = await collectionModel.addItemToCollection(updatedCollection.toString(), itemId);
+          await collectionModel.addItemToCollection(updatedCollection.toString(), itemId);
         }
       }
       
@@ -171,7 +175,11 @@ export async function updateOne (itemId: string, itemData: Partial<IItem>) {
         if (itemData.lendable) await changeCredits(item.user, 50);
         else if (!itemData.lendable) await changeCredits(item.user, -50)
       }
-      return await Item.findByIdAndUpdate(itemIdObj, {updatedData, collections}, { new: true });
+      const res = await Item.findByIdAndUpdate(itemIdObj, {
+        ...updatedData, 
+        $addToSet: { $each: { collections } },
+      }, { new: true });
+      return res
     }
   } catch (error) {
     console.error(error);
