@@ -25,6 +25,10 @@ export interface IChat extends Document {
 
 export interface IMessage extends Document {
   body: string;
+  notification?: {
+    item: string,
+    seen: boolean
+  }
   from?: {
     user: Types.ObjectId,
     seen: boolean
@@ -50,7 +54,7 @@ export interface IUser extends Document {
   reputation: number;
   collections: Types.ObjectId[];
   inbox: Types.ObjectId[];
-  new: boolean;
+  newUser: boolean;
 }
 
 export interface IGeoLocation {

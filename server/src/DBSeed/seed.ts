@@ -10,6 +10,7 @@ import { Item } from "../models/schemas/item.schema";
 import { Collection } from "../models/schemas/collection.schema";
 import { Chat } from "../models/schemas/chat.schema";
 import { Message } from "../models/schemas/message.schema";
+import { createNotificationChat } from "../models/chat.model";
 
 
 async function seedDatabase() {
@@ -168,6 +169,9 @@ async function seedDatabase() {
       item: item1._id,
       messages: [],
     });
+
+    await createNotificationChat(user1._id);
+    await createNotificationChat(user2._id);
 
     // Create messages
     const message1 = await Message.create({

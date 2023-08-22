@@ -28,3 +28,26 @@ export async function postMessage (message: IMessage, chatId: string) {
     throw error;
   }
 }
+
+export async function postNotification (message: string, itemId: string, chatId: Types.ObjectId) {
+  try {
+  
+  const notification: Partial<IMessage> = {
+    body: message,
+    notification: {
+      item: itemId,
+      seen: false
+    }
+  }
+  const newNotification = await Message.create(notification);
+  console.log(newNotification);
+  const res = await Chat.findByIdAndUpdate(chatId, { $push: { messages: newNotification._id } });
+  console.log(res);
+  return res;
+
+  return newNotification;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

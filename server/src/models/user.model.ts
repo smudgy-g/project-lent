@@ -63,16 +63,20 @@ export async function addToUserCollection (userId: string, collectionId: string)
   }
 }
 
-export async function updateUserDetails (id: string, { username, email, address }:Partial<IUser>): Promise<IUser | null> {
+export async function updateUserDetails (id: string, { username, email, address }: Partial<IUser>, newUser?: boolean): Promise<IUser | null> {
   try {
     const geoLocation = await convertAddressToGeoCode(address!);    
-    const updatedUser = await User.findByIdAndUpdate(id,
-      {
-        username,
-        email, 
-        address, 
-        geoLocation 
-      }, { new: true });
+    
+    let updatedFields: Partial<IUser> =  {
+      username,
+      email, 
+      address
+    };
+    
+    if (geoLocation) updatedFields.geoLocation = geoLocation;
+    if (newUser) updatedFields.newUser = newUser;
+  
+    const updatedUser = await User.findByIdAndUpdate(id, updatedFields, { new: true });
     return updatedUser;
   } catch (error) {
     console.error(error);
