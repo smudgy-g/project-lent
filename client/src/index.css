@@ -304,6 +304,8 @@ input:checked + .slider:before {
   border-radius: var(--radius-lg);
   border: var(--border);
   box-shadow: var(--box-shadow);
+
+  z-index: 1000;
 }
 
 .button-list-top {
@@ -441,6 +443,19 @@ input:checked + .slider:before {
   grid-template-rows: repeat(2, 1fr);
   gap: var(--p-xs);
   padding: var(--p-xs);
+}
+
+/* CameraCapture */
+
+.camera-capture {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.camera-capture video {
+  width: 100%;
+  border-radius: var(--radius-lg);
 }
 
 /* ItemSingle */
@@ -688,6 +703,7 @@ input[type=search] {
   display: flex;
   gap: var(--p-md);
 
+  overflow: scroll;
   scroll-snap-type: x mandatory;
   border-bottom: var(--border);
 }

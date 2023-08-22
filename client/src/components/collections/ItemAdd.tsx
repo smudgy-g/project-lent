@@ -3,10 +3,9 @@ import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext"
 import { useNavigate } from 'react-router-dom';
 import { getAllCollections, postItem } from "../../service/apiService";
 import { Item, Collection} from "../../types/types";
+import CameraCapture from "../camera/CameraCapture";
 
 export default function ItemAdd() {
-
-  /* State Variables */
 
   const [collections, setCollections] = useState<Collection[]>([])
   const [formData, setFormData] = useState<Item>({
@@ -17,8 +16,6 @@ export default function ItemAdd() {
     lendable: false,
     value: 999
   });
-
-  /* Hooks */
 
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
   const navigate = useNavigate();
@@ -46,10 +43,18 @@ export default function ItemAdd() {
 
   /* Handler Functions */
 
+  // When the user took an image
+  const handleImageCapture = (imageSrc: string): void => {
+    setFormData((prev) => ({
+      ...prev,
+      img_url: imageSrc,
+    }));
+  };
+
   // When the user changes one of the form inputs,
   // update the formData state variable
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const { name, type, value, checked, files } = event.target;
+    const { name, type, value, checked } = event.target;
 
     // By default, set the input value as the fieldValue
     let fieldValue: boolean | string = value;
@@ -58,34 +63,11 @@ export default function ItemAdd() {
     // according to the checked state of the input
     if (type === 'checkbox') fieldValue = checked;
 
-    // If the target is a file input, convert the file to
-    // a base64 string and set it as the fieldValue
-    if (type === 'file') {
-      // Use the first file of the input’s FilesList
-      const file = files![0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64String = reader.result as string;
-          fieldValue = base64String;
-          // Update the form data with the changed data
-          setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: fieldValue
-          }));
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    // If the target is not a file input:
-    else {
-      // Update the form data with the changed data
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: fieldValue
-      }));
-    }
+    // Update the form data with the changed data
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: fieldValue
+    }));
   };
 
   // When the user clicks the “Add Item” button,
@@ -108,93 +90,86 @@ export default function ItemAdd() {
   /* Render Component */
 
   return (<>
-    <div className="profile-edit">
-      <form onSubmit={handleSubmit}>
-        <label>
-          Name:
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-        </label>
-
-        <label>
-          Description:
-          <input
-            type="text"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-          />
-        </label>
-       
-        {collections.length > 0 && (
-        <label>
-          Collection:
-          <select id="collection" name="collection" multiple>
-          <option value="all" disabled selected>
-            All
-          </option>
-            {collections.map((collection: Collection) => {
-              return (
-                <option key={collection._id} value={collection._id}>
-                  {collection.name}
-                </option>
-                
-              );
-            })}
-          </select>
-        </label>
-        )}
-
-        <label>
-          Photo:
-          <input
-            type="file"
-            name="img_url"
-            accept="image/*"
-            onChange={handleChange}
-          />
-        </label>
-
-        <div className="input-wrapper">
-          Lend out?
-          <label className="toggle-switch">
-            <input
-              type="checkbox"
-              name="lendable"
-              id="lendable"
-              checked={formData.lendable}
-              onChange={handleChange}
-            />
-            <span className="slider"></span>
-          </label>
-        </div>
-
-        {formData.lendable && (
+    {!formData.img_url && <CameraCapture onImageCapture={handleImageCapture} />}
+    {formData.img_url && (
+      <div className="profile-edit">
+        <form onSubmit={handleSubmit}>
           <label>
-            Value:
+            Name:
             <input
-              type="number"
-              name="value"
-              value={formData.value}
+              type="text"
+              name="name"
+              value={formData.name}
               onChange={handleChange}
             />
           </label>
-        )}
 
-        <button type="submit"
-          className="button styled full large"
-          disabled={
-            formData.name === '' ||
-            formData.description === '' ||
-            formData.img_url === ''
-          }
-        >Create Item</button>
-      </form>
-    </div>
+          <label>
+            Description:
+            <input
+              type="text"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+            />
+          </label>
+
+          {collections.length > 0 && (
+          <label>
+            Collection:
+            <select id="collection" name="collection" multiple>
+            <option value="all" disabled selected>
+              All
+            </option>
+              {collections.map((collection: Collection) => {
+                return (
+                  <option key={collection._id} value={collection._id}>
+                    {collection.name}
+                  </option>
+
+                );
+              })}
+            </select>
+          </label>
+          )}
+
+          <div className="input-wrapper">
+            Lend out?
+            <label className="toggle-switch">
+              <input
+                type="checkbox"
+                name="lendable"
+                id="lendable"
+                checked={formData.lendable}
+                onChange={handleChange}
+              />
+              <span className="slider"></span>
+            </label>
+          </div>
+
+          {formData.lendable && (
+            <label>
+              Value:
+              <input
+                type="number"
+                name="value"
+                value={formData.value}
+                onChange={handleChange}
+              />
+            </label>
+          )}
+
+          <button type="submit"
+            className="button styled full large"
+            disabled={
+              formData.name === '' ||
+              formData.description === '' ||
+              formData.img_url === ''
+            }
+          >Create Item</button>
+        </form>
+      </div>
+    )}
 
   </>);
 }
