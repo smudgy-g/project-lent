@@ -1,10 +1,11 @@
 import { useEffect, useState, useContext } from "react";
 import { deleteUser, getUser } from "../../service/apiService";
-import { User } from "../../types/types";
+import { ActionButtonGroupData, User } from "../../types/types";
 import { HeaderContext } from "../../contexts/HeaderContext";
 import { useNavigate} from 'react-router-dom'
-import { HeaderContextProps, ActionButtonGroupData } from "../../contexts/HeaderContext";
+import { HeaderContextProps } from "../../contexts/HeaderContext";
 import { useSignOut } from 'react-auth-kit'
+import useHistory from "../navigation/useHistory";
 
 
 function Profile() {
@@ -17,7 +18,7 @@ function Profile() {
 
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
   const navigate = useNavigate();
-  const signOut = useSignOut()
+  const signOut = useSignOut();
 
 
   /* Use Effect */

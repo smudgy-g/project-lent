@@ -1,44 +1,37 @@
 import { ReactNode, createContext, useState } from "react";
+import { ActionButtonGroupData } from "../types/types";
 
 /* Header Context */
 
-// Type definitions
-
-export type ActionButtonData = {
-  type?: string;
-  title: string;
-  action: () => void;
-};
-
-export type ActionButtonGroupData = (ActionButtonData | ActionButtonData[])[];
-
 export interface HeaderContextProps {
+  currentPage: string;
+  setCurrentPage: React.Dispatch<React.SetStateAction<string>>;
   actionButtonGroupData: ActionButtonGroupData;
   setActionButtonGroupData: React.Dispatch<React.SetStateAction<ActionButtonGroupData>>;
 };
 
-// Create header context
-export const HeaderContext = createContext<HeaderContextProps>({actionButtonGroupData: [], setActionButtonGroupData: () => {}});
+export const HeaderContext = createContext<HeaderContextProps>({
+  currentPage: '',
+  setCurrentPage: () => {},
+  actionButtonGroupData: [],
+  setActionButtonGroupData: () => {},
+});
 
 /* Header Provider */
 
-// Type definition
 interface HeaderProviderProps {
   children: ReactNode;
 };
 
-// Component definition
 export default function HeaderProvider ({ children }: HeaderProviderProps) {
-
-  /* State Variable */
-
+  const [currentPage, setCurrentPage] = useState<string>('');
   const [actionButtonGroupData, setActionButtonGroupData] = useState<ActionButtonGroupData>([]);
 
-  /* Constant Definition */
-
   const values: HeaderContextProps = {
+    currentPage,
+    setCurrentPage,
     actionButtonGroupData,
-    setActionButtonGroupData
+    setActionButtonGroupData,
   };
 
   /* Render Component */

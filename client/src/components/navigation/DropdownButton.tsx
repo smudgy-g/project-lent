@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ActionButtonData } from "../../contexts/HeaderContext"
+import { ActionButtonData } from "../../types/types";
 
 interface DropdownButtonProps {
   actionButtonDataArray: ActionButtonData[];

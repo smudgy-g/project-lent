@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import { Collection, Item } from "../../types/types";
-import { ActionButtonGroupData, HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
+import { ActionButtonGroupData, Collection, Item } from "../../types/types";
+import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { cancelItemById, deleteItem, getAllCollections, getItemById, getItemsByCollection, putItemReserve, receiveItemById, returnItemById } from "../../service/apiService";
 
@@ -107,25 +107,58 @@ export default function ItemSingle () {
     return items.some((item) => item._id === itemId);
   }
 
-  function handleItemReturnClick(itemId : string) {
-    returnItemById(itemId);
-  };
-  async function handleItemReceiveClick(itemId: string) {
-    receiveItemById(itemId);
-  };
-  async function handleCancelClick(itemId: string) {
-    cancelItemById(itemId);
-  };
-
   /* Event Handlers */
 
+  // When the user clicks on the “Reserve” button
   function handleClickReserve () {
     if (item && item._id) {
       putItemReserve(item._id)
-        .then((chat) => navigate('/inbox'))
+        .then(() => navigate('/inbox'))
         .catch((error) => console.log(error));
     }
-  }
+  };
+  // When the user clicks on the “Cancel Reservation” or “Decline Reservation” button
+  async function handleClickCancel() {
+    try {
+      if (item && itemId) {
+        cancelItemById(itemId)
+          .then(() => item.available = true)
+          .catch((error) => console.log(error));
+      };
+    }
+    catch (error) {
+      console.log(error);
+    }
+  };
+  // When the user clicks on the “Item Received” button
+  async function handleClickReceived() {
+    try {
+      if (item && itemId) {
+        receiveItemById(itemId)
+          .then(() => item.borrowed = true)
+          .catch((error) => console.log(error));
+      }
+    }
+    catch (error) {
+      console.log(error);
+    }
+  };
+  // When the user clicks on the “Item Returned” button
+  async function handleClickReturned() {
+    try {
+      if (item && itemId) {
+        returnItemById(itemId)
+          .then(() => {
+            item.borrowed = false;
+            item.available = true;
+          })
+          .catch((error) => console.log(error));
+      }
+    }
+    catch (error) {
+      console.log(error);
+    }
+  };
 
   /* Render Component */
 
@@ -138,7 +171,7 @@ export default function ItemSingle () {
           <div className="metadata">
             <div className="metadata-group">
               {item.distance && <span className="distance">{item.distance.toFixed(1)} km</span>}
-              {item.lendable && item.value && <span className="value">{item.value} ¢</span>}
+              {item.lendable && item.value && <span className="value">{`¤ ${item.value}`}</span>}
             </div>
             {item.lendable && item.available && <span className="status available">• available</span>}
             {item.lendable && !item.available && !item.borrowed && <span className="status reserved">• reserved</span>}
@@ -152,17 +185,36 @@ export default function ItemSingle () {
         <div className="button-group end">
           {item.distance && item.lendable && item.available && (
             <button className="button styled secondary full large end" onClick={handleClickReserve}>
-              {`Reserve (${item.value} ¢)`}
+              {`Reserve (¤ ${item.value})`}
             </button>
           )}
-          {item.lendable && !item.available && userRole && (userRole.isReserver || userRole.isOwner) && (
-            <button className="button styled alert full large">Cancel Reservation</button>
+          {item.lendable && !item.available && userRole && userRole.isReserver && (
+            <button
+              className="button styled alert full large"
+              onClick={handleClickCancel}>
+              Cancel Reservation
+            </button>
+          )}
+          {item.lendable && !item.available && userRole && userRole.isOwner && (
+            <button
+              className="button styled alert full large"
+              onClick={handleClickCancel}>
+              Decline Reservation
+            </button>
           )}
           {userRole && userRole.isReserver && (
-            <button className="button styled secondary full large">Item Received</button>
+            <button
+              className="button styled secondary full large"
+              onClick={handleClickReceived}>
+              Item Received
+            </button>
           )}
           {item.borrowed && userRole && userRole.isOwner && (
-            <button className="button styled secondary full large end">Item Returned</button>
+            <button
+              className="button styled secondary full large end"
+              onClick={handleClickReturned}>
+              Item Returned
+            </button>
           )}
         </div>
       </div>
