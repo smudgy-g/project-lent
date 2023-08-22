@@ -5,5 +5,6 @@ module.exports = {
   forceExit: true,
   collectCoverage: true,
   coverageReporters: ["text", "lcov"],
-  coverageDirectory: "coverage"
+  coverageDirectory: "coverage",
+  setupFiles: ['./test/setup.ts']
 };

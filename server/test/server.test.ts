@@ -3,12 +3,11 @@ import app from '../src/index';
 import request from 'supertest';
 import * as jwt from 'jsonwebtoken';
 import { mockGeoLocation, mockNewUser, mockUserAddress, mockUserId, mockUserUpdatePayload } from './mocks';
-import { generateJWT } from '../src/utilities/webToken';
 import connectDb from '../src/models/_index';
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
-const secretKey = process.env.JWT_SECRET;
+const secretKey = process.env.JWT_SECRET || 'testing';
 
 beforeAll((done) => {
   connectDb()
@@ -34,17 +33,16 @@ afterAll((done) => {
     });
 });
 
-jest.mock('jsonwebtoken', () => {
-  let callCount = 0;
-  return {
-    sign: jest.fn().mockImplementation(({ userId, location }) => {
-      return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGUwY2VlMTI3OTYzNDVlMDVmZjg3ZWUiLCJnZW9Mb2NhdGlvbiI6eyJsYXRpdHVkZSI6NTIuNTM5MzM3LCJsb25naXR1ZGUiOjEzLjQyNTIzNX0sImlhdCI6MTY5MjYzMzcyMywiZXhwIjoxNjkyNzIwMTIzfQ.4daBg7FlF3AYzg9e_ZIz4D9v2xpAqqCuK5ad__LYJ0Q'
-    }),
-    verify: jest.fn().mockImplementation((token, secretKey) => {
-      return jwt.decode(token);
-    })
-  }
-})
+jest.mock('jsonwebtoken', () => ({
+  ...jest.requireActual('jsonwebtoken'),
+  sign: jest.fn().mockImplementation((payload) => {
+    if (payload && payload.userId) {
+      return `mockedToken_${payload.userId}`;
+    }
+    return 'mockedToken';
+  }),
+  verify: jest.fn().mockReturnValue({ userId: 'mockedUserId', geoLocation: 'mockedGeoLocation' })
+}));
 
 describe('Server', () => {
 
@@ -94,14 +92,16 @@ describe('User API endpoints', () => {
   test('Should create a new user', async () => {
     const response = await request(app.callback()).post('/register').send(mockNewUser).expect(201);
     expect(response.body.username).toBe(mockNewUser.username);
+
     newUserId = response.body._id;
     const mockUserId = newUserId && newUserId.toString();
+
     jwtToken = jwt.sign(
       {
-        userId: mockUserId,
+        userId: mockUserId, 
         geoLocation: mockGeoLocation,
       },
-      'hifflefwiff'
+      secretKey
     );
   });
 
@@ -113,8 +113,11 @@ describe('User API endpoints', () => {
   })
 
   test('Should delete a user', async () => {
-    
-    const response = await request(app.callback()).delete('/user').set('Cookie', `token=${jwtToken}`).send(mockNewUser).expect(200);
+    const user = await request(app.callback()).get(`/user/${mockUserId}`) 
+    console.log(user)
+    console.log('userId: ', mockUserId);
+    console.log('token: ', jwtToken);
+    const response = await request(app.callback()).delete('/user').set('Cookie', `token=${jwtToken}`).expect(200);
     expect(response.body.success).toBe(true);
   });
 });

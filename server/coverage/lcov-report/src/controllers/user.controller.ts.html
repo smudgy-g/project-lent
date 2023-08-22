@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">38.88% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>21/54</span>
+                <span class='fraction'>18/54</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.18% </span>
+                <span class="strong">22.72% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/22</span>
+                <span class='fraction'>5/22</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.75% </span>
+                <span class="strong">35.41% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>21/48</span>
+                <span class='fraction'>17/48</span>
             </div>
         
             
@@ -169,31 +169,31 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -257,20 +257,20 @@ export async function createOne (ctx: Context) {
     const emailExists = await userModel.findUserByEmail(user.email);
     const usernameExists = await userModel.findUserByUsername(user.username);
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (emailExists) <span class="cstat-no" title="statement not covered" >ctx.throw(400, { message: 'Email already exists.' });</span>
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (usernameExists) <span class="cstat-no" title="statement not covered" >ctx.throw(400, { message: 'Username already exists.' });</span>
+    if (emailExists) ctx.throw(400, { message: 'Email already exists.' });
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (usernameExists) <span class="cstat-no" title="statement not covered" >ctx.throw(400, { message: 'Username already exists.' });</span></span>
 &nbsp;
-    const newUser = await userModel.createUser(
+    const newUser = <span class="cstat-no" title="statement not covered" >await userModel.createUser(</span>
       user.username,
       user.email,
       user.password,
       user.address
     );
     
-    ctx.status = 201;
-    ctx.body = newUser;
+<span class="cstat-no" title="statement not covered" >    ctx.status = 201;</span>
+<span class="cstat-no" title="statement not covered" >    ctx.body = newUser;</span>
   } catch (error) {
-<span class="cstat-no" title="statement not covered" >    ctx.throw(500, { message: error });</span>
+    ctx.throw(500, { message: error });
   }
 }
 &nbsp;
@@ -279,10 +279,10 @@ export async function getUserById (ctx: Context) {
   <span class="missing-if-branch" title="if path not taken" >I</span>if (!userId) <span class="cstat-no" title="statement not covered" >ctx.throw(404, { message: 'No user Id provided.'})</span>
   try {
     const user = await userModel.findUserById(userId);
-    ctx.status = 200;
-    ctx.body = user;
+<span class="cstat-no" title="statement not covered" >    ctx.status = 200;</span>
+<span class="cstat-no" title="statement not covered" >    ctx.body = user;</span>
   } catch (error) {
-<span class="cstat-no" title="statement not covered" >    ctx.throw(500, { message: error });</span>
+    ctx.throw(500, { message: error });
   }
 }
 &nbsp;
@@ -337,7 +337,7 @@ export async function <span class="fstat-no" title="function not covered" >delet
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-21T18:26:24.290Z
+                at 2023-08-22T07:16:12.401Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
