@@ -14,11 +14,11 @@ async function handleJoinRoom(socket: Socket, chatId: string, userId: string) {
   }
 }
 async function handleSendMessage(chatId: string, message: IMessage) {
-  console.log(`User ID ${message.from} sent in ${chatId} to ${message.to} the message : ${message}`);
+  console.log(`User ID ${message.from} sent in ${chatId} to ${message.to} the message : ${message.body}`);
 
   const newMessage = await postMessage(message, chatId);
   
-  io.to(chatId).emit('new_message', newMessage);
+  io.to(chatId).emit('new_message_in_room', message);
 }
 
 async function handleLeaveRoom(socket: Socket, chatId: string) {

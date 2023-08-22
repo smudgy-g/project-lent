@@ -12,27 +12,44 @@ dotenv.config();
 const PORT = process.env.PORT || 5001;
 
 const app = new Koa();
+const server = http.createServer(app.callback());
+const serverOptions = {
+  cors: {
+    origin: 'http://localhost:3000', // Replace with the actual origin of your frontend application
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Origin', 'Content-Type', 'Accept', 'Authorization', 'Access-Control-Allow-Origin'],
+    credentials: true,
+    // preflightContinue: true,
+  },
+};
+const io = new Server(server, serverOptions);
 
-app.use(cors({ credentials: true }));
+// Middlewares
+app.use(cors({ 
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  headers: ['Content-Type', 'Authorization'], 
+  credentials: true,
+}));
 app.use(parser());
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-const server = http.createServer(app.callback());
-const io = new Server(server);
+ioConnect(io);
+console.log('🎪 Socket connected 🎪');
 
+const PORT = process.env.PORT || 5001;
+
+// function to connect to the database and start the server
 const run = async () => {
   await connectDb();
-  console.log('🚧 Connected to database 🚧');
+  console.log('🚧 Connected to the database 🚧');
 
-  app.listen(PORT, async () => {
-    console.log(`🚀 Live from Berlin at port ${PORT}, its Project Lent. 🚀`);
+  server.listen(PORT, async () => {
+    console.log(`🚀 Live from Berlin at port ${PORT}, it's Project Lent. 🚀`);
   });
-
-  ioConnect(io);
 };
 
 run();
 
 export { io };
-export default app;
