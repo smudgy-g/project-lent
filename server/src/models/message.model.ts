@@ -31,7 +31,7 @@ export async function postMessage (message: IMessage, chatId: string) {
 
 export async function postNotification (message: string, itemId: string, chatId: Types.ObjectId) {
   try {
-
+  
   const notification: Partial<IMessage> = {
     body: message,
     notification: {
@@ -40,7 +40,10 @@ export async function postNotification (message: string, itemId: string, chatId:
     }
   }
   const newNotification = await Message.create(notification);
-  await Chat.findByIdAndUpdate(chatId, { $push: { messages: notification._id } });
+  console.log(newNotification);
+  const res = await Chat.findByIdAndUpdate(chatId, { $push: { messages: newNotification._id } });
+  console.log(res);
+  return res;
 
   return newNotification;
   } catch (error) {
