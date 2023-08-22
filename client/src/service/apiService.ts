@@ -162,12 +162,12 @@ export async function postNewCollection (itemName: string, itemIds: string[]): P
 
 export async function changeCollectionName (collectionName: string, collectionId: string): Promise<Item> {
   try {
-    const response = await fetch(`${baseUrl}/collection/${collectionId}/changeName`, {
+    const response = await fetch(`${baseUrl}/collection/${collectionId}/name`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(collectionName),
+      body: JSON.stringify({newName: collectionName}),
       credentials: 'include'
     });
 
@@ -230,13 +230,13 @@ export async function deleteCollection (collectionId: string): Promise<Item> {
 
 export async function deleteItemsFromCollection (itemIds: string[], collectionId: string): Promise<Item> {
   try {
-    const response = await fetch(`${baseUrl}/collection/${collectionId}/deleteItems`, {
-      method: 'DELETE',
+    const response = await fetch(`${baseUrl}/collection/${collectionId}/removeitems`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
       credentials: 'include',
-      body: JSON.stringify(itemIds),
+      body: JSON.stringify({items: itemIds}),
     });
 
     const data = await response.json();

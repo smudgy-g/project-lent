@@ -184,7 +184,7 @@ export async function removeItemsFromCollection (collectionId: string, itemIds: 
     };
 
     return await Collection.findByIdAndUpdate(collectionIdObj, {
-      $pull: { items: itemIdObjArray }
+      $pullAll: { items: itemIdObjArray }
     });
 
   } catch (error) {
@@ -195,22 +195,27 @@ export async function removeItemsFromCollection (collectionId: string, itemIds: 
 
 export async function addItemsToCollections (collectionIds: string[], itemIds: string[]) {
   try {
+    console.log('collectionIds', collectionIds)
+    console.log('itemIds', itemIds)
     const collectionIdObjArray = collectionIds.map((id) => new Types.ObjectId(id));
     const itemIdObjArray = itemIds.map((id) => new Types.ObjectId(id));
+    console.log('collectionIdObjArray', collectionIdObjArray)
+    console.log('itemIdObjArray', itemIdObjArray)
 
     for (let item of itemIdObjArray) {
       await Item.findByIdAndUpdate(item, {
-        $push: { collections: collectionIdObjArray }
-      })
+        $addToSet: { collections: { $each: collectionIdObjArray } }
+      }, { new: true });
     };
 
     for (let collection of collectionIdObjArray) {
-      await Item.findByIdAndUpdate(collection, {
-        $push: { items: itemIdObjArray }
-      })
+      await Collection.findByIdAndUpdate(collection, {
+        $addToSet: { items: { $each: itemIdObjArray } }
+      }, { new: true });
     };
 
     return { collectionIdObjArray, itemIdObjArray };
+    
     } catch (error) {
     console.error(error);
     throw error;
