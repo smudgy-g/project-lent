@@ -1,28 +1,24 @@
 import { Socket } from 'socket.io';
-import { io } from '../index';
-import { handleJoinRoom, handleSendMessage, handleLeaveRoom } from './socketListener.controller';
-
-let sockets: Socket[] = [];
+import { handleJoinRoom, handleLeaveRoom, handleSendMessage } from './socketListener.controller';
 
 const ioConnect = (io: any) => {
   io.on('connection', (socket: Socket) => {
-    sockets.push(socket);
+    console.log('connected to:', socket.id);
 
     socket.on('join_chat', async (chatId, userId) => {
-      handleJoinRoom(socket, chatId, userId);
+      await handleJoinRoom(socket, chatId, userId);
     });
 
-    socket.on('send_message', async (message) => {
-      socket.emit('receive_message', message);
+    socket.on('message_from_client', async (chatId, message) => {
+      await handleSendMessage(chatId, message);
     });
 
-    socket.on('leave_chat', (chatId) => {
-      handleLeaveRoom(socket, chatId);
+    socket.on('leave_chat', async (chatId) => {
+      await handleLeaveRoom(socket, chatId);
     });
 
     socket.on('disconnect', () => {
       console.log('A user disconnected');
-      // handleDisconnect(socket);
     });
   });
 };
