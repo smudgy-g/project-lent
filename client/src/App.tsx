@@ -25,6 +25,7 @@ import CollectionItemAdd from './components/collections/CollectionItemAdd'
 import SocketProvider from "./contexts/SocketContext";
 import { io, Socket } from "socket.io-client";
 import { useEffect } from "react";
+import Modal from "./components/modal/modal";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +78,7 @@ const router = createBrowserRouter([
         <CollectionOverview />
       </RequireAuth>
       <TabNavigation />
+      {/* <Modal/> */}
     </>)
   },
   {
