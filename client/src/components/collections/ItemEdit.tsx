@@ -1,13 +1,14 @@
 import { useEffect, useState, useContext } from "react";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate, useParams } from 'react-router-dom';
-import { getItemById, putItemById } from "../../service/apiService";
-import { Item } from "../../types/types";
+import { getAllCollections, getItemById, putItemById } from "../../service/apiService";
+import { Collection, Item } from "../../types/types";
 
 export default function ItemEdit() {
 
   /* State Variables */
 
+  const [collections, setCollections] = useState<Collection[]>([])
   const [formData, setFormData] = useState<Item>({
     name: '',
     description: '',
@@ -35,6 +36,21 @@ export default function ItemEdit() {
         .catch((error) => console.log(error));
     }
   }, [itemId]);
+
+  useEffect(() => {
+    getAllCollections()
+      .then((result) => {
+        const filteredResult = result.filter(
+          (collection) =>
+            collection.name !== "All" &&
+            collection.name !== "Lent Out" &&
+            collection.name !== "Borrowed" &&
+            collection.name !== "Reserved"
+        );
+        setCollections(filteredResult);
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
   /* Handler Functions */
 
@@ -80,12 +96,32 @@ export default function ItemEdit() {
     }
   };
 
-  // When the user clicks the “Save Changes” button,
+  // // When the user clicks the “Save Changes” button,
+  // // PUT the item using the API service
+  // async function handleSubmit(event: React.FormEvent) {
+  //   event.preventDefault();
+  //   if (itemId) {
+  //     // await putItemById(itemId, formData);
+  //     console.log(formData)
+  //     navigate(`/item/${itemId}`);
+  //   }
+  // };
+
+
+  // When the user clicks the "Save Changes button,
   // PUT the item using the API service
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+
+    const selectedCollections: string[] = Array.from((document.getElementById('collection') as HTMLSelectElement).selectedOptions, option => option.value);
+
+    const updatedFormData = {
+      ...formData,
+      collections: selectedCollections.filter((result) => result !== 'all'),
+    };
     if (itemId) {
-      await putItemById(itemId, formData);
+      console.log(itemId, updatedFormData)
+      const response = await putItemById(itemId, updatedFormData);
       navigate(`/item/${itemId}`);
     }
   };
@@ -114,6 +150,35 @@ export default function ItemEdit() {
             onChange={handleChange}
           />
         </label>
+
+        {/* <label>
+          Collection:
+          <select id="collection" name="collection" multiple>
+            {collections && collections.map((collection : Collection) => {
+              return (<option key={collection._id} value={collection._id}>{collection.name}</option>)
+            })}
+          </select>
+        </label> */}
+
+
+        {collections.length > 0 && (
+        <label>
+          Collection:
+          <select id="collection" name="collection" multiple>
+          <option value="all" disabled selected>
+            All
+          </option>
+            {collections.map((collection: Collection) => {
+              return (
+                <option key={collection._id} value={collection._id}>
+                  {collection.name}
+                </option>
+                
+              );
+            })}
+          </select>
+        </label>
+        )}
 
         <div className="image-thumbnail" style={{backgroundImage: `url(${formData.img_url})`}}></div>
 

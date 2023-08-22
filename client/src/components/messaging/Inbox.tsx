@@ -1,14 +1,16 @@
 import { useEffect, useState, useContext } from "react";
-import { deleteChat, getAllChats } from "../../service/apiService";
+import { getAllChats } from "../../service/apiService";
 import { ChatPreview } from "../../types/types";
-import { Link } from 'react-router-dom'
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
+import ChatSingle from "./ChatSingle";
 
-function Inbox() {
+function InboxCombined() {
 
   /* State Variables */
 
-  const [chats, setChats] = useState<ChatPreview[] | null>(null)
+  const [chats, setChats] = useState<ChatPreview[] | null>(null);
+  const [currentChatId, setCurrentChatId] = useState<string | null>(null);
+  const [currentItemId, setCurrentItemId] = useState<string | null>(null);
 
   /* Hooks */
 
@@ -16,14 +18,8 @@ function Inbox() {
 
   /* Handler Functions */
 
-  async function handleDeleteChat (chatId: string) {
-    await deleteChat(chatId)
-      .then(() => {
-        getAllChats()
-          .then((chats) => setChats(chats))
-          .catch((error)=> console.log(error))
-      })
-      .catch((error) => console.log(error));
+  function handleChatClick (chatId: string) {
+    setCurrentChatId(chatId);
   }
 
   /* Use Effect */
@@ -32,41 +28,43 @@ function Inbox() {
     setActionButtonGroupData([]);
   }, []);
 
+  // Get data for all chats
   useEffect(() => {
     getAllChats()
       .then((chats) => setChats(chats))
       .catch((error) => console.log(error));
   }, []);
 
+  useEffect(() => {
+    if (chats) {
+      setCurrentChatId(chats[0].id);
+      setCurrentItemId(chats[0].itemId!);
+    }
+  }, [chats])
+
+  useEffect(() => {
+    if (chats && currentChatId) {
+      const itemId = chats.filter((chat) => chat.id === currentChatId)[0].itemId!;
+      setCurrentItemId(itemId);
+    }
+  }, [chats, currentChatId])
+
   /* Render Component */
 
   return (<>
     <div className="inbox">
-
-      <h1>Chats</h1>
       <div className="chat-preview-container">
-      {chats && chats.map((chat) => (
-        <div className="chat-preview" key={chat.id}>
-          <Link key={chat.id} to={`/chat/${chat.id}`}>
-              <div className="chat-preview-text">
-                <div className="datetime">{new Date(chat.updatedAt).toLocaleString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  hour: "numeric",
-                  timeZone: "UTC"
-                })}</div>
-                <div className="itemname">{chat.itemName}</div>
-                <div className="message">{`${chat.foreignUser}: ${chat.message}`}</div>
-              </div>
-          </Link>
-          <button className="button delete" onClick={() => handleDeleteChat(chat.id)}>Delete</button>
+      {chats && chats.map((chat, index) => (
+        <div className={`chat-preview-wrapper ${chat.id === currentChatId ? 'active' : ''}`}>
+          <div className="chat-preview" key={index} onClick={() => handleChatClick(chat.id)} style={{backgroundImage: `url(${chat.img_url})`}}></div>
         </div>
       ))}
       </div>
+
+      <ChatSingle currentChatId={currentChatId} currentItemId={currentItemId} />
     </div>
 
   </>);
 }
 
-export default Inbox;
+export default InboxCombined;

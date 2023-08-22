@@ -4,7 +4,7 @@ import * as collectionModel from '../models/collection.model';
 export async function getAllCollections (ctx: Context) {
   const userId = ctx.userId;
 
-  if (!userId) ctx.throw(400, { message: 'User ID not supplied.' });
+  if (!userId) ctx.throw(400, { message: 'User ID not provided.' });
 
   try {
     const result = await collectionModel.getAll(userId);
@@ -19,7 +19,7 @@ export async function createCollection (ctx:Context) {
   const userId = ctx.userId;
   const { name } = ctx.request.body as any;
 
-  if (!name) ctx.throw(400, { message: 'No name supplied.' });
+  if (!name) ctx.throw(400, { message: 'No name provided.' });
   
   try {
     const newCollection = await collectionModel.createOne(name, userId);
@@ -31,12 +31,12 @@ export async function createCollection (ctx:Context) {
 }
 
 export async function deleteCollection (ctx:Context) {
-  const id = ctx.params.id;
+  const collectionId = ctx.params.id;
 
-  if (!id) ctx.throw(400, { message: 'No collection ID supplied.' });
+  if (!collectionId) ctx.throw(400, { message: 'No collection ID provided.' });
 
   try {
-    await collectionModel.deleteOne(id);
+    await collectionModel.deleteOne(collectionId);
     ctx.status = 200;
     ctx.body = { success: true };
   } catch (error) {
@@ -45,12 +45,14 @@ export async function deleteCollection (ctx:Context) {
 }
 
 export async function updateCollectionName (ctx: Context) {
-  const { id, newName } = ctx.request.body as any;
+  const collectionId = ctx.params.id;
+  const { newName } = ctx.request.body as any;
 
-  if (!id) ctx.throw(400, { message: 'No collection ID supplied.' });
+  if (!collectionId) ctx.throw(400, { message: 'No collection ID provided.' });
+  if (!newName) ctx.throw(400, { message: 'No collection name provided.' });
 
   try {
-    const result = await collectionModel.updateName(id, newName);
+    const result = await collectionModel.updateName(collectionId, newName);
     ctx.status = 200;
     ctx.body = result;
   } catch (error) {
@@ -58,3 +60,31 @@ export async function updateCollectionName (ctx: Context) {
   }
 }
 
+export async function removeItemsFromCollection (ctx: Context) {
+  const collectionId = ctx.params.id;
+  const items = ctx.request.body as string[];
+  
+  if (!collectionId) ctx.throw(400, { message: 'No collection ID provided.' });
+
+  try {
+    const result = await collectionModel.removeItemsFromCollection(collectionId, items);
+    ctx.status = 200;
+    ctx.body = result;
+  } catch (error) {
+    ctx.throw(500, { message: error })
+  }
+}
+
+export async function addItemsToCollections (ctx: Context) {
+  const { itemIds, collectionIds } = ctx.request.body as any;
+
+  if (!collectionIds || !itemIds) ctx.throw(400, { message: 'No collections or items provided.' });
+
+  try {
+    const result = await collectionModel.addItemsToCollections(collectionIds, itemIds);
+    ctx.status = 200;
+    ctx.body = result;
+  } catch (error) {
+    ctx.throw(500, { message: error })
+  }
+}

@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getAllCollections, postItem } from "../../service/apiService";
 import { Item, Collection} from "../../types/types";
 
@@ -8,7 +8,7 @@ export default function ItemAdd() {
 
   /* State Variables */
 
-  const [collections, setCollections] = useState<Collection[]>([])
+  const [currentCollection, setCurrentCollection] = useState<Collection[]>([])
   const [formData, setFormData] = useState<Item>({
     name: '',
     description: '',
@@ -21,28 +21,28 @@ export default function ItemAdd() {
   /* Hooks */
 
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
+  const { collectionId } = useParams()
   const navigate = useNavigate();
 
   /* Use Effects */
 
   useEffect(() => {
     setActionButtonGroupData([]);
+    if (collectionId) {
+      setFormData((prevFormData) => {
+        return {
+          ...prevFormData, 
+          collections: [collectionId]
+        }
+      })
+    }
   }, []);
 
   useEffect(() => {
     getAllCollections()
-      .then((result) => {
-        const filteredResult = result.filter(
-          (collection) =>
-            collection.name !== "Lent Out" &&
-            collection.name !== "Borrowed" &&
-            collection.name !== "All" &&
-            collection.name !== "Reserved"
-        );
-        setCollections(filteredResult);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+      .then((result) => setCurrentCollection(result.filter((item) => item._id === collectionId)))
+      .catch((error)=> console.log(error))
+  }, [])
 
   /* Handler Functions */
 
@@ -93,14 +93,7 @@ export default function ItemAdd() {
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    const selectedCollections: string[] = Array.from((document.getElementById('collection') as HTMLSelectElement).selectedOptions, option => option.value);
-
-    const updatedFormData = {
-      ...formData,
-      collections: selectedCollections.filter((result) => result !== 'all'),
-    };
-
-    console.log(updatedFormData)
+    console.log(formData)
     //const response = await postItem(updatedFormData);
     // navigate(`/item/${response._id}`);
   };
@@ -130,24 +123,10 @@ export default function ItemAdd() {
           />
         </label>
        
-        {collections.length > 0 && (
-        <label>
+        {currentCollection[0] && <label>
           Collection:
-          <select id="collection" name="collection" multiple>
-          <option value="all" disabled selected>
-            All
-          </option>
-            {collections.map((collection: Collection) => {
-              return (
-                <option key={collection._id} value={collection._id}>
-                  {collection.name}
-                </option>
-                
-              );
-            })}
-          </select>
-        </label>
-        )}
+          <div id="collection">{currentCollection[0].name}</div>
+        </label>}
 
         <label>
           Photo:

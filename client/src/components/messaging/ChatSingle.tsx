@@ -1,10 +1,14 @@
-import { useEffect, useState, useContext, useRef } from "react";
-import { Chat, User, MessageToSend, Item} from "../../types/types";
-import { useParams, useNavigate } from 'react-router-dom'
-import { deleteChat, getChatbyId, getItemById, postMessage, receiveItemById, returnItemById } from "../../service/apiService";
-import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
+import { useEffect, useState, useRef } from "react";
+import { Chat, User, MessageToSend} from "../../types/types";
+import { getChatbyId, postMessage } from "../../service/apiService";
+import { Link } from "react-router-dom";
 
-export default function ChatSingle() {
+interface ChatSingleProps {
+  currentChatId: string | null;
+  currentItemId: string | null;
+}
+
+export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingleProps) {
 
   /* State Variables */
 
@@ -12,19 +16,38 @@ export default function ChatSingle() {
   const [currentChat, setCurrentChat] = useState<Chat | null>(null);
   const [userId, setUserId] = useState<User['id']>('');
   const [currentMessageData, setCurrentMessageData] = useState<MessageToSend | null>();
-  const [itemReceivedData, setItemReceivedData] = useState<Item | null>();
-  const [itemReturnedData, setItemReturnedData] = useState<Item | null>();
-  const [currentItem, setCurrentItem] = useState<Item | null>();
-
-  const [cancelButton, setCancelButton] = useState<boolean>(false)
-  const [receivedButton, setReceivedButton] = useState<boolean>(false)
-  const [returnedButton, setReturnedButton] = useState<boolean>(true)
 
   /* Hooks */
-  const {chatId} = useParams();
-  const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
   const messageEndRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate()
+
+  /* Use Effect */
+
+  // Initialize component
+  useEffect(() => {
+    getAndSetUserId();
+  }, []);
+
+  // Get current chat data
+  useEffect(() => {
+    if (currentChatId) {
+      getChatbyId(currentChatId)
+        .then((chat) => setCurrentChat(chat))
+        .catch((error) => console.log(error));
+    }
+  }, [currentChatId]);
+
+  useEffect(() => {
+    setCurrentMessageData({
+      body: inputValue,
+      from: userId,
+      to: currentChat?.foreignUserId,
+      seen: false,
+    });
+  }, [inputValue]);
+
+  useEffect(()=> (
+    scrollToBottom()
+  ), [currentChat?.messages]);
 
   /* Handler Functions */
 
@@ -39,29 +62,14 @@ export default function ChatSingle() {
   };
 
   async function handleSendClick() {
-    await postMessage(currentMessageData!, chatId!);
+    await postMessage(currentMessageData!, currentChatId!);
     setInputValue('');
-    getChatbyId(chatId!)
+    getChatbyId(currentChatId!)
       .then((chat) => setCurrentChat(chat))
       .catch((error) => console.log(error));
   };
 
-  function handleItemReturnClick(itemId : string) {
-    returnItemById(itemId, itemReturnedData!);
-    console.log(itemReturnedData);
-  };
-
-  async function handleItemReceiveClick(itemId: string) {
-    await receiveItemById(itemId);
-    console.log(itemReceivedData);
-  };
-
-  async function handleCancelClick() {
-    // cancelTransactionRoute
-    navigate(-1)
-  };
-
-  /* Helper Functions */
+  /* More Helper Functions, apparently */
 
   // Helper Functions to retrieve the userId by the cookie
   function getCookieValue(cookieName : string)  {
@@ -87,7 +95,7 @@ export default function ChatSingle() {
   };
 
   // Helper function to parse and set the userId
-  function getUserId () {
+  function getAndSetUserId () {
     const userIdObject = getCookieValue('_auth_state');
     const parsedUserIdObject = JSON.parse(userIdObject);
     const userId = parsedUserIdObject._id;
@@ -99,75 +107,22 @@ export default function ChatSingle() {
     messageEndRef.current?.scrollIntoView({behavior: undefined});
   };
 
-  /* Use Effect */
-
-  useEffect(() => {
-    setActionButtonGroupData([]);
-  }, []);
-
-  useEffect(() => {
-    getChatbyId(chatId)
-      .then((chat) => setCurrentChat(chat))
-      .catch((error) => console.log(error));
-  }, []);
-
-  useEffect(() => (
-    getUserId()
-  ));
-
-  useEffect(() => {
-    if(currentChat?.item._id){
-    getItemById(currentChat?.item!._id!)
-      .then((item) => setCurrentItem(item))
-      .catch((error) => console.log(error));
-    };
-    if(currentItem?.borrowed === true) {
-      setReceivedButton(true)
-      setReturnedButton(false);
-      setCancelButton(true);
-    };
-  }, [currentChat]);
-
-
-  useEffect(() => {
-    setCurrentMessageData({
-      body: inputValue,
-      from: userId,
-      to: currentChat?.foreignUserId,
-      seen: false,
-    });
-  }, [inputValue]);
-
-  useEffect(() => {
-    setItemReturnedData({
-      foreignUserId: currentChat?.foreignUserId!
-    });
-  }, [currentChat]);
-
-  // useEffect(() => {
-  //   setItemReceivedData({
-  //     _id: currentChat?.item._id!,
-  //     borrowed: true,
-  //   });
-  // }, [currentChat]);
-
-  useEffect(()=> (
-    scrollToBottom()
-  ), [currentChat?.messages]);
-
   /* Render Component */
 
   return (<>
     <div className="chat">
 
+      <div className="chat-header">
+        <h1>{currentChat && currentChat.item.name}</h1>
+        <Link to={`/item/${currentItemId}`}><button className="button arrow-right">Item</button></Link>
+      </div>
+
       <div className="message-container">
         {currentChat && currentChat.messages
-        .slice()
-        .reverse()
-        .map((message, index) => (
-          <>
-            {message.from !== userId ? (
-              <div key={index} className="message foreign-user">
+          .slice()
+          .reverse()
+          .map((message, index) => (
+              <div key={index} className={`message ${message.from !== userId ? 'foreign-user' : 'user'}`}>
                 <div className="datetime">
                   {message.createdAt.toString().substring(11, 16)}
                 </div>
@@ -176,54 +131,27 @@ export default function ChatSingle() {
                 </div>
                 <div className="scroll-reference" ref={messageEndRef}></div>
               </div>
-            ) : (
-              <div key={index} className="message user">
-                <div className="datetime">
-                  {message.createdAt.toString().substring(11, 16)}
-                </div>
-                <div className="message-body">
-                  {message.body}
-                </div>
-                <div className="scroll-reference" ref={messageEndRef}></div>
-              </div>
-            )
-            }
-          </>
-        ))}
+          ))
+        }
       </div>
-
     </div>
 
-    <>
-    {currentChat && currentChat.item.user === userId ? (
-      <div className="button-group chat-button-group">
-        <button className="button styled large" onClick={() => handleCancelClick()} disabled={cancelButton}>Cancel</button>
-        <button className="button styled large" onClick={() => handleItemReturnClick(currentChat?.item!._id)} disabled={returnedButton}>Returned Item</button>
-      </div>
-      ) : (
-        <div className="button-group chat-button-group">
-        <button className="button styled large" disabled={cancelButton} onClick={() => handleCancelClick()}>Cancel</button>
-        <button className="button styled large" onClick={() => handleItemReceiveClick(currentChat!.item!._id)} disabled={receivedButton}>Received Item</button>
-      </div>
-      )
-    }
-    </>
-
     <div className="chat-input-container">
-
       <input
         type="text"
         name="message"
         value={inputValue}
         onChange={handleChange}
         onKeyPress={handleKeyPress}
+        autoComplete='false'
+        autoFocus={true}
       />
 
       <button className="button send styled large"
         onClick={handleSendClick}
-        >Send
+      >
+        Send
       </button>
-
     </div>
   </>);
 };

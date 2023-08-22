@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import { ActionButtonGroupData, HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext"
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Collection } from "../../types/types";
 import { getAllCollections } from "../../service/apiService";
 import CollectionList from "./CollectionList";
@@ -32,13 +32,6 @@ export default function CollectionOverview () {
           navigate('/collection/add');
         }
       },
-      // {
-      //   type: 'add item',
-      //   title: '',
-      //   action: () => {
-      //     navigate('/item/add');
-      //   }
-      // },
       {
         type: 'profile',
         title: '',
@@ -54,8 +47,49 @@ export default function CollectionOverview () {
 
   return (<>
     <div className="collection-overview">
-      <h1>Collections</h1>
-      {collections && <CollectionList collections={collections} />}
+      {collections && (<>
+        <div className="static-collections">
+          {collections
+            .filter((collection) => (
+              collection.name?.toLowerCase() === 'all'
+              || collection.name?.toLowerCase() === 'lent out'
+              || collection.name?.toLowerCase() === 'reserved'
+              || collection.name?.toLowerCase() === 'borrowed'
+            ))
+            .map((collection) => (<>
+              {collection.items && collection.items[0] && (
+                <Link to={`/collection/${collection._id}`}>
+                  <div className="static-collection-preview">
+                    <div
+                      className="static-collection-image"
+                      style={{backgroundImage: `url(${collection.items[0].img_url})`}}>
+                    </div>
+                    <h2>{collection.name}</h2>
+                  </div>
+                </Link>
+              )}
+              {collection.items && !collection.items[0] && (
+                <div className="static-collection-preview deactivated">
+                  <div className="static-collection-image deactivated"></div>
+                  <h2>{collection.name}</h2>
+                </div>
+              )}
+            </>))
+          }
+        </div>
+      </>)}
+      {/* <h1>Collections</h1> */}
+      {collections && (
+        <CollectionList collections={
+          collections
+            .filter((collection) => (
+              collection.name?.toLowerCase() !== 'all'
+              && collection.name?.toLowerCase() !== 'lent out'
+              && collection.name?.toLowerCase() !== 'reserved'
+              && collection.name?.toLowerCase() !== 'borrowed'
+            ))
+        } />
+      )}
     </div>
   </>)
 }
