@@ -60,11 +60,16 @@ export interface ChatPreview {
 export interface Message {
   id?: string;
   body: string;
-  from: User['id'];
+  from: {
+    user: User['id'],
+    seen: boolean,
+  }
+  to: {
+    user: User['id'],
+    seen: boolean,
+  }
   foreignUserName?: string ;
-  to: User['id'];
   createdAt?: number | string;
-  seen: boolean;
 }
 
 export interface MessageToSend {

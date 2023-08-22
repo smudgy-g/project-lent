@@ -175,53 +175,22 @@ const router = createBrowserRouter([
 
 function App() {
 
-  // useEffect(() => {
-  //   const socket: Socket = io('http://localhost:5001');
-
-  //   socket.on('connect', () => {
-  //     console.log('Connected to server with id:', socket.id);
-  //   })
-
-  //   // if (currentChatId && userId) {
-  //   //   socket.emit('join_chat', currentChatId, userId);
-  //   // }
-
-  //   // socket.on('new_message_in_room', (message) => {
-  //   //   console.log('New message:', message);
-  //   //   setCurrentChat((prevChat) => {
-  //   //     return {
-  //   //       ...prevChat!,
-  //   //       messages: [
-  //   //         message,
-  //   //         ...prevChat!.messages, 
-  //   //       ],
-  //   //     }
-  //   //   })
-  //   // });
-
-  //   return () => {
-  //     console.log('unmounted!!!!!');
-  //     socket.close();
-  //     socket.off("connect");
-  //     // socket.off("join_chat");
-  //     // socket.off("new_message_in_room");
-  //   };
-  // }, [])
-
   return (<>
     <div className="app">
-      <SocketProvider>
-        <AuthProvider authType={'cookie'}
-                    authName={'_auth'}
-                    cookieDomain={window.location.hostname}
-                    cookieSecure={window.location.protocol === 'https:'}>
+      <AuthProvider
+        authType={'cookie'}
+        authName={'_auth'}
+        cookieDomain={window.location.hostname}
+        cookieSecure={window.location.protocol === 'https:'}
+      >
+        <SocketProvider>
           <HeaderProvider>
             <ModalProvider>
               <RouterProvider router={router} />
             </ModalProvider>
           </HeaderProvider>
-        </AuthProvider>
-      </SocketProvider>
+        </SocketProvider>
+      </AuthProvider>
     </div>
   </>);
 }

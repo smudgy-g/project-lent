@@ -5,8 +5,6 @@ import { HeaderContext } from "../../contexts/HeaderContext";
 import { useNavigate} from 'react-router-dom'
 import { HeaderContextProps } from "../../contexts/HeaderContext";
 import { useSignOut } from 'react-auth-kit'
-import useHistory from "../navigation/useHistory";
-
 
 function Profile() {
 

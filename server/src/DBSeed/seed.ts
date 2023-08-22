@@ -24,7 +24,7 @@ async function seedDatabase() {
     await Collection.deleteMany();
     await Chat.deleteMany();
     await Message.deleteMany()
-    console.log('>> Databse reset.')
+    console.log('>> Database reset.')
 
     const password1 = await bcrypt.hash('klaus', 10);
     const password2 = await bcrypt.hash('herbert', 10);
@@ -77,7 +77,7 @@ async function seedDatabase() {
       name: 'Borrowed',
       items: [],
     });
-    
+
     const collection3 = await Collection.create({
       name: 'Lent Out',
       items: [],
@@ -97,7 +97,7 @@ async function seedDatabase() {
       name: 'All',
       items: [],
     });
-    
+
     const collection7 = await Collection.create({
       name: 'Borrowed',
       items: [],
@@ -122,7 +122,7 @@ async function seedDatabase() {
     });
 
 
-  
+
 
 
 
@@ -172,16 +172,26 @@ async function seedDatabase() {
     // Create messages
     const message1 = await Message.create({
       body: 'Hello',
-      from: user1._id,
-      to: user2._id,
-      seen: false,
+      from: {
+        user: user1._id,
+        seen: false,
+      },
+      to: {
+        user: user2._id,
+        seen: false,
+      }
     });
 
     const message2 = await Message.create({
       body: 'Hi',
-      from: user2._id,
-      to: user1._id,
-      seen: false,
+      from: {
+        user: user2._id,
+        seen: false,
+      },
+      to: {
+        user: user1._id,
+        seen: false,
+      }
     });
 
     // Update references
