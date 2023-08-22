@@ -61,32 +61,29 @@ export async function findItemById (itemId: string, userId: string, userLocation
 
 export async function createOne (userId: string, itemData: Partial<IItem>): Promise<IItem | null> {
   try {
-    let collectionObjArray: Types.ObjectId[] | undefined;
     const userIdObject = new Types.ObjectId(userId);
     const user = await User.findById(userIdObject);
-
     if (!user) throw new Error('User not found.');
-
-    const allCollectionId = await collectionModel.getCollectionIdByName(userIdObject, 'All');
     
+    let collectionObjArray: Types.ObjectId[] = [];
+    const allCollectionId = await collectionModel.getCollectionIdByName(userIdObject, 'All');
     if (!allCollectionId) throw new Error('Could not find the "All" collection.'); // maybe we create an all collection
 
     if (itemData.collections && itemData.collections.length) {
-      collectionObjArray = itemData.collections.map(col => new Types.ObjectId(col));
-    } else if (!itemData.collections){
-      collectionObjArray = [];
+      itemData.collections.map(col => collectionObjArray.push(new Types.ObjectId(col)));
     }
 
+    collectionObjArray.push(allCollectionId);
     const newItem = new Item({
       user: userIdObject,
-      collections: [...(collectionObjArray || []), allCollectionId],
-      available: itemData.lendable,
       ...itemData,
+      collections: [...collectionObjArray],
+      available: itemData.lendable,
     });
 
-    return newItem.save().then(savedItem => {
+    return await newItem.save().then(savedItem => {
       const itemId = savedItem._id;
-      newItem.collections.map(collection => collectionModel.addItemToCollection(collection.toString(), itemId))
+      newItem.collections.map(async collection => await collectionModel.addItemToCollection(collection.toString(), itemId));
     })
     .then(() => newItem);
   } catch (error) {
@@ -306,13 +303,13 @@ export async function returnItem (userId: string, itemId: string) {
                   input: '$chats.users',
                   cond: { $ne: ['$$this', userIdObject] }
                 }
-              }
+              }, 0
             ]
           }
         }
       }
     ])
-    console.log(borrower[0]);
+    console.log(borrower[0]); // borrower id
     const item = await Item.findById(itemIdObject).select({ 'user': 1, 'name': 1, 'value': 1, '_id': 0 });
     const lentOutCollectionId = await collectionModel.getCollectionIdByName(userIdObject, 'Lent Out');
     
