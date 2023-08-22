@@ -147,7 +147,7 @@ export default function CollectionEdit () {
 
        
         <div className="dropdown-group button styled full large">
-          <button className="button styled full large" onClick={handleToggle}>Add to...</button>
+          <button className="button styled full large" onClick={handleToggle}>Add items to...</button>
             { isOpen && 
             <div className="button-list-top">
 
@@ -160,7 +160,7 @@ export default function CollectionEdit () {
             </div>}
         </div>
         }
-        <button className="button styled full large" onClick={handleClickSave}>Save</button>
+        <button className="button styled full large" onClick={handleClickSave}>Save Name</button>
 
     </div>
   </>)

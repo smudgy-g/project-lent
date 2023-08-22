@@ -87,16 +87,16 @@ export async function getAll (userId: string): Promise<any | null> {
 
 export async function addItemToCollection (collectionId: string, itemId: string) {
   try {
-    const itemIdObject = new Types.ObjectId(itemId);
+    const itemIdObj = new Types.ObjectId(itemId);
     const collection = await Collection.findById(collectionId);
     
-    if (collection && collection.items.includes(itemIdObject)) {
+    if (collection && collection.items.includes(itemIdObj)) {
       return collection; 
     }
 
-    const collectionIdObject = new Types.ObjectId(collectionId);
-    return await Collection.findByIdAndUpdate(collectionIdObject, 
-      { $push: { items: itemIdObject }},
+    const collectionIdObj = new Types.ObjectId(collectionId);
+    return await Collection.findByIdAndUpdate(collectionIdObj, 
+      { $push: { items: itemIdObj }},
       { new: true } )
   } catch (error) {
     console.error(error);
@@ -106,11 +106,11 @@ export async function addItemToCollection (collectionId: string, itemId: string)
 
 export async function removeItemFromCollection (collectionId: string, itemId: string) {
   try {
-    const itemIdObject = new Types.ObjectId(itemId);
-    const collectionIdObject = new Types.ObjectId(collectionId);
+    const itemIdObj = new Types.ObjectId(itemId);
+    const collectionIdObj = new Types.ObjectId(collectionId);
 
-    return await Collection.findByIdAndUpdate(collectionIdObject, 
-      { $pull: { items: itemIdObject } },
+    return await Collection.findByIdAndUpdate(collectionIdObj, 
+      { $pull: { items: itemIdObj } },
       { new: true });
   } catch (error) {
     console.error(error);

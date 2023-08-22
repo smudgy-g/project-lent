@@ -25,9 +25,14 @@ export interface IChat extends Document {
 
 export interface IMessage extends Document {
   body: string;
-  from: Types.ObjectId;
-  to: Types.ObjectId;
-  seen: boolean;
+  from: {
+    user: Types.ObjectId,
+    seen: boolean
+  };
+  to: {
+    user: Types.ObjectId,
+    seen: boolean
+  };
 }
 
 export interface ICollection extends Document {
@@ -45,6 +50,7 @@ export interface IUser extends Document {
   reputation: number;
   collections: Types.ObjectId[];
   inbox: Types.ObjectId[];
+  new: boolean;
 }
 
 export interface IGeoLocation {

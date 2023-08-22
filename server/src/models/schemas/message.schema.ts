@@ -4,9 +4,14 @@ import { IMessage } from '../../types';
 const messageSchema = new Schema<IMessage>(
   {
     body: { type: String, required: true },
-    from: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    to: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    seen: { type: Boolean },
+    from: { 
+      user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+      seen: { type: Boolean }
+    },
+    to: { 
+      user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+      seen: { type: Boolean } 
+    },
   },
   { timestamps: true }
 );
