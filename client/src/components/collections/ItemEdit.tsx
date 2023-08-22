@@ -111,12 +111,12 @@ export default function ItemEdit() {
         }
 
         console.log(itemId, updatedFormData)
-        //const response = await putItemById(itemId!, updatedFormData);
+        await putItemById(itemId!, updatedFormData);
         navigate(`/item/${itemId}`);
 
       } else {
       console.log(itemId, formData)
-      //const response = await putItemById(itemId!, formData);
+      await putItemById(itemId!, formData);
       navigate(`/item/${itemId}`);
     }
   };
