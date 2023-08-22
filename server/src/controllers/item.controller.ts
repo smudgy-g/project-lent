@@ -17,6 +17,7 @@ export async function getAllItems (ctx: Context) {
 export async function createItem (ctx:Context) {
   const userId = ctx.userId;
   const itemData = ctx.request.body as Partial<IItem>;
+  console.log('itemData', itemData)
 
   if (!itemData) ctx.throw(400, { message: 'No item data provided.' });
 

@@ -61,6 +61,7 @@ export async function findItemById (itemId: string, userId: string, userLocation
 
 export async function createOne (userId: string, itemData: Partial<IItem>): Promise<IItem | null> {
   try {
+    let collectionObjArray: Types.ObjectId[] | undefined;
     const userIdObject = new Types.ObjectId(userId);
     const user = await User.findById(userIdObject);
 
@@ -68,18 +69,24 @@ export async function createOne (userId: string, itemData: Partial<IItem>): Prom
 
     const allCollectionId = await collectionModel.getCollectionIdByName(userIdObject, 'All');
     
-    if (!allCollectionId) throw new Error('Could not find the "All" collection.');
-    
+    if (!allCollectionId) throw new Error('Could not find the "All" collection.'); // maybe we create an all collection
+
+    if (itemData.collections && itemData.collections.length) {
+      collectionObjArray = itemData.collections.map(col => new Types.ObjectId(col));
+    } else if (!itemData.collections){
+      collectionObjArray = [];
+    }
+
     const newItem = new Item({
       user: userIdObject,
-      collections: [...(itemData.collections || []), allCollectionId],
+      collections: [...(collectionObjArray || []), allCollectionId],
       available: itemData.lendable,
       ...itemData,
     });
 
     return newItem.save().then(savedItem => {
       const itemId = savedItem._id;
-      collectionModel.addItemToCollection(allCollectionId.toString(), itemId)
+      newItem.collections.map(collection => collectionModel.addItemToCollection(collection.toString(), itemId))
     })
     .then(() => newItem);
   } catch (error) {
