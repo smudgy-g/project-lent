@@ -9,7 +9,6 @@ import connectDb from './models/_index';
 import { ioConnect } from './controllers/socketHandler.controller';
 
 dotenv.config();
-const PORT = process.env.PORT || 5001;
 
 const app = new Koa();
 const server = http.createServer(app.callback());
@@ -25,10 +24,10 @@ const serverOptions = {
 const io = new Server(server, serverOptions);
 
 // Middlewares
-app.use(cors({ 
+app.use(cors({
   origin: 'http://localhost:3000',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  headers: ['Content-Type', 'Authorization'], 
+  headers: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
 app.use(parser());
