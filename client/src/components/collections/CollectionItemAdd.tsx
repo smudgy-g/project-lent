@@ -94,8 +94,8 @@ export default function ItemAdd() {
     event.preventDefault();
 
     console.log(formData)
-    //const response = await postItem(updatedFormData);
-    // navigate(`/item/${response._id}`);
+    const response = await postItem(formData!);
+    navigate(`/item/${response._id}`);
   };
 
   /* Render Component */

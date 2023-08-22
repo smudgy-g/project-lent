@@ -50,8 +50,8 @@ export default function CollectionSingle () {
       },
       {
         title: 'Delete',
-        action: () => {
-          //deleteCollection(collectionId!)
+        action: async () => {
+          await deleteCollection(collectionId!)
           navigate('/collections');
         }
       }

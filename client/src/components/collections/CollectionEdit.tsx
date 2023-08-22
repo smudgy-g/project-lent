@@ -44,15 +44,15 @@ export default function CollectionEdit () {
 
   function handleClickSave() {
     console.log(newCollectionName, collectionId)
-    //changeCollectionName(newCollectionName!, collectionId!)
-    // navigate(`/collection/${collectionId}`)
+    changeCollectionName(newCollectionName!, collectionId!)
+    navigate(`/collection/${collectionId}`)
   }
 
   // Remove Items
   async function handleClickRemove() {
     console.log(selectedItems, collectionId)
-    //await deleteItemsFromCollection(selectedItems!, collectionId!)
-    //navigate(`/collection/${collectionId}`)
+    await deleteItemsFromCollection(selectedItems!, collectionId!)
+    navigate(`/collection/${collectionId}`)
   }
 
   // Add Items to another collection
@@ -71,8 +71,8 @@ export default function CollectionEdit () {
   function handleToggle () {
     if( isOpen) {
       console.log('selected Collections:', selectedCollections, 'selected Items:', selectedItems)
-      //addItemsToCollections(selectedItems!, selectedCollections!)
-      // navigate(`/collection/${collectionId}`)
+      addItemsToCollections(selectedItems!, selectedCollections!)
+      navigate(`/collection/${collectionId}`)
     } else {
       setIsOpen(!isOpen);
     }
