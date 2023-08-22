@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react"
-import { ActionButtonGroupData, HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext"
+import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext"
 import { Link, useNavigate } from "react-router-dom";
-import { Collection } from "../../types/types";
+import { ActionButtonGroupData, Collection } from "../../types/types";
 import { getAllCollections } from "../../service/apiService";
 import CollectionList from "./CollectionList";
 
@@ -56,9 +56,9 @@ export default function CollectionOverview () {
               || collection.name?.toLowerCase() === 'reserved'
               || collection.name?.toLowerCase() === 'borrowed'
             ))
-            .map((collection) => (<>
+            .map((collection, index) => (<>
               {collection.items && collection.items[0] && (
-                <Link to={`/collection/${collection._id}`}>
+                <Link to={`/collection/${collection._id}`} key={index}>
                   <div className="static-collection-preview">
                     <div
                       className="static-collection-image"
@@ -69,7 +69,7 @@ export default function CollectionOverview () {
                 </Link>
               )}
               {collection.items && !collection.items[0] && (
-                <div className="static-collection-preview deactivated">
+                <div className="static-collection-preview deactivated" key={index}>
                   <div className="static-collection-image deactivated"></div>
                   <h2>{collection.name}</h2>
                 </div>

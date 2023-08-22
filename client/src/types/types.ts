@@ -73,3 +73,11 @@ export interface MessageToSend {
   to?: User['id'] ;
   seen: boolean;
 }
+
+export type ActionButtonData = {
+  type?: string;
+  title: string;
+  action: () => void;
+};
+
+export type ActionButtonGroupData = (ActionButtonData | ActionButtonData[])[];

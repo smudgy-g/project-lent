@@ -17,7 +17,10 @@ export default function ItemListItem ({ item }: ItemListItemProps) {
       <div className="preview-container">
         <div key={item._id} className="item-preview" style={{backgroundImage: `url(${item.img_url})`}}></div>
       </div>
-      <h2>{item.name}</h2>
+      <div className="list-item-title">
+        {item.distance && <span className="distance">{`${item.distance} km`}</span> }
+        <h2>{item.name}</h2>
+      </div>
     </div>
   </>);
 }
