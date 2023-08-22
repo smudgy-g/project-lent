@@ -451,11 +451,11 @@ input:checked + .slider:before {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: black;
 }
 
 .camera-capture video {
   width: 100%;
+  border-radius: var(--radius-lg);
 }
 
 /* ItemSingle */
@@ -703,6 +703,7 @@ input[type=search] {
   display: flex;
   gap: var(--p-md);
 
+  overflow: scroll;
   scroll-snap-type: x mandatory;
   border-bottom: var(--border);
 }

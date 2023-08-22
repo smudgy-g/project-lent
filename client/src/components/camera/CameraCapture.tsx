@@ -7,53 +7,73 @@ interface CameraCaptureProps {
 }
 
 const videoConstraints = {
-  aspectRatio: 1,
-  facingMode: "user"
+  // aspectRatio: 1,
+  facingMode: "environment"
 };
 
 export default function CameraCapture ({ onImageCapture }: CameraCaptureProps) {
   const webcamRef = useRef<Webcam>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
-  const captureImage = () => {
+  function handleClickCapture () {
     const imageSrc = webcamRef.current!.getScreenshot();
     if (imageSrc) {
       setCapturedImage(imageSrc);
-      onImageCapture(imageSrc);
     }
   };
 
-  // const onDrop = async (acceptedFiles) => {
-  //   const file = acceptedFiles[0];
-  //   const reader = new FileReader();
+  function handleClickDiscard () {
+    if (capturedImage) {
+      setCapturedImage(null);
+    }
+  }
 
-  //   reader.onload = () => {
-  //     const imageSrc = reader.result;
-  //     setCapturedImage(imageSrc);
-  //     onImageCapture(imageSrc);
-  //   };
+  function handleClickUse () {
+    if (capturedImage) {
+      onImageCapture(capturedImage);
+    }
+  }
 
-  //   reader.readAsDataURL(file);
-  // };
+  async function onDrop (acceptedFiles: any) {
+    const file = acceptedFiles[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const imageSrc = reader.result;
+      if (imageSrc) {
+        setCapturedImage(imageSrc as string);
+      }
+    };
+
+    reader.readAsDataURL(file);
+  };
 
   return (<>
     <div className='camera-capture'>
-      <Webcam
-        audio={false}
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-        videoConstraints={videoConstraints}
-      />
-      <button onClick={captureImage}>Capture Image</button>
-      {/* <Dropzone onDrop={onDrop}>
-        {({ getRootProps, getInputProps }) => (
-          <div {...getRootProps()}>
-            <input {...getInputProps()} />
-            <p>Drag 'n' drop an image here, or click to select a file</p>
-          </div>
-        )}
-      </Dropzone> */}
+      {!capturedImage && (<>
+        <Webcam
+          audio={false}
+          ref={webcamRef}
+          screenshotFormat="image/jpeg"
+          videoConstraints={videoConstraints}
+        />
+      </>)}
       {capturedImage && <img src={capturedImage} alt="Captured" />}
+      <div className='button-group'>
+        <Dropzone onDrop={onDrop}>
+          {({ getRootProps, getInputProps }) => (
+            <div className='button full' {...getRootProps()}>
+              <input {...getInputProps()} />
+              <button className='button styled full large'>Select Image</button>
+            </div>
+          )}
+        </Dropzone>
+        {!capturedImage && <button className='button styled secondary full large' onClick={handleClickCapture}>Capture Image</button>}
+        {capturedImage && (<>
+          <button className='button styled full large' onClick={handleClickDiscard}>Discard Image</button>
+          <button className='button styled secondary full large' onClick={handleClickUse}>Use Image</button>
+        </>)}
+      </div>
     </div>
   </>);
 };
