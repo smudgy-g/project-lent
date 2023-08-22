@@ -25,10 +25,11 @@ const userSchema = new Schema<IUser>({
   password: { type: String, required: true },
   address: { type: addressSchema, required: true },
   geoLocation: { type: geoLocationSchema, required: true },
-  credits: { type: Number },
-  reputation: { type: Number },
+  credits: { type: Number, min: 0 },
+  reputation: { type: Number, min: 0 },
   collections: [{ type: Schema.Types.ObjectId, ref: 'Collection' }],
   inbox: [{ type: Schema.Types.ObjectId, ref: 'Chat' }],
+  new: { type: Boolean }
 }, { timestamps: true });
 
 export const User = model<IUser>('User', userSchema);

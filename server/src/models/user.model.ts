@@ -20,6 +20,7 @@ export async function createUser (username: string, email: string, password: str
       reputation: 0,
       collections: [],
       inbox: [],
+      new: true
     });
     
     return newUser.save().then(async (user) => {
@@ -47,10 +48,10 @@ export async function findUserById (id: string): Promise<IUser | null> {
 
 export async function addToUserCollection (userId: string, collectionId: string): Promise<any> {
   try {
-    const collectionIdObject = new Types.ObjectId(collectionId);
+    const collectionIdObj = new Types.ObjectId(collectionId);
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { $push: { collections: collectionIdObject } },
+      { $push: { collections: collectionIdObj } },
       { new: true }
     );
     return updatedUser;
@@ -79,8 +80,8 @@ export async function updateUserDetails (id: string, { username, email, address 
 
 export async function deleteUserById (userId: string): Promise<IUser | null> {
   try {
-    const userIdObject = new Types.ObjectId(userId);
-    return await User.findByIdAndDelete(userIdObject);
+    const userIdObj = new Types.ObjectId(userId);
+    return await User.findByIdAndDelete(userIdObj);
   } catch (error) {
     console.error(error);
     throw error;
@@ -109,12 +110,12 @@ export async function getUsername (userId: string) {
 
 export async function addChatToInbox (userId: Types.ObjectId, chatId: Types.ObjectId) {
   try {
-    const userIdObject = new Types.ObjectId(userId);
-    const chatIdObject = new Types.ObjectId(chatId);
+    const userIdObj = new Types.ObjectId(userId);
+    const chatIdObj = new Types.ObjectId(chatId);
 
-    return await User.findByIdAndUpdate(userIdObject, {
+    return await User.findByIdAndUpdate(userIdObj, {
       $push: {
-        inbox: chatIdObject
+        inbox: chatIdObj
       }
     }, { new: true } )
   } catch (error) {
