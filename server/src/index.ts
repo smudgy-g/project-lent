@@ -18,8 +18,6 @@ app.use(parser());
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-const PORT = process.env.PORT || 5001;
-
 const server = http.createServer(app.callback());
 const io = new Server(server);
 
@@ -37,5 +35,4 @@ const run = async () => {
 run();
 
 export { io };
-
 export default app;

@@ -5,7 +5,7 @@ import { IAddress, IGeoLocation } from '../types';
 dotenv.config();
 const apiKey = process.env.GEO_API_KEY as string;
 
-export default function convertAddressToGeoCode(address: IAddress): Promise<IGeoLocation | null> {
+export default async function convertAddressToGeoCode(address: IAddress): Promise<IGeoLocation | null> {
   const stringifiedAddress = `${address.streetName} ${address.streetNumber}, ${address.postalCode} ${address.city}, Germany`;
   const encodedAddress = encodeURIComponent(stringifiedAddress);
   const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&components=country:DE&key=${apiKey}`;

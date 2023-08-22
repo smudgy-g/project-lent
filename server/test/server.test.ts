@@ -2,7 +2,7 @@ import mongoose, { Types } from 'mongoose';
 import app from '../src/index';
 import request from 'supertest';
 import * as jwt from 'jsonwebtoken';
-import { mockGeoLocation, mockNewUser, mockUserAddress, mockUserId, mockUserUpdatePayload } from './mocks';
+import { mockGeoLocation, mockNewUser, mockUserId } from './mocks';
 import connectDb from '../src/models/_index';
 import dotenv from "dotenv";
 

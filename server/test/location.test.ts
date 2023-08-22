@@ -1,10 +1,7 @@
-// import jest from 'jest';
 import { IItem } from "../src/types";
 import { getItemLocations } from "../src/utilities/location";
 import { mockGeoLocation, mockItem1, mockItem2 } from "./mocks";
 
-
-// Mocked getUserGeoLocation function
 const getItemLocationsMock = jest.fn().mockResolvedValue(mockGeoLocation);
 
 jest.mock('../src/utilities/location', () => {

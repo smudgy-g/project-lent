@@ -144,6 +144,7 @@ export async function updateOne (itemId: string, itemData: Partial<IItem>) {
     const itemIdObj = new Types.ObjectId(itemId);
     const { user, collections,...updatedData } = itemData;
     const item = await Item.findById(itemIdObj).select({ 'lendable': 1, 'user': 1, 'collections': 1 });
+    
     if (item && collections) {
       const userIdObj = new Types.ObjectId(item.user)
       const allCollectionId = await collectionModel.getCollectionIdByName(userIdObj, 'All');
@@ -153,7 +154,7 @@ export async function updateOne (itemId: string, itemData: Partial<IItem>) {
       for (let i = 0; i < item.collections.length; i++) {
         const originalCollection = item.collections[i].toString();
         if (!collections.includes(originalCollection)) {
-          const result = await collectionModel.removeItemFromCollection(originalCollection.toString(), itemId);
+          const result = await collectionModel.removeItemFromCollection(originalCollection, itemId);
         }
       }
 
