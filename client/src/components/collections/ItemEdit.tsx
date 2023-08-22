@@ -101,15 +101,22 @@ export default function ItemEdit() {
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    const selectedCollections: string[] = Array.from((document.getElementById('collection') as HTMLSelectElement).selectedOptions, option => option.value);
+    const collectionElement = document.getElementById('collection');
+      if (collectionElement) {
+        const selectedCollections: string[] = Array.from((collectionElement as HTMLSelectElement).selectedOptions, option => option.value);
+        // Rest of your code using selectedCollections
+        const updatedFormData = {
+          ...formData,
+          collections: selectedCollections.filter((result) => result !== 'all'),
+        }
 
-    const updatedFormData = {
-      ...formData,
-      collections: selectedCollections.filter((result) => result !== 'all'),
-    };
-    if (itemId) {
-      console.log(itemId, updatedFormData)
-      const response = await putItemById(itemId, updatedFormData);
+        console.log(itemId, updatedFormData)
+        //const response = await putItemById(itemId!, updatedFormData);
+        navigate(`/item/${itemId}`);
+
+      } else {
+      console.log(itemId, formData)
+      //const response = await putItemById(itemId!, formData);
       navigate(`/item/${itemId}`);
     }
   };
