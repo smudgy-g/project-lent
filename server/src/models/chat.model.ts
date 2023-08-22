@@ -65,14 +65,13 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
           .filter((user: any) => user._id.toString() !== userId)
           .map(async (user: any) => await getUsername(user.toString()))
       );
-
         return {
           id: chat.chats._id,
           itemId: chat.chats.item,
           itemName: chat.item[0].name,
           img_url: chat.item[0].img_url,
           foreignUser: foreignUserName[0],
-          message: chat.messages[chat.messages.length - 1].body,
+          message: chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].body : '',
           updatedAt: chat.chats.updatedAt,
         };
       })
@@ -161,17 +160,27 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
   }
 }
 
-export async function createChat (itemId: string, ownerId: any, userId: string, message?: string): Promise<IChat | null> {
+export async function createNotificationChat (id: Types.ObjectId): Promise<IChat | null> {
+  try {
+    const newChatData = new Chat({ _id: id });
+    return await Chat.create(newChatData);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function createChat (itemId: string, ownerId: string, userId: string, message?: string): Promise<IChat | null> {
   try {
     const ownerIdObj = new Types.ObjectId(ownerId);
     const userIdObj = new Types.ObjectId(userId);
     const itemIdObj = new Types.ObjectId(itemId);
 
-    const newChatData: Partial<IChat> = new Chat({
+    const newChatData = new Chat({
       item: itemIdObj,
       users: [ownerIdObj, userIdObj]
     });
-
+    
     const newChat = await Chat.create(newChatData);
 
     if (message) {
@@ -182,13 +191,15 @@ export async function createChat (itemId: string, ownerId: any, userId: string, 
           seen: false
         },
         to: {
-          user: userIdObj,
+          user: ownerIdObj,
           seen: false
         },
       }
       await addChatToInbox(ownerIdObj, newChat._id);
       await addChatToInbox(userIdObj, newChat._id);
-      return await postMessage(newMessage as IMessage, newChat._id);
+      const result = await postMessage(newMessage as IMessage, newChat._id);
+      console.log(result);
+      return result;
     }
     return newChat;
   } catch (error) {

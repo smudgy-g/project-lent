@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 import { IAddress, IGeoLocation, IUser } from '../types';
 import convertAddressToGeoCode from '../utilities/geocoding';
 import * as collection from './collection.model';
+import { createNotificationChat } from './chat.model';
 import { User } from './schemas/user.schema';
 import bcrypt from 'bcrypt';
 
@@ -29,6 +30,7 @@ export async function createUser (username: string, email: string, password: str
       await collection.createOne('Borrowed', id);
       await collection.createOne('Lent Out', id);
       await collection.createOne('Reserved', id);
+      await createNotificationChat(id);
     })
     .then(() => newUser);
   } catch (error) {

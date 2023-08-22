@@ -49,4 +49,4 @@ const run = async () => {
 
 run();
 
-export { io };
+export { io, app };

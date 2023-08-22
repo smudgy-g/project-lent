@@ -18,18 +18,18 @@ export interface ILogin {
 }
 
 export interface IChat extends Document {
-  item: Types.ObjectId;
+  item?: Types.ObjectId;
   messages: Types.ObjectId[];
-  users: Types.ObjectId[];
+  users?: Types.ObjectId[];
 }
 
 export interface IMessage extends Document {
   body: string;
-  from: {
+  from?: {
     user: Types.ObjectId,
     seen: boolean
   };
-  to: {
+  to?: {
     user: Types.ObjectId,
     seen: boolean
   };

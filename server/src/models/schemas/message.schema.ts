@@ -5,11 +5,11 @@ const messageSchema = new Schema<IMessage>(
   {
     body: { type: String, required: true },
     from: { 
-      user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+      user: { type: Schema.Types.ObjectId, ref: 'User' },
       seen: { type: Boolean }
     },
     to: { 
-      user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+      user: { type: Schema.Types.ObjectId, ref: 'User' },
       seen: { type: Boolean } 
     },
   },
