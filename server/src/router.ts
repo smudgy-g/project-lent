@@ -9,6 +9,12 @@ import * as search from './controllers/search.controller';
 
 const router = new Router();
 
+// test route
+router.get('/test', (ctx) => {
+  ctx.status = 200;
+  ctx.body = 'Testing 123';
+});
+
 // user routes
 router.get('/user/:id', user.getUserById);
 router.put('/user', authenticate, user.updateUser);

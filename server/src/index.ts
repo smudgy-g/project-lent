@@ -9,6 +9,7 @@ import connectDb from './models/_index';
 import { ioConnect } from './controllers/socketHandler.controller';
 
 dotenv.config();
+const PORT = process.env.PORT || 5001;
 
 const app = new Koa();
 
@@ -16,8 +17,6 @@ app.use(cors({ credentials: true }));
 app.use(parser());
 app.use(router.routes());
 app.use(router.allowedMethods());
-
-const PORT = process.env.PORT || 5001;
 
 const server = http.createServer(app.callback());
 const io = new Server(server);
@@ -36,3 +35,4 @@ const run = async () => {
 run();
 
 export { io };
+export default app;
