@@ -63,7 +63,7 @@ export interface Message {
   from: User['id'];
   foreignUserName?: string ;
   to: User['id'];
-  createdAt?: number;
+  createdAt?: number | string;
   seen: boolean;
 }
 

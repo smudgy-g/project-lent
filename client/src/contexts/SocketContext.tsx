@@ -89,12 +89,12 @@ export default function SocketProvider ({ children }: SocketProviderProps) {
           ...prevChat!,
           messages: [
             message,
-            ...prevChat!.messages, 
+            ...prevChat!.messages,
           ],
         }
       })
     });
-    
+
     // Cleanup
     return () => {
       socket.off("connect");
@@ -120,7 +120,7 @@ export default function SocketProvider ({ children }: SocketProviderProps) {
   // Helper for sending messages to the specified room
   function sendMessage (messageData: Message) {
     const socket = socketRef.current;
-    
+
     if (socket && currentChatId) {
       socket.emit('message_from_client', currentChatId, messageData);
     }
