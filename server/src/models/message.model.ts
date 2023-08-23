@@ -35,21 +35,46 @@ export async function postMessage (message: IMessage, chatId: string) {
 
 export async function postNotification (message: string, itemId: string, chatId: Types.ObjectId) {
   try {
-  
-  const notification: Partial<IMessage> = {
-    body: message,
-    notification: {
-      item: itemId,
-      seen: false
+    const notification: Partial<IMessage> = {
+      body: message,
+      notification: {
+        item: itemId,
+        seen: false
+      }
     }
-  }
-  const newNotification = await Message.create(notification);
-  console.log(newNotification);
-  const res = await Chat.findByIdAndUpdate(chatId, { $push: { messages: newNotification._id } });
-  console.log(res);
-  return res;
+    const newNotification = await Message.create(notification);
+    console.log(newNotification);
+    const res = await Chat.findByIdAndUpdate(chatId, { $push: { messages: newNotification._id } });
+    console.log(res);
 
-  return newNotification;
+    return newNotification;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function updateMessage (message: Partial<IMessage>, messageId: string) {
+  // object with message id and from/to/notification property
+  const messageIdObj = new Types.ObjectId(messageId);
+  try {
+    if (message.from) {
+      return await Message.findByIdAndUpdate(messageIdObj, {
+        $set: { 'from.seen': Boolean(message.from.seen) }
+      }, { new: true })
+    }
+
+    if (message.to) {
+      return await Message.findByIdAndUpdate(messageIdObj, {
+        $set: { 'to.seen': Boolean(message.to.seen) }
+      }, { new: true })
+    }
+
+    if (message.notification) {
+      return await Message.findByIdAndUpdate(messageIdObj, {
+        $set: { 'notification.seen': Boolean(message.notification.seen) }
+      }, { new: true })
+    }
   } catch (error) {
     console.error(error);
     throw error;
