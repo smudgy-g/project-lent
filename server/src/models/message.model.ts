@@ -8,8 +8,8 @@ export async function postMessage (message: IMessage, chatId: string) {
     const chatIdObj = new Types.ObjectId(chatId);
     const newMessage = await Message.create({
       body: message.body,
-      from: { user: message.from, seen: true },
-      to: { user: message.to, seen: false },
+      from: { user: message.from.user, seen: true },
+      to: { user: message.to.user, seen: false },
     });
     return await Chat.findByIdAndUpdate(chatIdObj, {
       $push: {
