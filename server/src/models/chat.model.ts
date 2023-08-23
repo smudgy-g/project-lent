@@ -197,9 +197,7 @@ export async function createChat (itemId: string, ownerId: string, userId: strin
       }
       await addChatToInbox(ownerIdObj, newChat._id);
       await addChatToInbox(userIdObj, newChat._id);
-      const result = await postMessage(newMessage as IMessage, newChat._id);
-      console.log(result);
-      return result;
+      await postMessage(newMessage as IMessage, newChat._id);
     }
     return newChat;
   } catch (error) {
