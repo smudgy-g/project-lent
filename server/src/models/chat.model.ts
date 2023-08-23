@@ -52,7 +52,7 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
           'chats.users': 1,
           'item.name': 1,
           'item.img_url': 1,
-          'messages.body': 1,
+          'messages': 1,
           'chats.updatedAt': 1
         }
       }
@@ -68,10 +68,10 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
         return {
           id: chat.chats._id,
           itemId: chat.chats.item,
-          itemName: chat.item[0].name,
-          img_url: chat.item[0].img_url,
+          itemName: chat.item[0] ? chat.item[0].name : '',
+          img_url: chat.item[0] ? chat.item[0].img_url : '',
           foreignUser: foreignUserName[0],
-          message: chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].body : '',
+          messages: chat.messages,
           updatedAt: chat.chats.updatedAt,
         };
       })

@@ -166,9 +166,9 @@ export async function updateOne (itemId: string, itemData: Partial<IItem>) {
       // Check for added items
       const originalCollection = item.collections.map(c => c.toString());
       for (let i = 0; i < collections.length; i++) {
-        const updatedCollection = collections[i];
+        const updatedCollection = collections[i].toString();
         if (!originalCollection.includes(updatedCollection)) {
-          await collectionModel.addItemToCollection(updatedCollection.toString(), itemId);
+          await collectionModel.addItemToCollection(updatedCollection, itemId);
         }
       }
       
@@ -264,6 +264,8 @@ export async function cancelReserveItem (userId: string, itemId: string) {
     if (item && userId !== item.user.toString()) reservedCollectionId = await collectionModel.getCollectionIdByName(userIdObj, 'Reserved');
     else if (item && userId === item.user.toString()) reservedCollectionId = await collectionModel.getCollectionIdByName(item.user, 'Reserved');
     
+
+    // delete chats
     await collectionModel.removeItemFromCollection(reservedCollectionId, itemId);
 
     const message = `The reservation for the ${item!.name} was cancelled.`;
