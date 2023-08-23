@@ -1,14 +1,15 @@
-import { useContext, useEffect, useState } from "react";
-import { ActionButtonGroupData, Item } from "../../types/types";
+import { SetStateAction, useContext, useEffect, useState } from "react";
+import { ActionButtonGroupData, Collection, Item } from "../../types/types";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteCollection, getAllItems, getItemsByCollection } from "../../service/apiService";
+import { deleteCollection, getAllCollections, getAllItems, getItemsByCollection } from "../../service/apiService";
 import ItemList from "./ItemList";
 
 export default function CollectionSingle () {
 
   const [items, setItems] = useState<Item[] | null>(null);
-
+  const [currentCollection, setCurrentCollection] = useState<Collection | undefined>();
+  
   /* Hooks */
 
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
@@ -30,6 +31,17 @@ export default function CollectionSingle () {
         .catch((error) => console.log(error));
     }
   }, [collectionId]);
+
+  useEffect(() => {
+    getAllCollections()
+      .then((result) => {
+        const filteredCollection = result.filter((item) => item._id === collectionId);
+        if (filteredCollection) {
+          setCurrentCollection(filteredCollection[0]);
+        }
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
   // Populate the Header component’s action button group
   useEffect(() => {
@@ -64,7 +76,9 @@ export default function CollectionSingle () {
 
   return (<>
     <div className="collection-single">
-      <h1>Collection: {collectionId}</h1>
+      {currentCollection &&
+      <h1>Collection: {currentCollection!.name}</h1>
+      }
       {items && <ItemList items={items} />}
     </div>
   </>)

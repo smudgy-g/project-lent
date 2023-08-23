@@ -158,7 +158,10 @@ export default function ItemSingle () {
     try {
       if (item && itemId) {
         cancelItemById(itemId)
-          .then(() => item.available = true)
+          .then(() => {
+            item.available = true
+            navigate('/collections')
+          })
           .catch((error) => console.log(error));
       };
     }
@@ -171,7 +174,10 @@ export default function ItemSingle () {
     try {
       if (item && itemId) {
         receiveItemById(itemId)
-          .then(() => item.borrowed = true)
+          .then(() => {
+            item.borrowed = true
+            navigate('/collections')
+          })
           .catch((error) => console.log(error));
       }
     }
@@ -187,6 +193,7 @@ export default function ItemSingle () {
           .then(() => {
             item.borrowed = false;
             item.available = true;
+            navigate('/collections')
           })
           .catch((error) => console.log(error));
       }
