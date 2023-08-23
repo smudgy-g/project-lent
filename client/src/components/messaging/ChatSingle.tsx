@@ -47,6 +47,7 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
             console.log(error);
           });
       }
+      return chat;
     })
   }
 

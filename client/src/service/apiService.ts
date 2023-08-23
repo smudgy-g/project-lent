@@ -614,7 +614,7 @@ export async function postMessage (currentMessageData: MessageToSend, chatId: st
 
 export async function putMessage(message: Message) {
   try {
-    const response = await fetch(`${baseUrl}/inbox/message`, {
+    const response = await fetch(`${baseUrl}/inbox/message/${message.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

@@ -12,12 +12,22 @@ function InboxCombined() {
     currentChatId,
     setCurrentChatId,
     currentItemId,
+    setCurrentItemId,
   } = useContext<SocketContextProps>(SocketContext);
 
   // Initialize the header
   useEffect(() => {
     setActionButtonGroupData([]);
   }, [setActionButtonGroupData]);
+
+  // Make sure the first chat is always selected,
+  // when the component loads and the chats were loaded
+  useEffect(() => {
+    if (chats && !currentChatId) {
+      setCurrentChatId(chats[0].id);
+      setCurrentItemId(chats[0].itemId!);
+    }
+  }, [chats]);
 
   /* Event Handlers */
 
