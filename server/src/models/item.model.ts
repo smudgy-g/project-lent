@@ -368,7 +368,6 @@ export async function returnItem (userId: string, itemId: string) {
     ])
     const borrowerId = data[0].borrowerId;
     const chatIdObj = data[0].chatId;
-    console.log(data[0]); // borrower id
     const item = await Item.findById(itemIdObj).select({ 'user': 1, 'name': 1, 'value': 1, '_id': 0 });
     const lentOutCollectionId = await collectionModel.getCollectionIdByName(userIdObj, 'Lent Out');
 
