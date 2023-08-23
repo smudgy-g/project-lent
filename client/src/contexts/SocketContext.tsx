@@ -32,6 +32,7 @@ interface SocketProviderProps {
 
 export default function SocketProvider ({ children }: SocketProviderProps) {
 
+
   const [currentChatId, setCurrentContextChatId] = useState<string>('');
   const [currentChat, setCurrentChat] = useState<Chat | null>(null);
   const [unreadCount, setUnreadCount] = useState<number | null>(null);
