@@ -68,8 +68,8 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
         return {
           id: chat.chats._id,
           itemId: chat.chats.item,
-          itemName: chat.item[0].name,
-          img_url: chat.item[0].img_url,
+          itemName: chat.item[0] ? chat.item[0].name : '',
+          img_url: chat.item[0] ? chat.item[0].img_url : '',
           foreignUser: foreignUserName[0],
           messages: chat.messages,
           updatedAt: chat.chats.updatedAt,
