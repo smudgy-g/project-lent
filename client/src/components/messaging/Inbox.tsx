@@ -13,23 +13,27 @@ function InboxCombined() {
   const [currentItemId, setCurrentItemId] = useState<string | null>(null);
 
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
-  const { userId, setCurrentContextChatId } = useContext<SocketContextProps>(SocketContext);
+  const {
+    userId,
+    setCurrentContextChatId,
+    setUnreadCount
+  } = useContext<SocketContextProps>(SocketContext);
 
   // Initialize the header
   useEffect(() => {
     setActionButtonGroupData([]);
   }, []);
 
-  // Get data for all chats
+  // Get data for all chats, process it, and set the chats state variable
   useEffect(() => {
     if (userId) {
       getAllChats()
         .then((chats) => {
           chats = chats.filter((chat) => chat.id !== userId)
           chats = addUnreadCount(chats);
-          console.log(chats);
-
+          chats = sortChats(chats);
           setChats(chats);
+          setUnreadCount(sumUnreadCounts(chats));
         })
         .catch((error) => console.log(error));
     }
@@ -48,9 +52,22 @@ function InboxCombined() {
     return chatsWithUnreadMessages
   }
 
-  // // Helper for sorting the chats according to the newest message
+  // Helper for sorting the chats according to the newest message
   function sortChats (chats: ChatPreview[]) {
-  //   return chats
+    return chats.sort((a, b) => {
+      const createdAtA = new Date(a.messages.at(-1)?.createdAt as string)
+      const createdAtB = new Date(b.messages.at(-1)?.createdAt as string)
+
+      return createdAtB.getTime() - createdAtA.getTime();
+    });
+  }
+
+  // Helper for summing up all unread counts of chats
+  function sumUnreadCounts (chats: ChatPreview[]) {
+    return chats.reduce((acc, chat) => {
+      const unreadCount = chat.unreadMessages ?? 0;
+      return acc + unreadCount;
+    }, 0)
   }
 
   // Make sure the first chat is always selected,
@@ -63,14 +80,26 @@ function InboxCombined() {
     }
   }, [chats])
 
-  // When the current chat ID changes,
-  // set the current item ID accordingly
+  // When the current chat ID changes
   useEffect(() => {
     if (chats && currentChatId) {
+      // set the current item ID accordingly
       const itemId = chats.filter((chat) => chat.id === currentChatId)[0].itemId!;
       setCurrentItemId(itemId);
+      // mark the chat as "seen", by setting
+      // its unread messages counter to 0
+      const updatedChats = chats.map((chat) => {
+        if (chat.id === currentChatId) chat.unreadMessages = 0;
+        return chat;
+      })
+      setChats(updatedChats)
     }
-  }, [chats, currentChatId])
+  }, [currentChatId])
+
+  // useEffect(() => {
+  //   if (chats && currentChatId) {
+  //   }
+  // }, [currentChatId])
 
   /* Event Handlers */
 
@@ -88,7 +117,11 @@ function InboxCombined() {
       {chats && chats
         .map((chat, index) => (
         <div className={`chat-preview-wrapper ${chat.id === currentChatId ? 'active' : ''}`} key={index}>
-          <div className="chat-preview" onClick={() => handleChatClick(chat.id)} style={{backgroundImage: `url(${chat.img_url})`}}></div>
+          <div
+            className={`chat-preview ${(chat.unreadMessages && chat.unreadMessages > 0) && 'unread'}`}
+            onClick={() => handleChatClick(chat.id)}
+            style={{backgroundImage: `url(${chat.img_url})`}}
+          ></div>
         </div>
       ))}
       </div>

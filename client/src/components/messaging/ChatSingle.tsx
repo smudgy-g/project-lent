@@ -58,22 +58,24 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
   // When the user clicks send, construct the message
   // and send it, then reset the input field
   async function handleClickSend() {
-    const messageData = {
-      body: inputValue,
-      from: {
-        user: userId,
-        seen: false,
-      },
-      to: {
-        user: currentChat?.foreignUserId!,
-        seen: false,
-      },
-      createdAt: (new Date()).toISOString(),
-    };
+    if (inputValue) {
+      const messageData = {
+        body: inputValue,
+        from: {
+          user: userId,
+          seen: true,
+        },
+        to: {
+          user: currentChat?.foreignUserId!,
+          seen: false,
+        },
+        createdAt: (new Date()).toISOString(),
+      };
 
-    if (sendMessage) {
-      sendMessage(messageData);
-      setInputValue('');
+      if (sendMessage) {
+        sendMessage(messageData);
+        setInputValue('');
+      }
     }
   };
 

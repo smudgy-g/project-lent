@@ -10,6 +10,8 @@ export interface SocketContextProps {
   sendMessage: ((messageData: Message) => void) | null;
   currentChat: Chat | null;
   setCurrentChat: React.Dispatch<SetStateAction<Chat | null>>;
+  unreadCount: number | null;
+  setUnreadCount: React.Dispatch<SetStateAction<number | null>>;
 };
 
 export const SocketContext = createContext<SocketContextProps>({
@@ -18,6 +20,8 @@ export const SocketContext = createContext<SocketContextProps>({
   sendMessage: null,
   currentChat: null,
   setCurrentChat: () => {},
+  unreadCount: 0,
+  setUnreadCount: () => {},
 });
 
 /* Socket Provider */
@@ -30,6 +34,7 @@ export default function SocketProvider ({ children }: SocketProviderProps) {
 
   const [currentChatId, setCurrentContextChatId] = useState<string>('');
   const [currentChat, setCurrentChat] = useState<Chat | null>(null);
+  const [unreadCount, setUnreadCount] = useState<number | null>(null);
 
   const [userId, setUserId] = useState<User['id']>('');
   const socketRef = useRef<Socket | null>(null);
@@ -133,6 +138,8 @@ export default function SocketProvider ({ children }: SocketProviderProps) {
     sendMessage,
     currentChat,
     setCurrentChat,
+    unreadCount,
+    setUnreadCount
   };
 
   /* Render Component */

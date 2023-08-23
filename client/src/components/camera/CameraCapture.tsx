@@ -7,7 +7,7 @@ interface CameraCaptureProps {
 }
 
 const videoConstraints = {
-  // aspectRatio: 1,
+  aspectRatio: 1,
   facingMode: "environment"
 };
 
