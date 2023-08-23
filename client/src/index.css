@@ -323,19 +323,6 @@ input:checked + .slider:before {
   z-index: 1000;
 }
 
-/* .button-list-top {
-  position: absolute;
-  bottom: calc(100% + var(--p-sm));
-  right: 0;
-  width: max-content;
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-  border-radius: var(--radius-lg);
-  border: var(--border);
-  box-shadow: 0px 6px 5px 0px var(--c-shadow);
-} */
-
 .button-list .button,
 .notification-item {
   border-bottom: var(--border);
