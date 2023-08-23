@@ -1,7 +1,8 @@
 import { useEffect, useState, useContext } from "react";
-import { getChatbyId } from "../../service/apiService";
+import { getChatbyId, putMessage } from "../../service/apiService";
 import { Link } from "react-router-dom";
 import { SocketContext, SocketContextProps } from "../../contexts/SocketContext";
+import { Chat } from "../../types/types";
 
 interface ChatSingleProps {
   currentChatId: string | null;
@@ -23,10 +24,31 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
   useEffect(() => {
     if (currentChatId) {
       getChatbyId(currentChatId)
-        .then((chat) => setCurrentChat(chat))
+        .then((chat) => {
+          setCurrentChat(chat);
+          setAsSeen(chat);
+        })
         .catch((error) => console.log(error));
     }
   }, [currentChatId]);
+
+  // Helper for marking every message in a chat
+  // as seen using the API service
+  function setAsSeen (chat: Chat) {
+    chat.messages.map((message) => {
+      const userRole = message.from?.user === userId ? 'from' : 'to';
+      if (message.id) {
+        const updatedMessage = {
+          id: message.id,
+          [userRole]: { seen: true }
+        }
+        putMessage(updatedMessage)
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    })
+  }
 
   // Scroll down when new messages arrive
   useEffect(()=> {
@@ -94,7 +116,7 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
           .slice()
           .reverse()
           .map((message, index) => (
-            <div key={index} className={`message ${message.from.user === userId ? 'user' : 'foreign-user'}`}>
+            <div key={index} className={`message ${message.from?.user === userId ? 'user' : 'foreign-user'}`}>
               <div className="datetime">
                 {message.createdAt?.toString().substring(11, 16)}
               </div>

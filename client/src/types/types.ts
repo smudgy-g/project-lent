@@ -61,12 +61,12 @@ export interface ChatPreview {
 
 export interface Message {
   id?: string;
-  body: string;
-  from: {
+  body?: string;
+  from?: {
     user: User['id'],
     seen: boolean,
   }
-  to: {
+  to?: {
     user: User['id'],
     seen: boolean,
   }
@@ -78,7 +78,6 @@ export interface MessageToSend {
   body: string;
   from: User['id'];
   to?: User['id'] ;
-  seen: boolean;
 }
 
 export type ActionButtonData = {
