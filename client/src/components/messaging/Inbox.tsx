@@ -3,7 +3,6 @@ import { getAllChats } from "../../service/apiService";
 import { ChatPreview } from "../../types/types";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import ChatSingle from "./ChatSingle";
-import { io, Socket } from 'socket.io-client';
 import { SocketContext, SocketContextProps } from "../../contexts/SocketContext";
 
 
