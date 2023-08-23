@@ -8,6 +8,8 @@ import { createChat } from "../models/chat.model";
 import { getItemLocations, sortByDistanceFromUser, itemDistanceFromUser } from '../utilities/location';
 import { transferValue, changeCredits } from "./user.model";
 import { postNotification } from "./message.model";
+import * as userModel from './user.model';
+import { Chat } from "./schemas/chat.schema";
 
 export async function getAll (id: string): Promise<Partial<IItem>[] | null> {
   try {
@@ -230,7 +232,7 @@ export async function cancelReserveItem (userId: string, itemId: string) {
     const userIdObj = new Types.ObjectId(userId);
     const itemIdObj = new Types.ObjectId(itemId);
 
-    const otherUser = await User.aggregate([
+    const data = await User.aggregate([
       { $match: { _id: userIdObj } },
       {
         $lookup: {
@@ -245,6 +247,7 @@ export async function cancelReserveItem (userId: string, itemId: string) {
       {
         $project: {
           _id: 0,
+          chatId: '$chats._id',
           id: {
             $arrayElemAt: [
               {
@@ -258,21 +261,26 @@ export async function cancelReserveItem (userId: string, itemId: string) {
         }
       }
     ])
-    
+    const otherUserIdObj = data[0].id;
+    const chatIdObj = data[0].chatId;
     const item = await Item.findById(itemIdObj).select({ 'user': 1, 'name': 1, '_id': 0 });
 
     let reservedCollectionId;
     if (item && userId !== item.user.toString()) reservedCollectionId = await collectionModel.getCollectionIdByName(userIdObj, 'Reserved');
-    if (item && userId === item.user.toString()) reservedCollectionId = await collectionModel.getCollectionIdByName(otherUser[0].id, 'Reserved');
+    if (item && userId === item.user.toString()) reservedCollectionId = await collectionModel.getCollectionIdByName(otherUserIdObj, 'Reserved');
     
-    // delete chats
     await collectionModel.removeItemFromCollection(reservedCollectionId, itemId);
 
     const message = `The reservation for the ${item!.name} was cancelled.`;
-    if (otherUser[0]) {
-      const ntfy = await postNotification (message, itemId, otherUser[0]._id);
+    if (data[0]) {
+      const ntfy = await postNotification (message, itemId, otherUserIdObj);
       console.log(ntfy)
     }
+
+    await User.findByIdAndUpdate(userIdObj, { $pull: { inbox: chatIdObj } });
+    await User.findByIdAndUpdate(otherUserIdObj, { $pull: { inbox: chatIdObj } });
+    await Chat.findByIdAndDelete(chatIdObj);
+
     return await Item.findByIdAndUpdate(itemIdObj, {
       $set: { available: true, borrowed: false, lendable: true },
       $pull: { collections: reservedCollectionId }
@@ -329,7 +337,7 @@ export async function returnItem (userId: string, itemId: string) {
   try {
     const userIdObj = new Types.ObjectId(userId);
     const itemIdObj = new Types.ObjectId(itemId);
-    const borrower = await User.aggregate([
+    const data = await User.aggregate([
       { $match: { _id: userIdObj } },
       {
         $lookup: {
@@ -343,6 +351,8 @@ export async function returnItem (userId: string, itemId: string) {
       { $match: { 'chats.item': itemIdObj } },
       {
         $project: {
+          _id: 0,
+          chatId: '$chats._id',
           borrowerId: {
             $arrayElemAt: [
               {
@@ -356,13 +366,15 @@ export async function returnItem (userId: string, itemId: string) {
         }
       }
     ])
-    console.log(borrower[0]); // borrower id
+    const borrowerId = data[0].borrowerId;
+    const chatIdObj = data[0].chatId;
+    console.log(data[0]); // borrower id
     const item = await Item.findById(itemIdObj).select({ 'user': 1, 'name': 1, 'value': 1, '_id': 0 });
     const lentOutCollectionId = await collectionModel.getCollectionIdByName(userIdObj, 'Lent Out');
 
     
-    if (item && borrower) {
-      const borrowedCollectionId = await collectionModel.getCollectionIdByName(borrower[0]._id, 'Borrowed');
+    if (item && data) {
+      const borrowedCollectionId = await collectionModel.getCollectionIdByName(borrowerId, 'Borrowed');
       const borrowedObjId = new Types.ObjectId(borrowedCollectionId);
       const lentOutObjId = new Types.ObjectId(lentOutCollectionId);
       
@@ -370,8 +382,12 @@ export async function returnItem (userId: string, itemId: string) {
       await collectionModel.removeItemFromCollection(borrowedCollectionId, itemId);
       
       const message = `The ${item!.name} has been returned.`;
-      const ntfy = await postNotification (message, itemId, borrower[0]._id);
+      const ntfy = await postNotification (message, itemId, borrowerId);
       console.log(ntfy)
+
+      await User.findByIdAndUpdate(userIdObj, { $pull: { inbox: chatIdObj } });
+      await User.findByIdAndUpdate(borrowerId, { $pull: { inbox: chatIdObj } });
+      await Chat.findByIdAndDelete(chatIdObj);
 
       return await Item.findByIdAndUpdate(itemIdObj, {
         $set: { borrowed: false, available: true },
