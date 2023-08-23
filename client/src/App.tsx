@@ -24,8 +24,15 @@ import CollectionEdit from "./components/collections/CollectionEdit";
 import CollectionItemAdd from './components/collections/CollectionItemAdd'
 import SocketProvider from "./contexts/SocketContext";
 import Modal from "./components/modal/modal";
+import LandingPage from "./components/landing/LandingPage";
 
 const router = createBrowserRouter([
+  {
+    path: '/landing',
+    element: (<>
+        <LandingPage />
+    </>)
+  },
   {
     path: '/',
     element: (<>
