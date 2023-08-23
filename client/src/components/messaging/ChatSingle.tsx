@@ -35,6 +35,8 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
   // Helper for marking every message in a chat
   // as seen using the API service
   function setAsSeen (chat: Chat) {
+    if (!chat) return;
+
     chat.messages.map((message) => {
       const userRole = message.from?.user === userId ? 'from' : 'to';
       if (message.id) {

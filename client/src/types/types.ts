@@ -62,6 +62,10 @@ export interface ChatPreview {
 export interface Message {
   id?: string;
   body?: string;
+  notification?: {
+    item?: string,
+    seen: boolean,
+  }
   from?: {
     user: User['id'],
     seen: boolean,

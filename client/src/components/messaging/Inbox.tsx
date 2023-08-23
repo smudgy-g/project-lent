@@ -55,7 +55,6 @@ function InboxCombined() {
 
       {chats && <ChatSingle currentChatId={currentChatId} currentItemId={currentItemId} />}
     </div>
-
   </>);
 }
 
