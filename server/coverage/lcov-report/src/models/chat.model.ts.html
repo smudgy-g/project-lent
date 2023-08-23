@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.78% </span>
+                <span class="strong">15.25% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/57</span>
+                <span class='fraction'>9/59</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.98% </span>
+                <span class="strong">16.36% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/53</span>
+                <span class='fraction'>9/55</span>
             </div>
         
             
@@ -257,7 +257,12 @@
 <a name='L192'></a><a href='#L192'>192</a>
 <a name='L193'></a><a href='#L193'>193</a>
 <a name='L194'></a><a href='#L194'>194</a>
-<a name='L195'></a><a href='#L195'>195</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -388,7 +393,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -406,7 +410,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -442,6 +445,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -451,7 +461,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import mongoose, { Schema, SchemaType, Types } from "mongoose";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Types } from "mongoose";
 import { IChat, IMessage } from "../types";
 import { Chat } from "./schemas/chat.schema";
 import { User } from "./schemas/user.schema";
@@ -460,8 +470,8 @@ import { postMessage } from '../models/message.model';
 &nbsp;
 export async function <span class="fstat-no" title="function not covered" >deleteOne </span>(id:string): Promise&lt;IChat | null&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
-    const chatIdObject = <span class="cstat-no" title="statement not covered" >new Types.ObjectId(id);</span>
-<span class="cstat-no" title="statement not covered" >    return Chat.findByIdAndDelete(chatIdObject);</span>
+    const chatIdObj = <span class="cstat-no" title="statement not covered" >new Types.ObjectId(id);</span>
+<span class="cstat-no" title="statement not covered" >    return Chat.findByIdAndDelete(chatIdObj);</span>
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    console.error(error);</span>
 <span class="cstat-no" title="statement not covered" >    throw error</span>
@@ -523,7 +533,7 @@ export async function <span class="fstat-no" title="function not covered" >getAl
           id: chat.chats._id,
           itemId: chat.chats.item,
           itemName: chat.item[0].name,
-          itemImg: chat.item[0].img_url,
+          img_url: chat.item[0].img_url,
           foreignUser: foreignUserName[0],
           message: chat.messages[chat.messages.length - 1].body,
           updatedAt: chat.chats.updatedAt,
@@ -539,10 +549,10 @@ export async function <span class="fstat-no" title="function not covered" >getAl
 &nbsp;
 export async function <span class="fstat-no" title="function not covered" >getChatById </span>(chatId: string, userId: string): Promise&lt;any | null&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
-    const chatIdObject = <span class="cstat-no" title="statement not covered" >new Types.ObjectId(chatId);</span>
-    
+    const chatIdObj = <span class="cstat-no" title="statement not covered" >new Types.ObjectId(chatId);</span>
+&nbsp;
     const data = <span class="cstat-no" title="statement not covered" >await Chat.aggregate([</span>
-      { $match: { _id: chatIdObject } },
+      { $match: { _id: chatIdObj } },
       {
         $lookup: {
           from: 'messages',
@@ -569,12 +579,11 @@ export async function <span class="fstat-no" title="function not covered" >getCh
           messages: {
             $map: {
               input: '$messages',
-              as: 'message', 
+              as: 'message',
               in: {
                 body: '$$message.body',
                 from: '$$message.from',
                 to: '$$message.to',
-                seen: '$$message.seen',
                 createdAt: '$$message.createdAt',
               },
             },
@@ -603,7 +612,6 @@ export async function <span class="fstat-no" title="function not covered" >getCh
             from: message.from,
             to: message.to,
             body: message.body,
-            seen: message.seen,
             createdAt: message.createdAt
           }))
           .sort(<span class="fstat-no" title="function not covered" >(a</span>: any, b: any) =&gt; <span class="cstat-no" title="statement not covered" >b.createdAt - a.createdAt)</span>
@@ -616,29 +624,36 @@ export async function <span class="fstat-no" title="function not covered" >getCh
   }
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >createChat </span>(itemId: string, ownerId: any, userId: string, message?: string): Promise&lt;IChat | null&gt; {
+export async function <span class="fstat-no" title="function not covered" >createChat </span>(itemId: string, ownerId: string, userId: string, message?: string): Promise&lt;IChat | null&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
-    const ownerIdObject = <span class="cstat-no" title="statement not covered" >new Types.ObjectId(ownerId);</span>
-    const userIdObject = <span class="cstat-no" title="statement not covered" >new Types.ObjectId(userId);</span>
-    const itemIdObject = <span class="cstat-no" title="statement not covered" >new Types.ObjectId(itemId);</span>
+    const ownerIdObj = <span class="cstat-no" title="statement not covered" >new Types.ObjectId(ownerId);</span>
+    const userIdObj = <span class="cstat-no" title="statement not covered" >new Types.ObjectId(userId);</span>
+    const itemIdObj = <span class="cstat-no" title="statement not covered" >new Types.ObjectId(itemId);</span>
 &nbsp;
     const newChatData: Partial&lt;IChat&gt; = <span class="cstat-no" title="statement not covered" >new Chat({</span>
-      item: itemIdObject,
-      users: [ownerIdObject, userIdObject]
+      item: itemIdObj,
+      users: [ownerIdObj, userIdObj]
     });
 &nbsp;
     const newChat = <span class="cstat-no" title="statement not covered" >await Chat.create(newChatData);</span>
-    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (message) {</span>
       const newMessage = <span class="cstat-no" title="statement not covered" >{</span>
         body: message,
-        from: userIdObject,
-        to: ownerIdObject,
-        seen: false
+        from: {
+          user: userIdObj,
+          seen: false
+        },
+        to: {
+          user: ownerIdObj,
+          seen: false
+        },
       }
-<span class="cstat-no" title="statement not covered" >      await addChatToInbox(ownerIdObject, newChat._id);</span>
-<span class="cstat-no" title="statement not covered" >      await addChatToInbox(userIdObject, newChat._id);</span>
-<span class="cstat-no" title="statement not covered" >      return await postMessage(newMessage as IMessage, newChat._id);</span>
+<span class="cstat-no" title="statement not covered" >      await addChatToInbox(ownerIdObj, newChat._id);</span>
+<span class="cstat-no" title="statement not covered" >      await addChatToInbox(userIdObj, newChat._id);</span>
+      const result = <span class="cstat-no" title="statement not covered" >await postMessage(newMessage as IMessage, newChat._id);</span>
+<span class="cstat-no" title="statement not covered" >      console.log(result);</span>
+<span class="cstat-no" title="statement not covered" >      return result;</span>
     }
 <span class="cstat-no" title="statement not covered" >    return newChat;</span>
   } catch (error) {
@@ -652,7 +667,7 @@ export async function <span class="fstat-no" title="function not covered" >creat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-22T07:16:12.401Z
+                at 2023-08-22T14:09:06.798Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

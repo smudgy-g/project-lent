@@ -7,6 +7,7 @@ import { Collection } from "./schemas/collection.schema";
 import { createChat } from "../models/chat.model";
 import { getItemLocations, sortByDistanceFromUser, itemDistanceFromUser } from '../utilities/location';
 import { transferValue, changeCredits } from "./user.model";
+import { postNotification } from "./message.model";
 
 export async function getAll (id: string): Promise<Partial<IItem>[] | null> {
   try {
@@ -211,8 +212,11 @@ export async function reserveItem (userId: string, itemId: string) {
         $push: { collections: reservedCollectionId }
       });
 
-      const message = `There is interest in the ${item.name}!`
+      const message = `There is interest in the ${item.name}!`;
       const newChat = await createChat(itemId, item.user.toString(), userId, message);
+      const ntfy = await postNotification (message, itemId, item.user);
+      console.log(ntfy)
+
       return newChat;
     }
   } catch (error) {
@@ -225,6 +229,35 @@ export async function cancelReserveItem (userId: string, itemId: string) {
   try {
     const userIdObj = new Types.ObjectId(userId);
     const itemIdObj = new Types.ObjectId(itemId);
+
+    const otherUser = await User.aggregate([
+      { $match: { _id: userIdObj } },
+      {
+        $lookup: {
+          from: 'chats',
+          localField: 'inbox',
+          foreignField: '_id',
+          as: 'chats'
+        }
+      },
+      { $unwind: '$chats'},
+      { $match: { 'chats.item': itemIdObj } },
+      {
+        $project: {
+          borrowerId: {
+            $arrayElemAt: [
+              {
+                $filter: {
+                  input: '$chats.users',
+                  cond: { $ne: ['$$this', userIdObj] }
+                }
+              }, 0
+            ]
+          }
+        }
+      }
+    ])
+    
     const item = await Item.findById(itemIdObj).select({ 'user': 1, 'name': 1, '_id': 0 });
     let reservedCollectionId;
 
@@ -234,6 +267,12 @@ export async function cancelReserveItem (userId: string, itemId: string) {
 
     // delete chats
     await collectionModel.removeItemFromCollection(reservedCollectionId, itemId);
+
+    const message = `The reservation for the ${item!.name} was cancelled.`;
+    if (otherUser[0]) {
+      const ntfy = await postNotification (message, itemId, otherUser[0]._id);
+      console.log(ntfy)
+    }
     return await Item.findByIdAndUpdate(itemIdObj, {
       $set: { available: true, borrowed: false, lendable: true },
       $pull: { collections: reservedCollectionId }
@@ -264,10 +303,15 @@ export async function recieveItem (userId: string, itemId: string) {
         const lentOutObjId = new Types.ObjectId(lentOutCollectionId);
         const collectionIds = [borrowedObjId, lentOutObjId];
 
+        const message = `The ${item.name} has been received.`;
+        const ntfy = await postNotification (message, itemId, item.user);
+        console.log(ntfy);
+
         await Item.findByIdAndUpdate(itemIdObj, {
           $set: { borrowed: true },
           $pull: { collections: reservedCollectionId },
         }, { new: true } );
+
         return await Item.findByIdAndUpdate(itemIdObj, {
           $addToSet: { collections: { $each: collectionIds } }
         }, { new: true } );
@@ -325,6 +369,10 @@ export async function returnItem (userId: string, itemId: string) {
       await collectionModel.removeItemFromCollection(lentOutCollectionId, itemId);
       await collectionModel.removeItemFromCollection(borrowedCollectionId, itemId);
       
+      const message = `The ${item!.name} has been returned.`;
+      const ntfy = await postNotification (message, itemId, borrower[0]._id);
+      console.log(ntfy)
+
       return await Item.findByIdAndUpdate(itemIdObj, {
         $set: { borrowed: false, available: true },
         $pullAll: { collections: [borrowedObjId, lentOutObjId] }
