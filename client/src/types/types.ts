@@ -10,7 +10,8 @@ export interface User {
   credits: number;
   collections: Collection[];
   reputation: number;
-  inbox: Chat[]
+  inbox: Chat[];
+  newUser?: boolean  ;
 }
 
 export interface Item {

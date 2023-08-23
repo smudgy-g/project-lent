@@ -10,7 +10,7 @@ export async function postMessage (message: IMessage, chatId: string) {
     if (!message.from || !message.to) {
       newMessage = await Message.create({
       body: message.body
-    });
+      });
     } else {
       newMessage = await Message.create({
         body: message.body,

@@ -5,29 +5,21 @@ import { ModalContext, ModalContextProps, ModalData } from "../../contexts/Modal
 
 export default function Modal () {
 
-  const { modalData, setModalData } = useContext<ModalContextProps>(ModalContext);
-
-useEffect(() => {
-  const localModalData: ModalData = {
-    title: 'Cancel Reservation Confirmation',
-    text: 'Are you sure you want to cancel this reservation?',
-    actionText: 'Cancel Reservation',
-    action: async () => console.log('hello')
-  };
-  setModalData(localModalData);
-}, []);
+  const { modalData, showModal } = useContext<ModalContextProps>(ModalContext);
 
   /* Event handler */
 
   /* Render Component */
 
   return (<>
+    {showModal && (
     <div className="modal-wrapper">
       <div className="modal">
-        <div>{modalData.title}</div>
-        <div>{modalData.text}</div>
-        <button onClick={modalData.action}>{modalData.actionText}</button>
+        <div><h1>{modalData.title}</h1></div>
+        <div className="modal-text" dangerouslySetInnerHTML={{ __html: modalData.text }}></div>
+        <button className="button styled large" onClick={modalData.action}>{modalData.actionText}</button>
       </div>
     </div>
+    )}
   </>);
 }
