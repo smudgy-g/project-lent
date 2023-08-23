@@ -47,6 +47,7 @@ async function seedDatabase() {
       },
       credits: 500,
       reputation: 5,
+      newUser: false
     });
 
     const user2 = await User.create({
@@ -65,6 +66,7 @@ async function seedDatabase() {
       },
       credits: 600,
       reputation: 3,
+      newUser: false
     });
 
     // Create collections
@@ -122,11 +124,6 @@ async function seedDatabase() {
       items: [],
     });
 
-
-
-
-
-
     // Create items
     const item1 = await Item.create({
       user: user2._id,
@@ -170,8 +167,8 @@ async function seedDatabase() {
       messages: [],
     });
 
-    await createNotificationChat(user1._id);
-    await createNotificationChat(user2._id);
+    const notificationChat1 = await createNotificationChat(user1._id);
+    const notificationChat2 = await createNotificationChat(user2._id);
 
     // Create messages
     const message1 = await Message.create({
@@ -201,12 +198,12 @@ async function seedDatabase() {
     // Update references
     await User.findByIdAndUpdate(user1._id, {
       collections: [collection1._id, collection2._id, collection3._id, collection4._id, collection5._id],
-      inbox: [chat._id],
+      inbox: [chat._id, notificationChat1!._id],
     });
 
     await User.findByIdAndUpdate(user2._id, {
       collections: [collection6._id, collection7._id, collection8._id, collection9._id, collection10._id, collection11._id],
-      inbox: [chat._id],
+      inbox: [chat._id, notificationChat2!._id],
     });
 
     await Item.findByIdAndUpdate(item1._id, {

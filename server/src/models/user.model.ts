@@ -30,7 +30,8 @@ export async function createUser (username: string, email: string, password: str
       await collection.createOne('Borrowed', id);
       await collection.createOne('Lent Out', id);
       await collection.createOne('Reserved', id);
-      await createNotificationChat(id);
+      const notifyChat = await createNotificationChat(id);
+      await User.findByIdAndUpdate(id, { $addToSet: { inbox: notifyChat?._id } });
     })
     .then(() => newUser);
   } catch (error) {
