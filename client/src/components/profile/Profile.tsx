@@ -59,15 +59,18 @@ function Profile() {
   /* Render Component */
 
   return (<>
-
-    <div className="profile">
-      <h1>{userData?.username}</h1>
-      <div>Email: {userData?.email}</div>
-      <div>Address:
-        <div>{userData?.address?.streetName} {userData?.address?.streetNumber}</div>
-        <div>{userData?.address?.postalCode} {userData?.address?.city}</div>
+    <div className="profile-page">
+      <div className="button-group">
+        <h1>{userData?.username}</h1>
+        <div className="metadata value">¤ {userData?.credits}</div>
       </div>
-      <div>Credits: {userData?.credits} ¢</div>
+      <div className="info">
+        <div>{userData?.email}</div>
+        <div>
+          <div>{userData?.address?.streetName} {userData?.address?.streetNumber}</div>
+          <div>{userData?.address?.postalCode} {userData?.address?.city}</div>
+        </div>
+      </div>
     </div>
   </>);
 }
