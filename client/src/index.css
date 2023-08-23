@@ -354,9 +354,16 @@ input:checked + .slider:before {
 
 .notifications-list {
   margin: 0 var(--p-sm);
-  top: var(--p-sm);
+  bottom: var(--p-3xl);
   overflow: scroll;
   max-height: calc(100% - var(--p-3xl) - var(--p-md));
+}
+
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--p-lg);
 }
 
 .notifications-title {

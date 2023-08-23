@@ -536,37 +536,6 @@ export async function getAllChats (): Promise<ChatPreview[]> {
 
 export async function getChatbyId (chatId: string | undefined): Promise<Chat> {
   try {
-    // START MOCK DATA
-    // Mock notifications
-    if (chatId === 'notifications') {
-      return {
-        _id: 'sdfasdoiufasd78asd6fa',
-        messages: [
-          {
-            body: 'Hans-Juergen canceled his reservation for your ‘Chocolate Cake Latte’',
-            from: {
-              user: '2323',
-              seen: false,
-            },
-            to: {
-              user: '2323',
-              seen: false,
-            }
-          }
-        ],
-        item: {
-          name: 'item',
-          user: '8as7d5fs8d75fg',
-          _id: 'jk345ghk2j3546gk2',
-        },
-        users: [],
-        foreignUserId: 'hj2k34g52jkh345',
-        foreignUserName: 'mayer'
-      }
-    }
-    // END MOCK DATA
-
-
     const response = await fetch(`${baseUrl}/inbox/${chatId}`, {
       credentials: 'include'
     });
