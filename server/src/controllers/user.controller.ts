@@ -45,7 +45,7 @@ export async function getUserById (ctx: Context) {
 
 export async function updateUser (ctx: Context) {
   const userId = ctx.userId;
-  const { username, email, address } = ctx.request.body as Partial<IUser>;
+  const { username, email, address, newUser } = ctx.request.body as Partial<IUser>;
 
   if (!username || !email || !address) ctx.throw(400, { message: 'One or more fields missing.' });
 
@@ -67,7 +67,7 @@ export async function updateUser (ctx: Context) {
   const userData = { username, email, address }
 
   try {
-    const updatedUser = await userModel.updateUserDetails(userId, userData);
+    const updatedUser = await userModel.updateUserDetails(userId, userData, newUser);
     ctx.status = 200;
     ctx.body = updatedUser;
   } catch (error) {

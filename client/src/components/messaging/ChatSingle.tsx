@@ -13,19 +13,15 @@ interface ChatSingleProps {
 
 export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingleProps) {
 
-  /* State Variables */
-
   const [inputValue, setInputValue] = useState<string>('');
   const [currentMessageData, setCurrentMessageData] = useState<Message | null>();
 
-  /* Hooks */
   const {
     userId,
     sendMessage,
     currentChat,
     setCurrentChat,
   } = useContext<SocketContextProps>(SocketContext);
-
 
   /* Use Effect */
 
@@ -91,7 +87,7 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
 
       <div className="chat-header">
         <h1>{currentChat && currentChat.item.name}</h1>
-        <Link to={`/item/${currentItemId}`}><button className="button arrow-right">Item</button></Link>
+        <Link to={`/item/${currentItemId}`}><button className="button arrow-right-circle">Item</button></Link>
       </div>
 
       <div className="message-container">

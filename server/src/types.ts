@@ -18,18 +18,22 @@ export interface ILogin {
 }
 
 export interface IChat extends Document {
-  item: Types.ObjectId;
+  item?: Types.ObjectId;
   messages: Types.ObjectId[];
-  users: Types.ObjectId[];
+  users?: Types.ObjectId[];
 }
 
 export interface IMessage extends Document {
   body: string;
-  from: {
+  notification?: {
+    item: string,
+    seen: boolean
+  }
+  from?: {
     user: Types.ObjectId,
     seen: boolean
   };
-  to: {
+  to?: {
     user: Types.ObjectId,
     seen: boolean
   };
@@ -50,7 +54,7 @@ export interface IUser extends Document {
   reputation: number;
   collections: Types.ObjectId[];
   inbox: Types.ObjectId[];
-  new: boolean;
+  newUser: boolean;
 }
 
 export interface IGeoLocation {
