@@ -1,20 +1,19 @@
 import { useContext, useEffect, useState } from "react"
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext"
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useAsyncError, useNavigate } from "react-router-dom";
 import { ActionButtonGroupData, Collection, User } from "../../types/types";
-import { getAllCollections, getUser } from "../../service/apiService";
+import { getAllCollections, getUser, putUser } from "../../service/apiService";
 import CollectionList from "./CollectionList";
-import { ModalContext, ModalContextProps } from "../../contexts/ModalContext";
+import { ModalContext, ModalContextProps, ModalData } from "../../contexts/ModalContext";
+
 
 export default function CollectionOverview () {
 
   const [collections, setCollections] = useState<Collection[] | null>(null);
-  const [istFirstUser, setIFirstUser] = useState<User | null>()
 
   /* Hooks */
 
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
-  const { showModal, setShowModal, setModalData, modalData, toggleModal } = useContext<ModalContextProps>(ModalContext);
   const navigate = useNavigate();
 
   /* Use Effect */
@@ -22,12 +21,6 @@ export default function CollectionOverview () {
   useEffect(() => {
     getAllCollections()
       .then((collections) => setCollections(collections))
-      .catch((error) => console.log(error));
-  }, []);
- 
-  useEffect(() => {
-    getUser()
-      .then((user) => console.log(user))
       .catch((error) => console.log(error));
   }, []);
 
@@ -62,6 +55,7 @@ export default function CollectionOverview () {
   /* Render Component */
 
   return (<>
+  
     <div className="collection-overview">
       {collections && (<>
         <div className="static-collections">

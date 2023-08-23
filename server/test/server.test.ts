@@ -1,5 +1,5 @@
 import mongoose, { Types } from 'mongoose';
-import app from '../src/index';
+import {app} from '../src/index';
 import request from 'supertest';
 import * as jwt from 'jsonwebtoken';
 import { mockGeoLocation, mockNewUser, mockUserId } from './mocks';
@@ -37,7 +37,7 @@ jest.mock('jsonwebtoken', () => ({
   ...jest.requireActual('jsonwebtoken'),
   sign: jest.fn().mockImplementation((payload) => {
     if (payload && payload.userId) {
-      return `mockedToken_${payload.userId}`;
+      return `${payload.userId}`;
     }
     return 'mockedToken';
   }),
@@ -113,8 +113,7 @@ describe('User API endpoints', () => {
   })
 
   test('Should delete a user', async () => {
-    const user = await request(app.callback()).get(`/user/${mockUserId}`) 
-    console.log(user)
+    const user = await request(app.callback()).get(`/user/${mockUserId}`)
     console.log('userId: ', mockUserId);
     console.log('token: ', jwtToken);
     const response = await request(app.callback()).delete('/user').set('Cookie', `token=${jwtToken}`).expect(200);

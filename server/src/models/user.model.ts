@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 import { IAddress, IGeoLocation, IUser } from '../types';
 import convertAddressToGeoCode from '../utilities/geocoding';
 import * as collection from './collection.model';
+import { createNotificationChat } from './chat.model';
 import { User } from './schemas/user.schema';
 import bcrypt from 'bcrypt';
 
@@ -29,6 +30,8 @@ export async function createUser (username: string, email: string, password: str
       await collection.createOne('Borrowed', id);
       await collection.createOne('Lent Out', id);
       await collection.createOne('Reserved', id);
+      const notifyChat = await createNotificationChat(id);
+      await User.findByIdAndUpdate(id, { $addToSet: { inbox: notifyChat?._id } });
     })
     .then(() => newUser);
   } catch (error) {
@@ -61,16 +64,20 @@ export async function addToUserCollection (userId: string, collectionId: string)
   }
 }
 
-export async function updateUserDetails (id: string, { username, email, address }:Partial<IUser>): Promise<IUser | null> {
+export async function updateUserDetails (id: string, { username, email, address }: Partial<IUser>, newUser?: boolean): Promise<IUser | null> {
   try {
     const geoLocation = await convertAddressToGeoCode(address!);    
-    const updatedUser = await User.findByIdAndUpdate(id,
-      {
-        username,
-        email, 
-        address, 
-        geoLocation 
-      }, { new: true });
+    
+    let updatedFields: Partial<IUser> =  {
+      username,
+      email, 
+      address
+    };
+    
+    if (geoLocation) updatedFields.geoLocation = geoLocation;
+    if (newUser) updatedFields.newUser = newUser;
+  
+    const updatedUser = await User.findByIdAndUpdate(id, updatedFields, { new: true });
     return updatedUser;
   } catch (error) {
     console.error(error);
