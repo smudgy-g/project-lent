@@ -231,6 +231,8 @@ export async function cancelReserveItem (userId: string, itemId: string) {
     if (item && userId !== item.user.toString()) reservedCollectionId = await collectionModel.getCollectionIdByName(userIdObj, 'Reserved');
     else if (item && userId === item.user.toString()) reservedCollectionId = await collectionModel.getCollectionIdByName(item.user, 'Reserved');
     
+
+    // delete chats
     await collectionModel.removeItemFromCollection(reservedCollectionId, itemId);
     return await Item.findByIdAndUpdate(itemIdObj, {
       $set: { available: true, borrowed: false, lendable: true },

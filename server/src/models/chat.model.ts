@@ -77,7 +77,6 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
         };
       })
     );
-    console.log(chats);
     return chats;
   } catch (error) {
     console.error(error);
