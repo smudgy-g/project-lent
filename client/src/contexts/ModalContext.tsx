@@ -57,7 +57,7 @@ export default function ModalProvider ({ children }: ModalProviderProps) {
     getUser()
       .then((user) => {
         if(user) {
-          if (!user.newUser) setShowModal(true)
+          if (user.newUser) setShowModal(true)
         }
       })
       .catch((error) => console.log(error));
