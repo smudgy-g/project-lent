@@ -5,6 +5,10 @@ import { Chat } from "./schemas/chat.schema";
 
 export async function postMessage (message: IMessage, chatId: string) {
   let newMessage: Partial<IMessage>;
+  if (!message.body) {
+    console.log('No message body provided.');
+    return message;
+  }
   try {
     const chatIdObj = new Types.ObjectId(chatId);
     if (!message.from || !message.to) {
