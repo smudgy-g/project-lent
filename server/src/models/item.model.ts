@@ -166,9 +166,9 @@ export async function updateOne (itemId: string, itemData: Partial<IItem>) {
       // Check for added items
       const originalCollection = item.collections.map(c => c.toString());
       for (let i = 0; i < collections.length; i++) {
-        const updatedCollection = collections[i];
+        const updatedCollection = collections[i].toString();
         if (!originalCollection.includes(updatedCollection)) {
-          await collectionModel.addItemToCollection(updatedCollection.toString(), itemId);
+          await collectionModel.addItemToCollection(updatedCollection, itemId);
         }
       }
       
