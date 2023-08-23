@@ -112,7 +112,7 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
           'item._id': 1,
           'item.name': 1,
           'item.user': 1,
-          messages: {
+          messages: { 
             $map: {
               input: '$messages',
               as: 'message',

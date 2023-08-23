@@ -244,7 +244,8 @@ export async function cancelReserveItem (userId: string, itemId: string) {
       { $match: { 'chats.item': itemIdObj } },
       {
         $project: {
-          borrowerId: {
+          _id: 0,
+          id: {
             $arrayElemAt: [
               {
                 $filter: {
@@ -259,12 +260,11 @@ export async function cancelReserveItem (userId: string, itemId: string) {
     ])
     
     const item = await Item.findById(itemIdObj).select({ 'user': 1, 'name': 1, '_id': 0 });
+
     let reservedCollectionId;
-
     if (item && userId !== item.user.toString()) reservedCollectionId = await collectionModel.getCollectionIdByName(userIdObj, 'Reserved');
-    else if (item && userId === item.user.toString()) reservedCollectionId = await collectionModel.getCollectionIdByName(item.user, 'Reserved');
+    if (item && userId === item.user.toString()) reservedCollectionId = await collectionModel.getCollectionIdByName(otherUser[0].id, 'Reserved');
     
-
     // delete chats
     await collectionModel.removeItemFromCollection(reservedCollectionId, itemId);
 
