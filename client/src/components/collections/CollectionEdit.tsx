@@ -1,14 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate, useParams } from "react-router-dom";
-import { addItemsToCollections, changeCollectionName, deleteItemsFromCollection, getAllCollections, getAllItems, getItemsByCollection, postNewCollection } from "../../service/apiService";
+import { addItemsToCollections, changeCollectionName, deleteItemsFromCollection, getAllCollections, getItemsByCollection } from "../../service/apiService";
 import { Item, Collection} from "../../types/types";
 import CheckList from "./CheckList";
 import { ChangeEvent } from "react";
 
 export default function CollectionEdit () {
-
-  /* State Variables */
 
   const [items, setItems] = useState<Item[] | null>(null)
   const [collections, setCollections] = useState<Collection[]>([])
@@ -19,78 +17,24 @@ export default function CollectionEdit () {
   const [collectionName, setCollectionName] = useState<Collection["name"]>('');
   const [newCollectionName, setNewCollectionName] = useState<Collection["name"]>('');
 
-
-  const [addToData, setAddToData] = useState<Collection>({
-    name: '',
-    items: [],
-    _id: '',
-  });
-
-
-  /* Hooks */
-
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
   const navigate = useNavigate();
   const { collectionId } = useParams();
 
-
-  /* Handler Functions */
-
-  // Change Collection Name
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    event.preventDefault();
-    setCollectionName(event.target.value);
-  };  
-
-  function handleClickSave() {
-    console.log(newCollectionName, collectionId)
-    changeCollectionName(newCollectionName!, collectionId!)
-    navigate(`/collection/${collectionId}`)
-  }
-
-  // Remove Items
-  async function handleClickRemove() {
-    console.log(selectedItems, collectionId)
-    await deleteItemsFromCollection(selectedItems!, collectionId!)
-    navigate(`/collection/${collectionId}`)
-  }
-
-  // Add Items to another collection
-
-  function handleSelectChange (event: ChangeEvent<HTMLSelectElement>) {
-    const { options } = event.target;
-    const selectedValues = [];
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].selected) {
-        selectedValues.push(options[i].value)
-      }
-    }
-    setSelectedCollections(selectedValues);
-  }
-  
-  function handleToggle () {
-    if( isOpen) {
-      console.log('selected Collections:', selectedCollections, 'selected Items:', selectedItems)
-      addItemsToCollections(selectedItems!, selectedCollections!)
-      navigate(`/collection/${collectionId}`)
-    } else {
-      setIsOpen(!isOpen);
-    }
-  }
-
-  /* Use Effect */
-
-  // Populate the Header component’s action button group
+  // Initialize the header
   useEffect(() => {
     setActionButtonGroupData([]);
   }, []);
 
+  // Get all items of the collection using the API service
   useEffect(() => {
     getItemsByCollection(collectionId!)
       .then((items) => setItems(items))
       .catch((error) => console.log(error))
   }, [])
 
+  // Get all collections using the API service, find the current collection,
+  // and set it as the currentCollection state variables value
   useEffect(() => {
     getAllCollections()
       .then((collections) => {
@@ -115,55 +59,88 @@ export default function CollectionEdit () {
     }
   }, [currentCollection]);
 
+  /* Handler Functions */
 
-  useEffect(() => {
-    setNewCollectionName(collectionName)
-    console.log(newCollectionName)
-  });
+  // Change Collection Name
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    event.preventDefault();
+    setCollectionName(event.target.value);
+  };
+
+  function handleClickSave() {
+    console.log(newCollectionName, collectionId)
+    changeCollectionName(newCollectionName!, collectionId!)
+    navigate(`/collection/${collectionId}`)
+  }
+
+  // Remove Items
+  async function handleClickRemove() {
+    console.log(selectedItems, collectionId)
+    await deleteItemsFromCollection(selectedItems!, collectionId!)
+    navigate(`/collection/${collectionId}`)
+  }
+
+  // Add Items to another collection
+  function handleSelectChange (event: ChangeEvent<HTMLSelectElement>) {
+    const { options } = event.target;
+    const selectedValues = [];
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].selected) {
+        selectedValues.push(options[i].value)
+      }
+    }
+    setSelectedCollections(selectedValues);
+  }
+
+  function handleToggle () {
+    if(isOpen) {
+      console.log('selected Collections:', selectedCollections, 'selected Items:', selectedItems)
+      addItemsToCollections(selectedItems!, selectedCollections!)
+      navigate(`/collection/${collectionId}`)
+    } else {
+      setIsOpen(!isOpen);
+    }
+  }
 
   /* Render Component */
 
   return (<>
-    <form>
-      {currentCollection[0] && (
-          <label>
-            Name:
-            <input
-              type="text"
-              name="collectionName"
-              value={collectionName}
-              onChange={handleChange}
-            />
-          </label>
+    <div className="collection-edit">
+      <form>
+        {currentCollection[0] && (
+          <input
+            type="text"
+            name="collectionName"
+            value={collectionName}
+            onChange={handleChange}
+          />
         )}
-      <div>
         <CheckList items={items!} setSelectedItems={setSelectedItems}/>
-      </div>
-    </form>
-    <div className="button-group">
-        
-        <button className="button styled full large" onClick={handleClickRemove}>Remove</button>
-        {collections.length > 0 &&
+      </form>
+      <div className="button-stack end">
+        <div className="button-group">
+          {(selectedItems && selectedItems.length > 0) && (<>
+            <button className="button styled secondary full large" onClick={handleClickRemove}>Remove</button>
 
-       
-        <div className="dropdown-group button styled full large">
-          <button className="button styled full large" onClick={handleToggle}>Add items to...</button>
-            { isOpen && 
-            <div className="button-list-top">
-
-            <select id="collection" name="collection" multiple onChange={handleSelectChange}>
-              {collections && collections.map((collection : Collection) => {
-                return (<option key={collection._id} value={collection._id}>{collection.name}</option>)
-              })}
-            </select>
-
-            </div>}
+            {(collections.length > 0) && (
+              <div className="dropdown-group button styled full large">
+                <button className="button styled full large" onClick={handleToggle}>{!isOpen ? 'Add to...': 'Confirm'}</button>
+                  { isOpen && (
+                    <select className="select-list" id="collection" name="collection" multiple onChange={handleSelectChange}>
+                      {collections && collections.map((collection : Collection) => (
+                        <option key={collection._id} value={collection._id}>{collection.name}</option>
+                      ))}
+                    </select>
+                  )}
+              </div>
+            )}
+          </>)}
         </div>
-        }
-        <button className="button styled full large" onClick={handleClickSave}>Save Name</button>
+        {(currentCollection[0] && currentCollection[0].name !== collectionName) && <div className="button-group">
+          <button className="button styled full large" onClick={handleClickSave}>Save</button>
+        </div>}
 
+      </div>
     </div>
   </>)
 }
-
-          {/* {collections.map((collection) => <button key={collection._id} className="button" onClick={() => handleClickAddToCollection(collection._id!)}>{collection.name!}</button>)} */}

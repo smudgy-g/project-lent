@@ -1,5 +1,6 @@
 import { Item } from "../../types/types"
 import { useEffect, useState } from "react";
+import ItemListItem from "./ItemListItem";
 /* Type Definition */
 
 interface CheckListProps {
@@ -20,7 +21,6 @@ export default function CheckList({ items, setSelectedItems }: CheckListProps) {
       // If the item ID is not in the array, add it
       setCheckedItems([...checkedItems, itemId]);
     }
-
   }
 
   useEffect(() => {
@@ -33,18 +33,16 @@ export default function CheckList({ items, setSelectedItems }: CheckListProps) {
     <>
       <div className="collection-list">
         {items &&
-          items.map((item) => (
-            <div key={item._id}>
-              <label>
-                <input
-                  type="checkbox"
-                  value={item._id}
-                  onChange={() => handleCheckboxChange(item._id!)}
-                />
-                <div>{item.name}</div>
-                <img src={item.img_url} alt={item.name} />
-              </label>
-            </div>
+          items.map((item, index) => (
+            <label key={index}>
+              <input
+                className="hide"
+                type="checkbox"
+                value={item._id}
+                onChange={() => handleCheckboxChange(item._id!)}
+              />
+              <ItemListItem item={item} />
+            </label>
           ))}
       </div>
     </>

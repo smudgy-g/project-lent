@@ -1,4 +1,4 @@
-import { FormEvent, FormEventHandler, useContext, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate } from "react-router-dom";
 import { getAllItems, postNewCollection } from "../../service/apiService";
@@ -12,7 +12,7 @@ export default function CollectionAdd () {
   const [inputValue, setInputValue] = useState('')
   const [items, setItems] = useState<Item[] | null>(null)
   const [selectedItems, setSelectedItems] = useState<string[] | null>(null)
- 
+
 
   /* Hooks */
 
@@ -26,7 +26,7 @@ export default function CollectionAdd () {
     event.preventDefault();
     setInputValue(event.target.value);
     console.log(inputValue, selectedItems)
-  };  
+  };
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -53,17 +53,14 @@ export default function CollectionAdd () {
 
   return (<>
   <form onSubmit={handleSubmit}>
-    <div className="form-element">
-      <label>
-        Name:
-        <input
-          type="text"
-          name="collectionName"
-          value={inputValue}
-          onChange={handleChange}
-        />
-      </label>
-    </div>
+    <input
+      type="text"
+      name="collectionName"
+      placeholder="Name"
+      value={inputValue}
+      onChange={handleChange}
+      autoComplete="off"
+    />
     <div>
       <CheckList items={items!} setSelectedItems={setSelectedItems}/>
     </div>

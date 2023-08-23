@@ -72,16 +72,16 @@ export default function ItemSingle () {
     if (item && itemId) {
       // If the user is the item’s owner
       const localActionButtonGroupDataOwner: ActionButtonGroupData = [
-        {
-          type: 'edit',
-          title: '',
-          action: () => {
-            if (itemId) {
-              navigate(`/item/${itemId}/edit`);
-            }
-          }
-        },
         [
+          {
+            type: 'edit',
+            title: 'Edit Item',
+            action: () => {
+              if (itemId) {
+                navigate(`/item/${itemId}/edit`);
+              }
+            }
+          },
           {
             title: 'Delete Item',
             action: () => {
@@ -238,7 +238,7 @@ export default function ItemSingle () {
               Cancel Reservation
             </button>
           )}
-          {item.lendable && !item.available && userRole && userRole.isOwner && (
+          {item.lendable && !item.available && !item.borrowed && userRole && userRole.isOwner && (
             <button
               className="button styled alert full large"
               onClick={handleClickCancel}>

@@ -137,7 +137,7 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
           value={inputValue}
           onChange={handleChange}
           onKeyPress={handleKeyPress}
-          autoComplete='false'
+          autoComplete='off'
           autoFocus={true}
         />
 
