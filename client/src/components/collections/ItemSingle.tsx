@@ -23,7 +23,7 @@ export default function ItemSingle () {
   });
 
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
-  const { showModal, setShowModal, setModalData, modalData } = useContext<ModalContextProps>(ModalContext);
+  const { showModal, setShowModal, setModalData } = useContext<ModalContextProps>(ModalContext);
   const navigate = useNavigate();
   const { itemId } = useParams();
 
