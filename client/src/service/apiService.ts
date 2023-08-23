@@ -2,7 +2,7 @@ import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 import { LoginFormData } from "../components/auth/Login";
 import { RegisterFormData } from "../components/auth/Register"
 import { ProfileEditData } from "../components/profile/ProfileEdit";
-import { Chat, ChatPreview, Collection, Item, MessageToSend, User } from "../types/types";
+import { Chat, ChatPreview, Collection, Item, Message, MessageToSend, User } from "../types/types";
 
 const baseUrl = "http://localhost:5001"
 
@@ -611,3 +611,26 @@ export async function postMessage (currentMessageData: MessageToSend, chatId: st
     console.log(err);
   };
 };
+
+export async function putMessage(message: Message) {
+  try {
+    const response = await fetch(`${baseUrl}/inbox/message`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(message),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
+  } catch (err) {
+    console.log(err)
+  }
+}
