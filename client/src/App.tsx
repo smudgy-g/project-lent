@@ -23,8 +23,6 @@ import CollectionAdd from "./components/collections/CollectionAdd";
 import CollectionEdit from "./components/collections/CollectionEdit";
 import CollectionItemAdd from './components/collections/CollectionItemAdd'
 import SocketProvider from "./contexts/SocketContext";
-import { io, Socket } from "socket.io-client";
-import { useEffect } from "react";
 import Modal from "./components/modal/modal";
 
 const router = createBrowserRouter([
@@ -36,6 +34,7 @@ const router = createBrowserRouter([
         <CollectionOverview />
       </RequireAuth>
       <TabNavigation />
+      <Modal/>
     </>)
   },
   {
@@ -58,6 +57,7 @@ const router = createBrowserRouter([
         <Profile/>
       </RequireAuth>
       <TabNavigation />
+      <Modal/>
     </>)
   },
   {
@@ -68,6 +68,7 @@ const router = createBrowserRouter([
         <ProfileEdit/>
       </RequireAuth>
       <TabNavigation />
+      <Modal/>
     </>)
   },
   {
@@ -78,7 +79,7 @@ const router = createBrowserRouter([
         <CollectionOverview />
       </RequireAuth>
       <TabNavigation />
-      {/* <Modal/> */}
+      <Modal/>
     </>)
   },
   {
@@ -89,6 +90,7 @@ const router = createBrowserRouter([
         <CollectionSingle />
       </RequireAuth>
       <TabNavigation />
+      <Modal/>
     </>)
   },
   {
@@ -99,6 +101,7 @@ const router = createBrowserRouter([
         <ItemSingle />
       </RequireAuth>
       <TabNavigation />
+      <Modal />
     </>)
   },
   {
@@ -109,6 +112,7 @@ const router = createBrowserRouter([
         <ItemAdd />
       </RequireAuth>
       <TabNavigation />
+      <Modal/>
     </>)
   },
   {
@@ -119,6 +123,7 @@ const router = createBrowserRouter([
         <ItemEdit />
       </RequireAuth>
       <TabNavigation />
+      <Modal/>
     </>)
   },
   {
@@ -129,6 +134,7 @@ const router = createBrowserRouter([
         <Discover />
       </RequireAuth>
       <TabNavigation />
+      <Modal/>
     </>)
   },
   {
@@ -139,6 +145,7 @@ const router = createBrowserRouter([
         <Inbox />
       </RequireAuth>
       <TabNavigation />
+      <Modal/>
     </>)
   },
   {
@@ -149,6 +156,7 @@ const router = createBrowserRouter([
         <CollectionAdd />
       </RequireAuth>
       <TabNavigation />
+      <Modal/>
     </>)
   },
   {
@@ -159,6 +167,7 @@ const router = createBrowserRouter([
         <CollectionEdit />
       </RequireAuth>
       <TabNavigation />
+      <Modal/>
     </>)
   },
   {
@@ -169,6 +178,7 @@ const router = createBrowserRouter([
         <CollectionItemAdd/>
       </RequireAuth>
       <TabNavigation />
+      <Modal/>
     </>)
   },
 ])

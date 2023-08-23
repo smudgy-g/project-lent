@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import { getUser } from "../../service/apiService";
 
 export interface ProfileEditData {
-  username: string | undefined;
-  email: string | undefined;
-  address: Address;
+  username?: string | undefined;
+  email?: string | undefined;
+  address?: Address;
+  newUser?: boolean;
 };
 
 function ProfileEdit() {
@@ -52,7 +53,7 @@ function ProfileEdit() {
     if (name === 'streetName' || name === 'streetNumber' || name === 'postalCode' || name === 'city') {
       setProfileEditData((prevProfileData) => ({
         ...prevProfileData,
-        address: {
+        addres: {
           ...prevProfileData.address,
           [name]: value
         }
@@ -104,7 +105,7 @@ function ProfileEdit() {
           <input
             type="text"
             name="streetName"
-            value={profileEditData.address.streetName}
+            value={profileEditData!.address!.streetName}
             onChange={handleChange}
           />
         </label>
@@ -114,7 +115,7 @@ function ProfileEdit() {
           <input
             type="text"
             name="streetNumber"
-            value={profileEditData.address.streetNumber}
+            value={profileEditData!.address!.streetNumber}
             onChange={handleChange}
           />
         </label>
@@ -124,7 +125,7 @@ function ProfileEdit() {
           <input
             type="text"
             name="postalCode"
-            value={profileEditData.address.postalCode}
+            value={profileEditData!.address!.postalCode}
             onChange={handleChange}
           />
         </label>
@@ -134,7 +135,7 @@ function ProfileEdit() {
           <input
             type="text"
             name="city"
-            value={profileEditData.address.city}
+            value={profileEditData!.address!.city}
             onChange={handleChange}
           />
         </label>
@@ -145,10 +146,10 @@ function ProfileEdit() {
           disabled={
             profileEditData.username === '' ||
             profileEditData.email === '' ||
-            profileEditData.address.streetName === '' ||
-            profileEditData.address.streetNumber === '' ||
-            profileEditData.address.postalCode === '' ||
-            profileEditData.address.city === ''
+            profileEditData!.address!.streetName === '' ||
+            profileEditData!.address!.streetNumber === '' ||
+            profileEditData!.address!.postalCode === '' ||
+            profileEditData!.address!.city === ''
           }
         >Save Changes</button>
       </form>

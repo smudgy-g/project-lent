@@ -1,10 +1,7 @@
 import { useEffect, useState, useContext } from "react";
-import { Message } from "../../types/types";
 import { getChatbyId } from "../../service/apiService";
 import { Link } from "react-router-dom";
 import { SocketContext, SocketContextProps } from "../../contexts/SocketContext";
-
-
 
 interface ChatSingleProps {
   currentChatId: string | null;
@@ -14,7 +11,6 @@ interface ChatSingleProps {
 export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingleProps) {
 
   const [inputValue, setInputValue] = useState<string>('');
-  const [currentMessageData, setCurrentMessageData] = useState<Message | null>();
 
   const {
     userId,
@@ -23,9 +19,7 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
     setCurrentChat,
   } = useContext<SocketContextProps>(SocketContext);
 
-  /* Use Effect */
-
-  // Get current chat data
+  // Get the current chat’s data
   useEffect(() => {
     if (currentChatId) {
       getChatbyId(currentChatId)
@@ -34,8 +28,37 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
     }
   }, [currentChatId]);
 
-  useEffect(() => {
-    setCurrentMessageData({
+  // Scroll down when new messages arrive
+  useEffect(()=> {
+    scrollToBottom();
+  }, [currentChat?.messages]);
+
+  // Helper function for scrolling down to the bottom message
+  function scrollToBottom () {
+    const messageContainer = document.querySelector('.message-container');
+    if (messageContainer) {
+      messageContainer.scrollTop = messageContainer.scrollHeight;
+    }
+  };
+
+  /* Handler Functions */
+
+  // Keep the input value updated
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setInputValue(event.target.value);
+  };
+
+  // When the user presses the “Enter” key, send the message
+  function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
+    if(event.key === 'Enter') {
+      handleClickSend();
+    }
+  };
+
+  // When the user clicks send, construct the message
+  // and send it, then reset the input field
+  async function handleClickSend() {
+    const messageData = {
       body: inputValue,
       from: {
         user: userId,
@@ -46,37 +69,11 @@ export default function ChatSingle ({ currentChatId, currentItemId }: ChatSingle
         seen: false,
       },
       createdAt: (new Date()).toISOString(),
-    });
-  }, [inputValue]);
+    };
 
-  useEffect(()=> {
-    scrollToBottom();
-  }, [currentChat?.messages]);
-
-  /* Handler Functions */
-
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setInputValue(event.target.value);
-  };
-
-  function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
-    if(event.key === 'Enter') {
-    handleClickSend();
-    }
-  };
-
-  async function handleClickSend() {
-    if (sendMessage && currentMessageData) {
-      sendMessage(currentMessageData);
+    if (sendMessage) {
+      sendMessage(messageData);
       setInputValue('');
-    }
-  };
-
-  // Helper function to scroll down to the lowest message
-  function scrollToBottom () {
-    const messageContainer = document.querySelector('.message-container');
-    if (messageContainer) {
-      messageContainer.scrollTop = messageContainer.scrollHeight;
     }
   };
 

@@ -10,7 +10,8 @@ export interface User {
   credits: number;
   collections: Collection[];
   reputation: number;
-  inbox: Chat[]
+  inbox: Chat[];
+  newUser?: boolean  ;
 }
 
 export interface Item {
@@ -52,9 +53,10 @@ export interface ChatPreview {
   itemId: Item['_id'];
   itemName: string;
   img_url: string;
-  message: string;
+  messages: Message[];
   updatedAt: number;
   foreignUser: string;
+  unreadMessages?: number;
 }
 
 export interface Message {

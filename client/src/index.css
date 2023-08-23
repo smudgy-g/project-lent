@@ -246,6 +246,7 @@ input:checked + .slider:before {
 }
 
 .tab-navigation {
+  /* position: relative; */
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   justify-items: center;
@@ -291,10 +292,14 @@ input:checked + .slider:before {
 }
 
 .button-list {
-  position: absolute;
-  top: calc(100% + var(--p-sm));
+  top: calc(100% + var(--p-xs));
   right: 0;
   width: max-content;
+}
+
+.button-list,
+.notifications-list {
+  position: absolute;
 
   display: flex;
   flex-direction: column;
@@ -308,7 +313,7 @@ input:checked + .slider:before {
   z-index: 1000;
 }
 
-.button-list-top {
+/* .button-list-top {
   position: absolute;
   bottom: calc(100% + var(--p-sm));
   right: 0;
@@ -319,9 +324,10 @@ input:checked + .slider:before {
   border-radius: var(--radius-lg);
   border: var(--border);
   box-shadow: 0px 6px 5px 0px var(--c-shadow);
-}
+} */
 
-.button-list .button {
+.button-list .button,
+.notification-item {
   border-bottom: var(--border);
   padding: var(--p-lg) var(--p-lg);
   padding-left: var(--p-xl);
@@ -329,8 +335,47 @@ input:checked + .slider:before {
   width: 100%;
   justify-content: end;
 }
-.button-list .button:last-child {
+.button-list .button:last-child,
+.notification-item:last-child {
   border-bottom: none;
+}
+
+.notifications-list {
+  margin: 0 var(--p-sm);
+  top: var(--p-sm);
+  overflow: scroll;
+  max-height: calc(100% - var(--p-3xl) - var(--p-md));
+}
+
+.notifications-title {
+  width: 100%;
+  place-self: start;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--p-sm);
+
+  padding: var(--p-md) var(--p-xl);
+
+  border-bottom: var(--border);
+}
+
+.notifications-title h1 {
+  display: inline-block;
+}
+
+.notifications-title .close {
+  box-sizing: content-box;
+  cursor: pointer;
+}
+
+.notifications-overlay {
+  position: fixed;
+  inset: 0;
+  bottom: calc(var(--p-2xl) + var(--p-2xs));
+  backdrop-filter: blur(20px);
+  background-color: rgba(245, 245, 245, 0.90);
 }
 
 /* Profile */
@@ -836,15 +881,24 @@ input[type=search] {
   align-items: center;
   position: fixed;
   inset: 0;
-  background-color: white;
-  z-index: 1;
+  backdrop-filter: blur(20px);
+  background-color: rgba(245, 245, 245, 0.90);
+  z-index: 1100;
 }
 
 .modal{
   display: flex;
   flex-direction: column;
+  gap: 20px;
   align-items: center;
   max-height: 100%;
   overflow: scroll;
   text-align: center;
+  padding: var(--p-xl);
+}
+
+.modal-text{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
