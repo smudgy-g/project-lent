@@ -72,7 +72,7 @@ export async function getAllChats (userId:string): Promise<any[] | null> {
           itemName: chat.item[0].name,
           img_url: chat.item[0].img_url,
           foreignUser: foreignUserName[0],
-          message: chat.messages[chat.messages.length - 1].body,
+          message: chat.messages.length > 0 ? chat.messages[chat.messages.length - 1].body : '',
           updatedAt: chat.chats.updatedAt,
         };
       })
