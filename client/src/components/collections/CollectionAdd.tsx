@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { FormEvent, FormEventHandler, useContext, useEffect, useState } from "react";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate } from "react-router-dom";
 import { getAllItems, postNewCollection } from "../../service/apiService";
@@ -28,10 +28,12 @@ export default function CollectionAdd () {
     console.log(inputValue, selectedItems)
   };  
 
-  async function handleSubmit() {
-    const newCollection = await postNewCollection(inputValue, selectedItems!)
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault();
     console.log(inputValue, selectedItems)
-    navigate(`/collections/${newCollection._id}`)
+    let newCollection = await postNewCollection(inputValue, selectedItems!)
+    console.log(newCollection)
+    navigate(`/collection/${newCollection._id}`)
   }
 
   /* Use Effect */
