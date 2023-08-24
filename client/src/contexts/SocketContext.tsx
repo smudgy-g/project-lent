@@ -106,7 +106,7 @@ export default function SocketProvider ({ children }: SocketProviderProps) {
   useEffect(() => {
     if (chats && currentChatId) {
       // Set the current item ID accordingly
-      const itemId = chats.filter((chat) => chat.id === currentChatId)[0].itemId!;
+      const itemId = chats.filter((chat) => chat?.id === currentChatId)[0].itemId!;
       setCurrentItemId(itemId);
       // Mark the chat as "seen", by setting
       // its unread messages counter to 0

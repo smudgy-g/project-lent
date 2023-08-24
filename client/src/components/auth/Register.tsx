@@ -72,20 +72,23 @@ function Register() {
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    console.log(registerFormData);
-    registerUser(registerFormData);
-    navigate('/login')
-    setRegisterFormData({
-      username: '',
-      password: '',
-      email: '',
-      address: {
-        streetName: '',
-        streetNumber: '',
-        postalCode: '',
-        city: '',
-      },
-    });
+    registerUser(registerFormData)
+      .then((response) => {
+        navigate('/login')
+        setRegisterFormData({
+          username: '',
+          password: '',
+          email: '',
+          address: {
+            streetName: '',
+            streetNumber: '',
+            postalCode: '',
+            city: '',
+          },
+        });
+      })
+      .catch((error) => console.log(error));
+
   };
 
   /* Render Component */
