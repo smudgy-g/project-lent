@@ -3,7 +3,7 @@ import { RegisterFormData } from "../components/auth/Register"
 import { ProfileEditData } from "../components/profile/ProfileEdit";
 import { Chat, ChatPreview, Collection, Item, Message, MessageToSend, User } from "../types/types";
 
-const baseUrl = "http://localhost:5001"
+const baseUrl = 'https://silent-sea-9485.fly.dev'
 
 /* Profile */
 

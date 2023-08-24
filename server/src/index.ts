@@ -14,7 +14,7 @@ const app = new Koa();
 const server = http.createServer(app.callback());
 const serverOptions = {
   cors: {
-    origin: 'http://localhost:3000', // Replace with the actual origin of your frontend application
+    origin: '0.0.0.0:3000', // Replace with the actual origin of your frontend application
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Origin', 'Content-Type', 'Accept', 'Authorization', 'Access-Control-Allow-Origin'],
     credentials: true,
@@ -25,7 +25,7 @@ const io = new Server(server, serverOptions);
 
 // Middlewares
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: '0.0.0.0:3000',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   headers: ['Content-Type', 'Authorization'],
   credentials: true,
