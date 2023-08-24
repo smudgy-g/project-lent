@@ -19,6 +19,3 @@ primary_region = "ams"
 [env]
   PORT = "5001"
   DB_NAME = "lentDB"
-  DB_URL=mongodb+srv://admin:Axuq0YtrQntupgbK@lentdb.scvc9hr.mongodb.net/?retryWrites=true&w=majority
-  GEO_API_KEY=AIzaSyCZwdNjRM6zj4nfRKSvORrRxThmbcP0aHg
-  JWT_SECRET=hifflefwiff
