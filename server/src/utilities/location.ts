@@ -4,7 +4,7 @@ import { getUserGeoLocation } from '../models/user.model'
 import { Types } from 'mongoose';
 
 export async function getItemLocations (items: IItem[]) {
-  if (!items) return null;
+  if (!items || items.length === 0) return null;
 
   return await Promise.all(items.map(async item => ({
     item,
@@ -13,7 +13,10 @@ export async function getItemLocations (items: IItem[]) {
 }
 
 export function sortByDistanceFromUser ({ latitude, longitude }: IGeoLocation, items: any[]) {
-  const itemsWithDistance = items.map((item: any) => ({    
+  if (!items) return [];
+  const itemsWithDistance = items
+    .filter(item => item.location && item.location.latitude !== null && item.location.longitude !== null)
+    .map((item: any) => ({    
       _id: item.item._id,
       user: item.item.user,
       name: item.item.name,

@@ -17,11 +17,11 @@ export async function createUser (username: string, email: string, password: str
       password: hashedPassword,
       address,
       geoLocation,  
-      credits: 0,
+      credits: 100,
       reputation: 0,
       collections: [],
       inbox: [],
-      new: true
+      newUser: true
     });
     
     return newUser.save().then(async (user) => {
@@ -66,16 +66,16 @@ export async function addToUserCollection (userId: string, collectionId: string)
 
 export async function updateUserDetails (id: string, { username, email, address }: Partial<IUser>, newUser?: boolean): Promise<IUser | null> {
   try {
-    const geoLocation = await convertAddressToGeoCode(address!);    
+    let updatedFields: Partial<IUser> = {};
     
-    let updatedFields: Partial<IUser> =  {
-      username,
-      email, 
-      address
+    if (username) updatedFields.username = username;
+    if (email) updatedFields.email = email;
+    if (address) {
+      const geoLocation = await convertAddressToGeoCode(address!);    
+      if (geoLocation) updatedFields.geoLocation = geoLocation;
+      updatedFields.address = address
     };
-    
-    if (geoLocation) updatedFields.geoLocation = geoLocation;
-    if (newUser) updatedFields.newUser = newUser;
+    if (newUser !== undefined) updatedFields.newUser = newUser;
   
     const updatedUser = await User.findByIdAndUpdate(id, updatedFields, { new: true });
     return updatedUser;
