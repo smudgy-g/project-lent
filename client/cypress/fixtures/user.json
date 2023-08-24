@@ -1,0 +1,21 @@
+{
+  "username": "Klaus",
+  "email": "klaus@example.com",
+  "password": "password1",
+  "address": {
+    "streetName": "Stresemannstraße",
+    "streetNumber": "123",
+    "postalCode": "10963",
+    "city": "Berlin"
+  },
+  "geoLocation": {
+    "latitude": 52.5075201,
+    "longitude": 13.3778567
+  },
+  "credits": 500,
+  "reputation": 5,
+  "newUser": false
+}
+
+
+

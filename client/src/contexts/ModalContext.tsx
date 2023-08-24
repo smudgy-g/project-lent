@@ -79,7 +79,8 @@ export default function ModalProvider ({ children }: ModalProviderProps) {
       action: () => {
         putUser({
           newUser: false,
-        },)
+        }
+        )
         setShowModal(false) 
       }
     };

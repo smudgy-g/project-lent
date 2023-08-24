@@ -104,8 +104,8 @@ export default function SocketProvider ({ children }: SocketProviderProps) {
   // when the component loads and the chats were loaded
   useEffect(() => {
     if (chats && !currentChatId) {
-      setCurrentChatId(chats[0].id);
-      setCurrentItemId(chats[0].itemId!);
+      setCurrentChatId(chats[0]?.id);
+      setCurrentItemId(chats[0]?.itemId!);
     }
   }, [chats]);
 

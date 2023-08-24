@@ -1,0 +1,11 @@
+{
+  "user": "Klaus",
+  "name": "Drill",
+  "img_url": "http://5.imimg.com/data5/VW/FM/MY-38627328/cordless-hand-driller-500x500.jpg",
+  "value": 300,
+  "description": "Electric drill, good working condition.",
+  "lendable": true,
+  "available": true,
+  "collections": ["All", "All"],
+  "borrowed": false
+}

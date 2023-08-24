@@ -75,16 +75,24 @@ export default function ItemAdd() {
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
-    const selectedCollections: string[] = Array.from((document.getElementById('collection') as HTMLSelectElement).selectedOptions, option => option.value);
+    const collectionElement = document.getElementById('collection');
 
-    const updatedFormData = {
-      ...formData,
-      collections: selectedCollections.filter((result) => result !== 'all'),
-    };
+    if (collectionElement) {
+      const selectedCollections: string[] = Array.from((document.getElementById('collection') as HTMLSelectElement).selectedOptions, option => option.value);
 
-    console.log(updatedFormData)
-    const response = await postItem(updatedFormData);
-    navigate(`/item/${response._id}`);
+      const updatedFormData = {
+        ...formData,
+        collections: selectedCollections.filter((result) => result !== 'all'),
+      };
+      console.log(updatedFormData)
+      const response = await postItem(updatedFormData);
+      navigate(`/item/${response._id}`);
+
+    } else {
+      console.log(formData)
+      const response = await postItem(formData);
+      navigate(`/item/${response._id}`);
+    }
   };
 
   /* Render Component */
