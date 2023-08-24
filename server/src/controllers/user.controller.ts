@@ -47,31 +47,26 @@ export async function updateUser (ctx: Context) {
   const userId = ctx.userId;
   const { username, email, address, newUser } = ctx.request.body as Partial<IUser>;
 
-  if (!username || !email || !address) ctx.throw(400, { message: 'One or more fields missing.' });
-
   const user = await userModel.findUserById(userId);
-
-  if (user && user.username !== username) {
-    const checkUsername = await userModel.findUserByUsername(username);
-
-    if (checkUsername) ctx.throw(400, { message: 'Username already exists.' });
-
-  } else if (user && user.email !== email) {
-    const checkEmail = await userModel.findUserByEmail(email);
-
-    if (checkEmail) ctx.throw(400, { message: 'Email already exists.' });
+  if (user) {
+    if (username && user.username !== username) {
+      const checkUsername = await userModel.findUserByUsername(username);
+      if (checkUsername) ctx.throw(400, { message: 'Username already exists.' });
+    }
+    if (email && user.email !== email) {
+      const checkEmail = await userModel.findUserByEmail(email);
+      if (checkEmail) ctx.throw(400, { message: 'Email already exists.' });
+    }
+    const userData = { username, email, address }
+    try {
+      const updatedUser = await userModel.updateUserDetails(userId, userData, newUser);
+      ctx.status = 200;
+      ctx.body = updatedUser;
+    } catch (error) {
+      ctx.throw(500, { message: error });
+    }
   } else {
     ctx.throw(400, { message: 'User not found.' });
-  }
-
-  const userData = { username, email, address }
-
-  try {
-    const updatedUser = await userModel.updateUserDetails(userId, userData, newUser);
-    ctx.status = 200;
-    ctx.body = updatedUser;
-  } catch (error) {
-    ctx.throw(500, { message: error });
   }
 }
 
