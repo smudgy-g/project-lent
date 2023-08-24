@@ -1,0 +1,7 @@
+[
+  {"name": "All", "items": ["Drill"]},
+  {"name": "Borrowed", "items": []},
+  {"name": "Lent Out", "items": []},
+  {"name": "Reserved", "items": []},
+  {"name": "Tools", "items": ["Drill"]}
+]
