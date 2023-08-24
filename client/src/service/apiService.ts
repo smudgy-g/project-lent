@@ -92,7 +92,13 @@ export async function registerUser (registerFormData: RegisterFormData) {
       credentials: 'include'
     });
 
-    return await response.json();
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
   } catch (err) {
     console.log(err);
   };
@@ -108,7 +114,14 @@ export async function loginUser (loginFormData: LoginFormData) {
       body: JSON.stringify(loginFormData),
       credentials: 'include'
     });
-    return await response.json();
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
   } catch (err) {
     console.log(err);
   };
@@ -558,7 +571,14 @@ export async function deleteChat(chatId: string) {
       method: 'DELETE',
       credentials: 'include'
     });
-    return await response.json()
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
   } catch (err) {
     console.log(err)
   }
@@ -574,7 +594,14 @@ export async function postMessage (currentMessageData: MessageToSend, chatId: st
       body: JSON.stringify(currentMessageData),
       credentials: 'include'
     });
-    return await response.json();
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
   } catch (err) {
     console.log(err);
   };
