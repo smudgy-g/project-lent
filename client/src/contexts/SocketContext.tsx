@@ -157,7 +157,7 @@ export default function SocketProvider ({ children }: SocketProviderProps) {
 
   // Initialize the socket connection and its listeners
   useEffect(() => {
-    socketRef.current = io('0.0.0.0:5001');
+    socketRef.current = io('https://silent-sea-9485.fly.dev:5001');
     const socket = socketRef.current;
 
     socket.on('connect', () => {
