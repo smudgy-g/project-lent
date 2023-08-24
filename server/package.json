@@ -6,7 +6,7 @@
   "scripts": {
     "test": "NODE_ENV=test jest --detectOpenHandles --maxWorkers=1",
     "seed": "ts-node src/DBSeed/seed.ts",
-    "start": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "start": "ts-node src/index.ts",
     "build": "tsc"
   },
   "author": "",
