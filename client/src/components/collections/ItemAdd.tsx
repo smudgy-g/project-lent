@@ -74,20 +74,21 @@ export default function ItemAdd() {
   // POST the item using the API service
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-
+    
     const collectionElement = document.getElementById('collection');
-
+    
     if (collectionElement) {
       const selectedCollections: string[] = Array.from((document.getElementById('collection') as HTMLSelectElement).selectedOptions, option => option.value);
-
       const updatedFormData = {
         ...formData,
         collections: selectedCollections.filter((result) => result !== 'all'),
       };
+      
       console.log(updatedFormData)
+      
       const response = await postItem(updatedFormData);
       navigate(`/item/${response._id}`);
-
+      
     } else {
       console.log(formData)
       const response = await postItem(formData);
@@ -100,7 +101,7 @@ export default function ItemAdd() {
   return (<>
     {!formData.img_url && <CameraCapture onImageCapture={handleImageCapture} />}
     {formData.img_url && (
-      <div className="profile-edit">
+      <div className="item-add">
         <form onSubmit={handleSubmit}>
           <label>
             Name:
@@ -125,7 +126,7 @@ export default function ItemAdd() {
           {collections.length > 0 && (
           <label>
             Collection:
-            <select id="collection" name="collection" multiple>
+            <select className="select-list" id="collection" name="collection" multiple>
             <option value="all" disabled selected>
               All
             </option>

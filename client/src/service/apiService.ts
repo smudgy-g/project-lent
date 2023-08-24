@@ -1,4 +1,3 @@
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 import { LoginFormData } from "../components/auth/Login";
 import { RegisterFormData } from "../components/auth/Register"
 import { ProfileEditData } from "../components/profile/ProfileEdit";
@@ -93,7 +92,13 @@ export async function registerUser (registerFormData: RegisterFormData) {
       credentials: 'include'
     });
 
-    return await response.json();
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
   } catch (err) {
     console.log(err);
   };
@@ -109,7 +114,14 @@ export async function loginUser (loginFormData: LoginFormData) {
       body: JSON.stringify(loginFormData),
       credentials: 'include'
     });
-    return await response.json();
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
   } catch (err) {
     console.log(err);
   };
@@ -536,37 +548,6 @@ export async function getAllChats (): Promise<ChatPreview[]> {
 
 export async function getChatbyId (chatId: string | undefined): Promise<Chat> {
   try {
-    // START MOCK DATA
-    // Mock notifications
-    if (chatId === 'notifications') {
-      return {
-        _id: 'sdfasdoiufasd78asd6fa',
-        messages: [
-          {
-            body: 'Hans-Juergen canceled his reservation for your ‘Chocolate Cake Latte’',
-            from: {
-              user: '2323',
-              seen: false,
-            },
-            to: {
-              user: '2323',
-              seen: false,
-            }
-          }
-        ],
-        item: {
-          name: 'item',
-          user: '8as7d5fs8d75fg',
-          _id: 'jk345ghk2j3546gk2',
-        },
-        users: [],
-        foreignUserId: 'hj2k34g52jkh345',
-        foreignUserName: 'mayer'
-      }
-    }
-    // END MOCK DATA
-
-
     const response = await fetch(`${baseUrl}/inbox/${chatId}`, {
       credentials: 'include'
     });
@@ -590,7 +571,14 @@ export async function deleteChat(chatId: string) {
       method: 'DELETE',
       credentials: 'include'
     });
-    return await response.json()
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
   } catch (err) {
     console.log(err)
   }
@@ -606,7 +594,14 @@ export async function postMessage (currentMessageData: MessageToSend, chatId: st
       body: JSON.stringify(currentMessageData),
       credentials: 'include'
     });
-    return await response.json();
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+
+    return data;
   } catch (err) {
     console.log(err);
   };
@@ -614,7 +609,7 @@ export async function postMessage (currentMessageData: MessageToSend, chatId: st
 
 export async function putMessage(message: Message) {
   try {
-    const response = await fetch(`${baseUrl}/inbox/message`, {
+    const response = await fetch(`${baseUrl}/inbox/message/${message.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

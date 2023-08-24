@@ -124,7 +124,7 @@ export default function ItemEdit() {
   /* Render Component */
 
   return (<>
-    <div className="profile-edit">
+    <div className="item-edit">
       <form onSubmit={handleSubmit}>
         <label>
           Name:
@@ -149,16 +149,16 @@ export default function ItemEdit() {
         {collections.length > 1 && (
         <label>
           Collection:
-          <select id="collection" name="collection" multiple>
-          <option value="all" disabled selected>
-            All
-          </option>
+          <select className="select-list" id="collection" name="collection" multiple>
+            <option value="all" disabled selected>
+              All
+            </option>
             {collections.map((collection: Collection) => {
               return (
                 <option key={collection._id} value={collection._id}>
                   {collection.name}
                 </option>
-                
+
               );
             })}
           </select>

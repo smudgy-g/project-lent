@@ -2,46 +2,46 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import {AuthProvider, RequireAuth} from 'react-auth-kit';
+import {AuthProvider} from 'react-auth-kit';
 
+import Layout from "./Layout";
+import SocketProvider from "./contexts/SocketContext";
 import HeaderProvider from "./contexts/HeaderContext";
-import Header from "./components/navigation/Header";
-import TabNavigation from "./components/navigation/TabNavigation";
+import ModalProvider from "./contexts/ModalContext";
+
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+
 import Profile from "./components/profile/Profile";
+import ProfileEdit from "./components/profile/ProfileEdit";
+
 import CollectionOverview from "./components/collections/CollectionOverview";
 import CollectionSingle from "./components/collections/CollectionSingle";
-import ProfileEdit from "./components/profile/ProfileEdit";
-import Inbox from "./components/messaging/Inbox";
-import ItemSingle from "./components/collections/ItemSingle";
-import ItemEdit from "./components/collections/ItemEdit";
-import ItemAdd from "./components/collections/ItemAdd";
-import Discover from "./components/discover/Discover";
-import ModalProvider from "./contexts/ModalContext";
 import CollectionAdd from "./components/collections/CollectionAdd";
 import CollectionEdit from "./components/collections/CollectionEdit";
 import CollectionItemAdd from './components/collections/CollectionItemAdd'
-import SocketProvider from "./contexts/SocketContext";
-import Modal from "./components/modal/modal";
+
+import ItemSingle from "./components/collections/ItemSingle";
+import ItemEdit from "./components/collections/ItemEdit";
+import ItemAdd from "./components/collections/ItemAdd";
+
+import Discover from "./components/discover/Discover";
+import Inbox from "./components/messaging/Inbox";
 import LandingPage from "./components/landing/LandingPage";
 
 const router = createBrowserRouter([
   {
     path: '/landing',
     element: (<>
-        <LandingPage />
+      <LandingPage />
     </>)
   },
   {
     path: '/',
     element: (<>
-      <Header />
-      <RequireAuth loginPath='/login'>
+      <Layout>
         <CollectionOverview />
-      </RequireAuth>
-      <TabNavigation />
-      <Modal/>
+      </Layout>
     </>)
   },
   {
@@ -59,139 +59,102 @@ const router = createBrowserRouter([
   {
     path: '/profile',
     element: (<>
-      <Header />
-      <RequireAuth loginPath='/login'>
+      <Layout>
         <Profile/>
-      </RequireAuth>
-      <TabNavigation />
-      <Modal/>
+      </Layout>
     </>)
   },
   {
     path: '/profile/edit',
     element: (<>
-      <Header />
-      <RequireAuth loginPath='/login'>
+      <Layout>
         <ProfileEdit/>
-      </RequireAuth>
-      <TabNavigation />
-      <Modal/>
+      </Layout>
     </>)
   },
   {
     path: '/collections',
     element: (<>
-      <Header />
-      <RequireAuth loginPath='/login'>
+      <Layout>
         <CollectionOverview />
-      </RequireAuth>
-      <TabNavigation />
-      <Modal/>
+      </Layout>
     </>)
   },
   {
     path: '/collection/:collectionId',
     element: (<>
-      <Header />
-      <RequireAuth loginPath='/login'>
+      <Layout>
         <CollectionSingle />
-      </RequireAuth>
-      <TabNavigation />
-      <Modal/>
+      </Layout>
     </>)
   },
   {
     path: '/item/:itemId',
     element: (<>
-      <Header />
-      <RequireAuth loginPath="/login">
+      <Layout>
         <ItemSingle />
-      </RequireAuth>
-      <TabNavigation />
-      <Modal />
+      </Layout>
     </>)
   },
   {
     path: '/item/add',
     element: (<>
-      <Header />
-      <RequireAuth loginPath="/login">
+      <Layout>
         <ItemAdd />
-      </RequireAuth>
-      <TabNavigation />
-      <Modal/>
+      </Layout>
     </>)
   },
   {
     path: '/item/:itemId/edit',
     element: (<>
-      <Header />
-      <RequireAuth loginPath="/login">
+      <Layout>
         <ItemEdit />
-      </RequireAuth>
-      <TabNavigation />
-      <Modal/>
+      </Layout>
     </>)
   },
   {
     path: '/discover',
     element: (<>
-      <div></div>
-      <RequireAuth loginPath="/login">
+      <Layout options={{header: false}}>
         <Discover />
-      </RequireAuth>
-      <TabNavigation />
-      <Modal/>
+      </Layout>
     </>)
   },
   {
     path: '/inbox',
     element: (<>
-      <div></div>
-      <RequireAuth loginPath='/login'>
+      <Layout options={{header: false}}>
         <Inbox />
-      </RequireAuth>
-      <TabNavigation />
-      <Modal/>
+      </Layout>
     </>)
   },
   {
     path: '/collection/add',
     element: (<>
-      <Header />
-      <RequireAuth loginPath='/login'>
+      <Layout>
         <CollectionAdd />
-      </RequireAuth>
-      <TabNavigation />
-      <Modal/>
+      </Layout>
     </>)
   },
   {
     path: '/collection/edit/:collectionId',
     element: (<>
-      <Header />
-      <RequireAuth loginPath='/login'>
+      <Layout>
         <CollectionEdit />
-      </RequireAuth>
-      <TabNavigation />
-      <Modal/>
+      </Layout>
     </>)
   },
   {
     path: '/item/add/:collectionId',
     element: (<>
-      <Header />
-      <RequireAuth loginPath='/login'>
+      <Layout>
         <CollectionItemAdd/>
-      </RequireAuth>
-      <TabNavigation />
-      <Modal/>
+      </Layout>
     </>)
   },
 ])
 
-function App() {
-
+export default function App() {
   return (<>
     <div className="app">
       <AuthProvider
@@ -211,6 +174,3 @@ function App() {
     </div>
   </>);
 }
-
-
-export default App;

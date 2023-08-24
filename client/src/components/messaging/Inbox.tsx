@@ -12,12 +12,22 @@ function InboxCombined() {
     currentChatId,
     setCurrentChatId,
     currentItemId,
+    setCurrentItemId,
   } = useContext<SocketContextProps>(SocketContext);
 
   // Initialize the header
   useEffect(() => {
     setActionButtonGroupData([]);
   }, [setActionButtonGroupData]);
+
+  // Make sure the first chat is always selected,
+  // when the component loads and the chats were loaded
+  useEffect(() => {
+    if (chats && !currentChatId) {
+      setCurrentChatId(chats[0].id);
+      setCurrentItemId(chats[0].itemId!);
+    }
+  }, [chats]);
 
   /* Event Handlers */
 
@@ -31,8 +41,7 @@ function InboxCombined() {
   return (<>
     <div className="inbox">
       <div className="chat-preview-container">
-      {chats && chats
-        .map((chat, index) => (
+      {chats && chats.map((chat, index) => (
         <div className={`chat-preview-wrapper ${chat.id === currentChatId ? 'active' : ''}`} key={index}>
           <div
             className={`chat-preview ${(chat.unreadMessages && chat.unreadMessages > 0) && 'unread'}`}
@@ -45,7 +54,6 @@ function InboxCombined() {
 
       {chats && <ChatSingle currentChatId={currentChatId} currentItemId={currentItemId} />}
     </div>
-
   </>);
 }
 

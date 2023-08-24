@@ -10,6 +10,7 @@ export interface SocketContextProps {
   currentChatId: string | null;
   setCurrentChatId: React.Dispatch<SetStateAction<string | null>>;
   currentItemId: string | null;
+  setCurrentItemId: React.Dispatch<SetStateAction<string | null>>;
   userId: string;
   sendMessage: ((messageData: Message) => void) | null;
   currentChat: Chat | null;
@@ -23,6 +24,7 @@ export const SocketContext = createContext<SocketContextProps>({
   currentChatId: null,
   setCurrentChatId: () => {},
   currentItemId: null,
+  setCurrentItemId: () => {},
   userId: '',
   sendMessage: null,
   currentChat: null,
@@ -100,20 +102,11 @@ export default function SocketProvider ({ children }: SocketProviderProps) {
     }, 0)
   }
 
-  // Make sure the first chat is always selected,
-  // when the component loads and the chats were loaded
-  useEffect(() => {
-    if (chats && !currentChatId) {
-      setCurrentChatId(chats[0]?.id);
-      setCurrentItemId(chats[0]?.itemId!);
-    }
-  }, [chats]);
-
   // When the current chat ID changes
   useEffect(() => {
     if (chats && currentChatId) {
       // Set the current item ID accordingly
-      const itemId = chats.filter((chat) => chat.id === currentChatId)[0].itemId!;
+      const itemId = chats.filter((chat) => chat?.id === currentChatId)[0].itemId!;
       setCurrentItemId(itemId);
       // Mark the chat as "seen", by setting
       // its unread messages counter to 0
@@ -220,6 +213,7 @@ export default function SocketProvider ({ children }: SocketProviderProps) {
     currentChatId,
     setCurrentChatId,
     currentItemId,
+    setCurrentItemId,
     userId,
     sendMessage,
     currentChat,

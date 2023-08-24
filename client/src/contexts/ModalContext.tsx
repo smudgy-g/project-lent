@@ -1,6 +1,5 @@
 import { ReactNode, createContext, useState, useEffect } from "react";
 import { getUser, putUser } from "../service/apiService";
-import { useNavigate } from "react-router-dom";
 
 export type ModalData = {
   title: string,
@@ -65,23 +64,38 @@ export default function ModalProvider ({ children }: ModalProviderProps) {
 
   useEffect(() => {
     const localModalData: ModalData = {
-      title: 'Hi there, newby!',
+      title: 'The Lending Cycle',
       text: `
-      <p>Welcome to our platform, where sharing is the new owning! Here's how you can lend and borrow items in a snap:<p>
-      <p>**1. Add an Item:** Click a photo or upload an image of the item you want to lend. Give it a lending value in credits. As a thank you for adding a new item, we'll top up your account with 100 credits!<p>
-      <p>**2. Discover and Reserve:** Explore items on our discover page or use the search bar to find something specific. Once you've found something you need, reserve it. You'll be directed to a chat with the owner to arrange the pickup.<p>
-      <p>**3. Receive and Transfer:** Meet the owner, get your item, and confirm receipt in the app. This will trigger the transfer of the agreed credits to the owner's account.<p>
-      <p>**4. Return and Wrap Up:** When it's time to return the item, chat with the owner to arrange the meetup. Once the item is back with the owner and they confirm it in the app, the lending cycle concludes, and the item becomes available for lending again.
-      <p>
-      <p>Remember, our platform thrives on trust and community. Please respect the items and the people you interact with. Happy sharing!<p>
+      <div class="paragraph">
+        <h3>Step 1: Add an Item</h3>
+        <p>Click a photo or upload an image of the item you want to lend. Give it a lending value in credits. As a thank you for adding a new item, we'll top up your account with 100 credits!</p>
+      </div>
+      <div class="paragraph">
+        <h3>Step 2: Discover and Reserve</h3>
+        <p>Explore items on our discover page or use the search bar to find something specific. Once you've found something you need, reserve it. You'll be directed to a chat with the owner to arrange the pickup.</p>
+      </div>
+      <div class="paragraph">
+        <h3>Step 3: Receive and Transfer</h3>
+        <p>Meet the owner, get your item, and confirm receipt in the app. This will trigger the transfer of the agreed credits to the owner's account.</p>
+      </div>
+      <div class="paragraph">
+        <h3>Step 4: Return and Wrap Up</h3>
+        <p>When it's time to return the item, chat with the owner to arrange the meetup. Once the item is back with the owner and they confirm it in the app, the lending cycle concludes, and the item becomes available for lending again.
+        </p>
+        </div>
+        <div class="paragraph">
+        <h3>Step 5: Be nice!</h3>
+        <p>Remember, our platform thrives on trust and community. Please respect the items and the people you interact with. Happy sharing!</p>
+      </div>
     `,
-      actionText: 'Get Started',
+      actionText: 'Got it!',
       action: () => {
         putUser({
           newUser: false,
         }
         )
         setShowModal(false) 
+
       }
     };
     setModalData(localModalData);

@@ -112,11 +112,13 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
           'item._id': 1,
           'item.name': 1,
           'item.user': 1,
-          messages: { 
+          messages: {
             $map: {
               input: '$messages',
               as: 'message',
               in: {
+                _id: '$$message._id',
+                notification: '$$message.notification',
                 body: '$$message.body',
                 from: '$$message.from',
                 to: '$$message.to',
@@ -145,6 +147,8 @@ export async function getChatById (chatId: string, userId: string): Promise<any 
         item: data[0].item[0],
         messages: data[0].messages
           .map((message: any) => ({
+            id: message._id,
+            notification: message.notification,
             from: message.from,
             to: message.to,
             body: message.body,
@@ -180,7 +184,7 @@ export async function createChat (itemId: string, ownerId: string, userId: strin
       item: itemIdObj,
       users: [ownerIdObj, userIdObj]
     });
-    
+
     const newChat = await Chat.create(newChatData);
 
     if (message) {

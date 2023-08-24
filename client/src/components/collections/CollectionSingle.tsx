@@ -1,4 +1,4 @@
-import { SetStateAction, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ActionButtonGroupData, Collection, Item } from "../../types/types";
 import { HeaderContext, HeaderContextProps } from "../../contexts/HeaderContext";
 import { useNavigate, useParams } from "react-router-dom";
@@ -9,14 +9,10 @@ export default function CollectionSingle () {
 
   const [items, setItems] = useState<Item[] | null>(null);
   const [currentCollection, setCurrentCollection] = useState<Collection | undefined>();
-  
-  /* Hooks */
 
   const { setActionButtonGroupData } = useContext<HeaderContextProps>(HeaderContext);
   const navigate = useNavigate();
   const { collectionId } = useParams();
-
-  /* Use Effect */
 
   useEffect(() => {
     if (collectionId === 'all') {
@@ -32,6 +28,8 @@ export default function CollectionSingle () {
     }
   }, [collectionId]);
 
+  // Get all collections using the API service, find the current collection,
+  // and set it as the currentCollection state variables value
   useEffect(() => {
     getAllCollections()
       .then((result) => {
@@ -77,7 +75,7 @@ export default function CollectionSingle () {
   return (<>
     <div className="collection-single">
       {currentCollection &&
-      <h1>Collection: {currentCollection!.name}</h1>
+      <h1>{currentCollection!.name || 'Collection'}</h1>
       }
       {items && <ItemList items={items} />}
     </div>

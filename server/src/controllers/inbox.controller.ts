@@ -13,7 +13,7 @@ export async function getAllChats (ctx: Context) {
   } catch (error) {
     ctx.throw(500, { message: error });
   }
-  
+
 }
 
 export async function getChatById (ctx: Context) {
@@ -29,7 +29,7 @@ export async function getChatById (ctx: Context) {
   } catch (error) {
     ctx.throw(500, { message: error });
   }
-  
+
 }
 
 export async function deleteChat (ctx:Context) {
@@ -63,8 +63,9 @@ export async function postMessage (ctx: Context) {
 }
 
 export async function updateMessage (ctx: Context) {
+
   const messageid = ctx.params.messageid;
-  const message = ctx.request.body as Partial<IMessage>; 
+  const message = ctx.request.body as Partial<IMessage>;
   if (!message) ctx.throw(400, { message: 'No message details provided.' })
   try {
     const result = await messageModel.updateMessage(message, messageid);
@@ -78,9 +79,9 @@ export async function updateMessage (ctx: Context) {
 export async function createChat (ctx: Context) {
   const userId = ctx.userId;
   const { itemId, ownerId } = ctx.request.body as any;
-  
+
   if (!itemId || !ownerId) ctx.throw(400, { message: 'Request body missing required data.' });
-  
+
   try {
     const result = await chatModel.createChat(itemId, ownerId, userId);
 
